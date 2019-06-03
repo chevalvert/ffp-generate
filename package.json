@@ -1,0 +1,52 @@
+{
+  "name": "ffp-generator",
+  "amdName": "ffp",
+  "version": "0.0.0",
+  "description": "JavaScript browser module to generate `ffp` landscapes",
+  "source": "src/index.js",
+  "main": "dist/ffp-generator.js",
+  "module": "dist/ffp-generator.m.js",
+  "unpkg": "dist/ffp-generator.umd.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "start": "microbundle watch -f umd -o example --target browser & light-server -s example -p 8080 -w example/**/*",
+    "build": "microbundle -f es,cjs --external all && microbundle -f umd --target browser",
+    "test": "eslint src/**",
+    "deploy": "ghp example",
+    "preversion": "npm run build && git add dist",
+    "postversion": "git push && git push --tags && yarn deploy --force"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+git@github.com:chevalvert/ffp-generator.git"
+  },
+  "author": "Arnaud Juracek <arnaud@chevalvert.fr>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chevalvert/ffp-generator/issues"
+  },
+  "homepage": "https://github.com/chevalvert/ffp-generator#readme",
+  "dependencies": {
+    "@internet/raf": "^0.2.1",
+    "canvas2svg": "^1.0.16",
+    "fast-random": "^2.0.4",
+    "file-saver": "^2.0.1",
+    "lineclip": "^1.1.5",
+    "missing-math": "^2.0.1",
+    "tumult": "^3.0.11"
+  },
+  "devDependencies": {
+    "eslint": "^4.18.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^6.0.0",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "ghp": "^1.1.4",
+    "light-server": "^2.4.0",
+    "microbundle": "^0.4.3"
+  },
+  "private": true
+}

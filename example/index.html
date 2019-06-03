@@ -1,0 +1,89 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>ffp-generate</title>
+    <meta name="description" content="description">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,minimal-ui">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
+
+    <style type="text/css">
+      body {
+        background-color: #333;
+      }
+
+      main {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+
+        transform-origin: 0 0;
+        transform:
+          scale(0.25)
+          translate(-50%, -50%);
+
+        box-shadow: 0 0 100px rgba(black, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <canvas/>
+    </main>
+
+    <script src="ffp-generator.umd.js"></script>
+    <script>
+      var prng = ffp.prng
+      prng.seed = window.location.hash.substring(1) || Date.now()
+      document.title += ' | ' + prng.seed
+      console.log(+prng.seed)
+
+      var swatch = prng.randomOf(Object.values(ffp.swatches))
+
+      var landscape = ffp.generate({
+        units: [24, 48, 96],
+        width: 2000,
+        height: 2000 * (4 / 3),
+        groundsLength: 30,
+
+        percentOfStraightLines: 0.125,
+        percentOfGradients: 0.5,
+        percentOfSimplexGradients: 0.1,
+
+        swatch: swatch,
+        backgroundColor: prng.randomOf(swatch),
+
+        symbols: [
+          // 'debug',
+          // 'empty',
+          'square',
+          'square_offset',
+          'vertical_line',
+          'vertical_line_offset',
+          'horizontal_line',
+          'horizontal_line_offset',
+          'diagonal',
+          'diamond',
+          'circle',
+          // 'ffp'
+        ],
+
+        canvas: document.querySelector('canvas'),
+        random: prng.random
+      })
+
+      landscape.render()
+      landscape.mount(document.querySelector('main'))
+
+      landscape.parent.style.width = landscape.width + 'px'
+      landscape.parent.style.height = landscape.height + 'px'
+
+      landscape.parent.addEventListener('click', function () {
+        ffp.erode(landscape, {
+          step: 96,
+          easing: 0.01,
+          snapToGrid: true
+        })
+      })
+    </script>
+  </body>
+</html>

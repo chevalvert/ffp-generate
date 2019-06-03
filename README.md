@@ -1,6 +1,8 @@
 # `ffp-generator` [<img src="https://github.com/chevalvert.png?size=100" align="right">](http://chevalvert.fr/)
 > JavaScript browser module to generate `ffp` landscapes
 
+<br>
+
 ## Installation
 
 ```sh

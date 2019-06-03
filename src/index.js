@@ -5,6 +5,7 @@ import Line from './abstractions/Line'
 import makePattern from './controllers/make-pattern'
 import SYMBOLS from './controllers/symbols'
 import randomOf from './utils/array-random'
+import prng from './utils/prng'
 
 export const generate = ({
   units = [24],
@@ -21,7 +22,7 @@ export const generate = ({
   symbols = ['debug'],
 
   canvas = null,
-  random = Math.random
+  random = prng.random
 } = {}) => {
   const patterns = symbols.map(symbolName => makePattern(SYMBOLS[symbolName]))
 
@@ -65,6 +66,6 @@ export const generate = ({
   })
 }
 
-export { default as prng } from './utils/prng'
+export { prng }
 export { erode } from './controllers/erode'
 export { swatches } from './controllers/swatches'

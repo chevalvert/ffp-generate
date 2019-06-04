@@ -41,10 +41,20 @@ export default class SVGCanvas {
   get svg () { return this.ctx.getSvg() }
   get serializedSvg () { return this.ctx.getSerializedSvg(true) }
 
-  async toBlob () {
-    return this.ctx.isSVGCompatible
+  async toBlob (type) {
+    if (!type) type = this.ctx.isSVGCompatible ? 'image/svg+xml' : 'image/png'
+
+    if (!SVGCanvas.isSupportedMimeType(type)) {
+      throw new Error(`Invalid or unsupported mime type.\nSupported mime types are: ${SVGCanvas.SUPPORTED_MIME_TYPES}`)
+    }
+
+    if (type === 'image/svg+xml' && !this.ctx.isSVGCompatible) {
+      throw new Error(`image/svg+xml mime type is not compatible with the current context.`)
+    }
+
+    return (type === 'image/svg+xml')
       ? new Blob([this.serializedSvg], { type: 'image/svg+xml;charset=utf-8' })
-      : new Promise(resolve => this.canvas.toBlob(resolve, 'image/png'))
+      : new Promise(resolve => this.canvas.toBlob(resolve, type))
   }
 
   didMount () {}
@@ -88,8 +98,24 @@ export default class SVGCanvas {
     this.el.querySelector('g').innerHTML = ''
   }
 
-  async save (filename = Date.now()) {
-    const blob = await this.toBlob()
+  static get SUPPORTED_MIME_TYPES () {
+    return [
+      'image/png',
+      'image/jpeg',
+      'image/svg+xml'
+    ]
+  }
+
+  static isSupportedMimeType (type) {
+    return SVGCanvas.SUPPORTED_MIME_TYPES.includes(type)
+  }
+
+  async save (filename = Date.now(), { type = 'image/png' } = {}) {
+    if (!SVGCanvas.isSupportedMimeType(type)) {
+      throw new Error(`Invalid or unsupported mime type.\nSupported mime types are: ${SVGCanvas.SUPPORTED_MIME_TYPES}`)
+    }
+
+    const blob = await this.toBlob(type)
     return FileSaver.saveAs(blob, filename)
   }
 }

@@ -53,4 +53,19 @@ export default class Landscape extends SVGCanvas {
       pattern
     }))
   }
+
+  ensureSVGContext () {
+    return this.ctx.isSVGCompatible
+      ? this
+      : Landscape.from(this.grounds, {
+        backgroundColor: this.backgroundColor,
+        groupGroundTogether: this.groupGroundTogether
+      }).render()
+  }
+
+  save (filename, { type } = {}) {
+    return (type === 'image/svg+xml' && !this.ctx.isSVGCompatible)
+      ? this.ensureSVGContext().save(filename, { type })
+      : super.save(filename, { type })
+  }
 }

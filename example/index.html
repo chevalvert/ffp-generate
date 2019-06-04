@@ -84,6 +84,12 @@
           snapToGrid: true
         })
       })
+
+      window.addEventListener('keyup', function (e) {
+        e.preventDefault()
+        if (e.key === 's') return landscape.save(prng.seed, { type: 'image/png' })
+        if (e.key === 'p') return landscape.save(prng.seed, { type: 'image/svg+xml' })
+      })
     </script>
   </body>
 </html>

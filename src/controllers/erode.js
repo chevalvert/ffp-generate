@@ -1,72 +1,84 @@
 import raf from '@internet/raf'
+import Line from '../abstractions/Line'
+import roundTo from '../utils/round-to'
 
-import datalines from '../controllers/erode-dataline'
+// let buffer
+// let shouldUpdate = false
+// const erosion = {}
 
-import randomOf from '../utils/array-random'
+// const EASING = {
+//   values: [],
+//   targets: [],
+//   coef: 0.001,
+//   tolerance: 0.1,
 
-let buffer
-let shouldUpdate = false
-const erosion = {}
+//   init: function (length = this.targets.length) {
+//     this.values = new Array(length).fill(0)
+//   },
 
-const EASING = {
-  values: [],
-  targets: [],
-  coef: 0.001,
-  tolerance: 0.1,
+//   update: function () {
+//     if (!this.values || !this.values.length) this.init()
 
-  init: function (length = this.targets.length) {
-    this.values = new Array(length).fill(0)
-  },
+//     shouldUpdate = false
+//     for (let i = 0; i < this.targets.length; i++) {
+//       const d = (this.targets[i] - this.values[i])
+//       if (Math.abs(d) > this.tolerance) {
+//         shouldUpdate = true
+//         this.values[i] += d * this.coef
+//       }
+//     }
+//   }
+// }
 
-  update: function () {
-    if (!this.values || !this.values.length) this.init()
-
-    shouldUpdate = false
-    for (let i = 0; i < this.targets.length; i++) {
-      const d = (this.targets[i] - this.values[i])
-      if (Math.abs(d) > this.tolerance) {
-        shouldUpdate = true
-        this.values[i] += d * this.coef
-      }
-    }
-  }
-}
-
-raf.add(update)
+// raf.add(update)
 
 export const erode = (landscape, {
   step = 24,
-  easing = 0.001,
-  snapToGrid = true
+  // easing = 0.001,
+  snapToGrid = true,
+  autoplay = true
 } = {}) => {
-  if (!landscape.canvas) throw new Error('erode only works on SVGCanvas with canvas element for now')
-
-  if (!erosion.landscape) {
-    buffer = landscape.copy()
-    erosion.landscape = landscape
-    erosion.step = step
+  if (landscape.ctx.isSVG) {
+    throw new Error('Eroding canvas only works on non SVG context for now')
   }
 
-  EASING.coef = easing
-  EASING.targets = randomOf(datalines).map(v => {
-    return snapToGrid
-      ? Math.floor((v * landscape.height) / step) * step - landscape.height / 2
-      : v * (landscape.height / step) * step - landscape.height / 2
-  })
+  let shouldUpdate = autoplay
+  const buffer = landscape.copy()
 
-  shouldUpdate = true
-}
+  // const line = new Line(x => Math.sin((x * 0.01) + line.frameCount) * 2)
+  const line = new Line(x => Line.perlin({
+    seed: 1,
+    octaves: 1,
+    resolution: 32,
+    lacunarity: 2,
+    gain: 0.5
+  })((x + line.frameCount) / 10) * step * 10)
 
-function update (dt) {
-  if (!shouldUpdate) return
+  line.frameCount = 0
 
-  EASING.update()
-  erosion.landscape.background(erosion.landscape.backgroundColor)
+  raf.add(update)
 
-  EASING.values.forEach((y, index) => {
-    const x = index * erosion.step
-    erosion.landscape.ctx.drawImage(buffer, x, 0, erosion.step, erosion.landscape.height, x, y, erosion.step, erosion.landscape.height)
-  })
+  return {
+    play: () => { shouldUpdate = true },
+    pause: () => { shouldUpdate = false },
+    clear: () => {
+      raf.remove(update)
+    }
+  }
+
+  function update (dt) {
+    if (!shouldUpdate) return
+
+    line.frameCount += 1
+
+    landscape.background(landscape.backgroundColor)
+
+    for (let x = 0; x < landscape.width; x += step) {
+      const v = line.compute(x, { force: true })
+      const y = snapToGrid ? roundTo(v, step) : v
+      landscape.ctx.drawImage(buffer, x, 0, step, buffer.height, x, y, step, buffer.height)
+    }
+  }
 }
 
 export default erode

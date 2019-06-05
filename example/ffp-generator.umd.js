@@ -1,2 +1,4923 @@
-!function(n,t){"object"==typeof exports&&"undefined"!=typeof module?t(exports):"function"==typeof define&&define.amd?define(["exports"],t):t(n.ffp={})}(this,function(n){var t="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{};function r(n,t){return n(t={exports:{}},t.exports),t.exports}var e=r(function(n,t){function r(n,t){var r=[],e=[];return null==t&&(t=function(n,t){return r[0]===t?"[Circular ~]":"[Circular ~."+e.slice(0,r.indexOf(t)).join(".")+"]"}),function(i,o){if(r.length>0){var a=r.indexOf(this);~a?r.splice(a+1):r.push(this),~a?e.splice(a,Infinity,i):e.push(i),~r.indexOf(o)&&(o=t.call(this,i,o))}else r.push(o);return null==n?o:n.call(this,i,o)}}(n.exports=function(n,t,e,i){return JSON.stringify(n,r(t,i),e)}).getSerialize=r}),i=function(n){return function(){var t,r,i=48,o=1,a=i,s=new Array(i),g=0,h=new function(){var n=4022871197;return function(t){if(t){t=t.toString();for(var r=0;r<t.length;r++){var e=.02519603282416938*(n+=t.charCodeAt(r));e-=n=e>>>0,n=(e*=n)>>>0,n+=4294967296*(e-=n)}return 2.3283064365386963e-10*(n>>>0)}n=4022871197}};for(t=0;t<i;t++)s[t]=h(Math.random());var l=function(){++a>=i&&(a=0);var n=1768863*s[a]+2.3283064365386963e-10*o;return s[a]=n-(o=0|n)},c=function(n){return Math.floor(n*(l()+1.1102230246251565e-16*(2097152*l()|0)))};c.string=function(n){var t,r="";for(t=0;t<n;t++)r+=String.fromCharCode(33+c(94));return r};return c.cleanString=function(n){return n=(n=(n=n.replace(/(^\s*)|(\s*$)/gi,"")).replace(/[\x00-\x1F]/gi,"")).replace(/\n /,"\n")},c.hashString=function(n){for(n=c.cleanString(n),h(n),t=0;t<n.length;t++)for(g=n.charCodeAt(t),r=0;r<i;r++)s[r]-=h(g),s[r]<0&&(s[r]+=1)},c.seed=function(n){void 0!==n&&null!==n||(n=Math.random()),"string"!=typeof n&&(n=e(n,function(n,t){return"function"==typeof t?t.toString():t})),c.initState(),c.hashString(n)},c.addEntropy=function(){var n=[];for(t=0;t<arguments.length;t++)n.push(arguments[t]);!function(){var n=Array.prototype.slice.call(arguments);for(t=0;t<n.length;t++)for(r=0;r<i;r++)s[r]-=h(n[t]),s[r]<0&&(s[r]+=1)}(g+++(new Date).getTime()+n.join("")+Math.random())},c.initState=function(){for(h(),t=0;t<i;t++)s[t]=h(" ");o=1,a=i},c.done=function(){h=null},void 0!==n&&c.seed(n),c.range=function(n){return c(n)},c.random=function(){return c(Number.MAX_VALUE-1)/Number.MAX_VALUE},c.floatBetween=function(n,t){return c.random()*(t-n)+n},c.intBetween=function(n,t){return Math.floor(c.random()*(t-n+1))+n},c}()};i.create=function(n){return new i(n)};var o=i;var a=class{constructor(n){this.p=new Uint8Array(512),this.seed(n)}gen(){}seed(n){const t=o.create(n||Math.random());for(let n=0;n<256;n++)this.p[n]=n;for(let n=0;n<256;n++){const r=t(256),e=this.p[n];this.p[n]=this.p[r],this.p[r]=e}for(let n=0;n<256;n++)this.p[n+256]=this.p[n]}transform(n){return((...t)=>n.apply(this,t)).bind(this)}octavate(...n){const t=n[0],r=n.slice(1);let e=0,i=0;for(let n=0;n<t;n++){const t=1<<n;e+=this.gen.apply(this,r.map(n=>n*t))/t}for(let n=0;n<t;n++)i+=1/(1<<n);return e/i}};class s{constructor(n){this.x=n}dot(n){return this.x*n}}const g=[new s(1),new s(-1)];var h={grad1:function(n,t){return g[n[t]%g.length]}};function l(...n){const t=n.slice(1),r=n[0]-t.reduce((n,t)=>n+t*t,0);return r*r*r*r}var c={lerp:function(n,t,r){return n*(1-r)+t*r},fade:function(n){return n*n*n*(10+n*(6*n-15))},cut1:l.bind(null,1),cut:l.bind(null,.5)};const{grad1:u}=h,{cut1:b}=c;var d=class extends a{gen(n){const t=Math.floor(n)%256,r=n-t;return.5*(b(r)*u(this.p,t).dot(r)+b(r-1)*u(this.p,t+1).dot(r-1))}};class p{constructor(n,t){this.x=n,this.y=t}dot(n,t){return this.x*n+this.y*t}}const f=[new p(1,0),new p(1,1),new p(0,1),new p(-1,1),new p(-1,0),new p(-1,-1),new p(0,-1),new p(1,-1)];var v={grad2:function(n,t,r){return f[n[t+n[r]]%f.length]},S2_TO_C:.5*(Math.sqrt(3)-1),C_TO_S2:(3-Math.sqrt(3))/6};const{grad2:m,S2_TO_C:_,C_TO_S2:w}=v,{cut:y}=c;var x=class extends a{gen(n,t){const r=(n+t)*_,e=Math.trunc(n+r),i=Math.trunc(t+r),o=(e+i)*w,a=n-(e-o),s=t-(i-o),g=a>s?1:0,h=a>s?0:1,l=a-g+w,c=s-h+w,u=a-1+2*w,b=s-1+2*w;return 70*(y(a,s)*m(this.p,e,i).dot(a,s)+y(l,c)*m(this.p,e+g,i+h).dot(l,c)+y(u,b)*m(this.p,e+1,i+1).dot(u,b))}};const{grad1:S}=h,{lerp:E,fade:M}=c;var A=class extends a{gen(n){const t=Math.floor(n)%256,r=n-t,e=S(this.p,t).dot(r),i=S(this.p,t+1).dot(r-1);return E(e,i,M(r))}};const{grad2:C}=v,{fade:k,lerp:T}=c;var O=class extends a{gen(n,t){const r=Math.trunc(n)%256,e=Math.trunc(t)%256,i=n-r,o=t-e,a=C(this.p,r,e).dot(i,o),s=C(this.p,r+1,e).dot(i-1,o),g=C(this.p,r,e+1).dot(i,o-1),h=C(this.p,r+1,e+1).dot(i-1,o-1);return T(T(a,s,k(i)),T(g,h,k(i)),k(o))}};class P{constructor(n,t,r){this.x=n,this.y=t,this.z=r}dot(n,t,r){return this.x*n+this.y*t+this.z*r}}const N=[new P(1,1,1),new P(-1,1,1),new P(1,-1,1),new P(-1,-1,1),new P(1,1,0),new P(-1,1,0),new P(1,-1,0),new P(-1,-1,0),new P(1,1,-1),new P(-1,1,-1),new P(1,-1,-1),new P(-1,-1,-1)];var j={grad3:function(n,t,r,e){return N[n[t+n[r+n[e]]]%N.length]}};const{grad3:G}=j,{fade:R,lerp:I}=c;var q=class extends a{gen(n,t,r){const e=Math.trunc(n)%256,i=Math.trunc(t)%256,o=Math.trunc(r)%256,a=n-e,s=t-i,g=r-o,h=G(this.p,e,i,o).dot(a,s,g),l=G(this.p,e+1,i,o).dot(a-1,s,g),c=G(this.p,e,i+1,o).dot(a,s-1,g),u=G(this.p,e+1,i+1,o).dot(a-1,s-1,g),b=G(this.p,e,i,o+1).dot(a,s,g-1),d=G(this.p,e+1,i,o+1).dot(a-1,s,g-1),p=G(this.p,e,i+1,o+1).dot(a,s-1,g-1),f=G(this.p,e+1,i+1,o+1).dot(a-1,s-1,g-1);return I(I(I(h,l,a),I(c,u,a),R(s)),I(I(b,d,a),I(p,f,a),R(s)),R(g))}};class z{constructor(n,t,r,e){this.x=n,this.y=t,this.z=r,this.t=e}dot(n,t,r,e){return this.x*n+this.y*t+this.z*r+this.t*e}}const F=[new z(0,1,1,1),new z(0,1,1,-1),new z(0,1,-1,1),new z(0,1,-1,-1),new z(0,-1,1,1),new z(0,-1,1,-1),new z(0,-1,-1,1),new z(0,-1,-1,-1),new z(1,0,1,1),new z(1,0,1,-1),new z(1,0,-1,1),new z(1,0,-1,-1),new z(-1,0,1,1),new z(-1,0,1,-1),new z(-1,0,-1,1),new z(-1,0,-1,-1),new z(1,1,0,1),new z(1,1,0,-1),new z(1,-1,0,1),new z(1,-1,0,-1),new z(-1,1,0,1),new z(-1,1,0,-1),new z(-1,-1,0,1),new z(-1,-1,0,-1),new z(1,1,1,0),new z(1,1,-1,0),new z(1,-1,1,0),new z(1,-1,-1,0),new z(-1,1,1,0),new z(-1,1,-1,0),new z(-1,-1,1,0),new z(-1,-1,-1,0)];var U={grad4:function(n,t,r,e,i){return F[n[t+n[r+n[e+n[i]]]]%F.length]}};const{grad4:D}=U,{fade:L,lerp:V}=c;var B=class extends a{gen(n,t,r,e){const i=Math.trunc(n)%256,o=Math.trunc(t)%256,a=Math.trunc(r)%256,s=Math.trunc(e)%256,g=n-i,h=t-o,l=r-a,c=e-s,u=D(this.p,i,o,a,s).dot(g,h,l,c),b=D(this.p,i+1,o,a,s).dot(g-1,h,l),d=D(this.p,i,o+1,a,s).dot(g,h-1,l),p=D(this.p,i+1,o+1,a,s).dot(g-1,h-1,l),f=D(this.p,i,o,a+1,s).dot(g,h,l-1),v=D(this.p,i+1,o,a+1,s).dot(g-1,h,l-1),m=D(this.p,i,o+1,a+1,s).dot(g,h-1,l-1),_=D(this.p,i+1,o+1,a+1,s).dot(g-1,h-1,l-1),w=D(this.p,i,o,a,s+1).dot(g,h,l,c-1),y=D(this.p,i+1,o,a,s+1).dot(g-1,h,l,c-1),x=D(this.p,i,o+1,a,s+1).dot(g,h-1,l,c-1),S=D(this.p,i+1,o+1,a,s+1).dot(g-1,h-1,l,c-1),E=D(this.p,i,o,a+1,s+1).dot(g,h,l-1,c-1),M=D(this.p,i+1,o,a+1,s+1).dot(g-1,h,l-1,c-1),A=D(this.p,i,o+1,a+1,s+1).dot(g,h-1,l-1,c-1),C=D(this.p,i+1,o+1,a+1,s+1).dot(g-1,h-1,l-1,c-1);return V(V(V(V(u,b,g),V(d,p,g),L(h)),V(V(f,v,g),V(m,_,g),L(h)),L(l)),V(V(V(w,y,g),V(x,S,g),L(h)),V(V(E,M,g),V(A,C,g),L(h)),L(l)),L(c))}};const{lerp:H,fade:Y}=c;function X(n,t){return 1===t.length?n[t[0]]:n[t[0]+X(n,t.slice(1))]}class J{constructor(n){this.R=n}dot(n){let t=0;for(let r=0;r<n.length;r++)t+=this.R[r]*n[r];return t}}const W=[];var Z={lerpN:function n(t,r){if(1===r.length)return H(t[0],t[1],Y(r[0]));const e=t.slice(0,Math.floor(t.length/2)),i=t.slice(Math.ceil(t.length/2));return H(n(e,r.slice(0,r.length-1)),n(i,r.slice(0,r.length-1)),Y(r[r.length-1]))},getNs:function(n,t,r,e){const i=[];0===W.length&&function(n){for(let t=0;t<2*n;t++){const r=new Array(n).fill(0);r[t%n]=t/n>=1?1:-1,W[t]=new J(r)}}(t);for(let o=0;o<2<<t-1;o++){const a=r.slice(),s=e.slice();let g=o;for(let n=0;n<t;n++)1&g&&(a[n]+=1,s[n]-=1),g>>=1;i[o]=W[X(n,a)%W.length].dot(s)}return i}};const{lerpN:K,getNs:Q}=Z;var $={Simplex1:d,Simplex2:x,Perlin1:A,Perlin2:O,Perlin3:q,Perlin4:B,PerlinN:class extends a{gen(...n){const t=[],r=[];for(let e=0;e<n.length;e++)t[e]=Math.trunc(n[e])%256,r[e]=n[e]-t[e];const e=Q(this.p,n.length,t,r);return K(e,r)}}},nn=r(function(n){!function(n){var t=n.noise={};function r(n,t,r){this.x=n,this.y=t,this.z=r}r.prototype.dot2=function(n,t){return this.x*n+this.y*t},r.prototype.dot3=function(n,t,r){return this.x*n+this.y*t+this.z*r};var e=[new r(1,1,0),new r(-1,1,0),new r(1,-1,0),new r(-1,-1,0),new r(1,0,1),new r(-1,0,1),new r(1,0,-1),new r(-1,0,-1),new r(0,1,1),new r(0,-1,1),new r(0,1,-1),new r(0,-1,-1)],i=[151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208,89,18,169,200,196,135,130,116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,250,124,123,5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,223,183,170,213,119,248,152,2,44,154,163,70,221,153,101,155,167,43,172,9,129,22,39,253,19,98,108,110,79,113,224,232,178,185,112,104,218,246,97,228,251,34,242,193,238,210,144,12,191,179,162,241,81,51,145,235,249,14,239,107,49,192,214,31,181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254,138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180],o=new Array(512),a=new Array(512);t.seed=function(n){n>0&&n<1&&(n*=65536),(n=Math.floor(n))<256&&(n|=n<<8);for(var t=0;t<256;t++){var r;o[t]=o[t+256]=r=1&t?i[t]^255&n:i[t]^n>>8&255,a[t]=a[t+256]=e[r%12]}},t.seed(0);var s=.5*(Math.sqrt(3)-1),g=(3-Math.sqrt(3))/6,h=1/6;function l(n){return n*n*n*(n*(6*n-15)+10)}function c(n,t,r){return(1-r)*n+r*t}t.simplex2=function(n,t){var r,e,i=(n+t)*s,h=Math.floor(n+i),l=Math.floor(t+i),c=(h+l)*g,u=n-h+c,b=t-l+c;u>b?(r=1,e=0):(r=0,e=1);var d=u-r+g,p=b-e+g,f=u-1+2*g,v=b-1+2*g,m=a[(h&=255)+r+o[(l&=255)+e]],_=a[h+1+o[l+1]],w=.5-u*u-b*b,y=.5-d*d-p*p,x=.5-f*f-v*v;return 70*((w<0?0:(w*=w)*w*a[h+o[l]].dot2(u,b))+(y<0?0:(y*=y)*y*m.dot2(d,p))+(x<0?0:(x*=x)*x*_.dot2(f,v)))},t.simplex3=function(n,t,r){var e,i,s,g,l,c,u=(n+t+r)*(1/3),b=Math.floor(n+u),d=Math.floor(t+u),p=Math.floor(r+u),f=(b+d+p)*h,v=n-b+f,m=t-d+f,_=r-p+f;v>=m?m>=_?(e=1,i=0,s=0,g=1,l=1,c=0):v>=_?(e=1,i=0,s=0,g=1,l=0,c=1):(e=0,i=0,s=1,g=1,l=0,c=1):m<_?(e=0,i=0,s=1,g=0,l=1,c=1):v<_?(e=0,i=1,s=0,g=0,l=1,c=1):(e=0,i=1,s=0,g=1,l=1,c=0);var w=v-e+h,y=m-i+h,x=_-s+h,S=v-g+2*h,E=m-l+2*h,M=_-c+2*h,A=v-1+.5,C=m-1+.5,k=_-1+.5,T=a[(b&=255)+e+o[(d&=255)+i+o[(p&=255)+s]]],O=a[b+g+o[d+l+o[p+c]]],P=a[b+1+o[d+1+o[p+1]]],N=.5-v*v-m*m-_*_,j=.5-w*w-y*y-x*x,G=.5-S*S-E*E-M*M,R=.5-A*A-C*C-k*k;return 32*((N<0?0:(N*=N)*N*a[b+o[d+o[p]]].dot3(v,m,_))+(j<0?0:(j*=j)*j*T.dot3(w,y,x))+(G<0?0:(G*=G)*G*O.dot3(S,E,M))+(R<0?0:(R*=R)*R*P.dot3(A,C,k)))},t.perlin2=function(n,t){var r=Math.floor(n),e=Math.floor(t);n-=r,t-=e;var i=a[(r&=255)+o[e&=255]].dot2(n,t),s=a[r+o[e+1]].dot2(n,t-1),g=a[r+1+o[e]].dot2(n-1,t),h=a[r+1+o[e+1]].dot2(n-1,t-1),u=l(n);return c(c(i,g,u),c(s,h,u),l(t))},t.perlin3=function(n,t,r){var e=Math.floor(n),i=Math.floor(t),s=Math.floor(r);n-=e,t-=i,r-=s;var g=a[(e&=255)+o[(i&=255)+o[s&=255]]].dot3(n,t,r),h=a[e+o[i+o[s+1]]].dot3(n,t,r-1),u=a[e+o[i+1+o[s]]].dot3(n,t-1,r),b=a[e+o[i+1+o[s+1]]].dot3(n,t-1,r-1),d=a[e+1+o[i+o[s]]].dot3(n-1,t,r),p=a[e+1+o[i+o[s+1]]].dot3(n-1,t,r-1),f=a[e+1+o[i+1+o[s]]].dot3(n-1,t-1,r),v=a[e+1+o[i+1+o[s+1]]].dot3(n-1,t-1,r-1),m=l(n),_=l(t),w=l(r);return c(c(c(g,d,m),c(h,p,m),w),c(c(u,f,m),c(b,v,m),w),_)}}(n.exports)}),tn=r(function(n){const t=nn.noise,r=(n,t,r)=>Math.max(t,Math.min(n,r)),e=(n,t,r)=>i(n,t,r,0,1),i=(n,t,r,e,i)=>(n-t)*(i-e)/(r-t)+e,o=(n,t,r)=>n+r*(t-n),a=(n,t)=>void 0!==t?o(n,t,Math.random()):o(0,n,Math.random());function s(n,r,e){return 3===arguments.length?t.perlin3(n,r,e):2===arguments.length?t.perlin2(n,r):1===arguments.length?t.perlin2(n,null):null}n.exports={clamp:r,constrain:r,degrees:n=>180*n/Math.PI,radians:n=>n*Math.PI/180,lerp:o,normalize:e,norm:e,map:i,random:a,rnd:a,perlin:s,noise:s}}),rn=tn.radians,en=tn.lerp,on=tn.normalize,an=function(n){void 0===n&&(n=function(n,t,r,e){return 1}),this.compute=n.bind(this)},sn={methods:{configurable:!0}};function gn(n,t,r,e,i){void 0===i&&(i={});var o=i.ctx,a=i.color;"transparent"!==a&&(a&&(o.fillStyle=a),o.fillRect(n,t,r,e))}function hn(n){return function(t,r,e){void 0===e&&(e={});var i=e.ctx,o=e.unit,a=e.scale;void 0===a&&(a=1);var s=e.foregroundColor;void 0===s&&(s="black");var g=e.backgroundColor;void 0===g&&(g="white"),i.beginSVGGroup(),gn(t,r,o,o,{ctx:i,color:g}),i.fillStyle=s,n(t,r,{ctx:i,unit:o,scale:a}),i.endSVGGroup()}}sn.methods.get=function(){return Object.getOwnPropertyNames(an).filter(function(n){return"methods"!==n}).filter(function(n){return"function"==typeof an[n]})},an.normalize=function(n,t,r,e){return[on(n,0,r),on(t,0,e)]},an.simplex=function(n){void 0===n&&(n={});var t=n.seed;void 0===t&&(t=null);var r=n.octaves;void 0===r&&(r=2);var e=n.power;void 0===e&&(e=1);var i=Math.pow(2,r),o=new $.Simplex2(t);return new an(function(n,t,r,a){var s=an.normalize(n,t,r,a);return Math.pow(on(o.gen(s[0]/i,s[1]/i),-1,1),e)})},an.linear=function(n){return void 0===n&&(n=0),new an(function(t,r,e,i){var o=an.normalize(t,r,e,i),a=o[0],s=o[1],g=rn(n);return(en(1-a,a,(Math.sin(g)+1)/2)+en(1-s,s,(Math.cos(g)+1)/2))/2})},an.random=function(n){return void 0===n&&(n=Math.random),new an(n)},an.fix=function(n){return void 0===n&&(n=1),new an(function(){return n})},Object.defineProperties(an,sn);var ln=cn;function cn(n,t,r){var e,i,o,a,s,g=n.length,h=bn(n[0],t),l=[];for(r||(r=[]),e=1;e<g;e++){for(i=n[e-1],a=s=bn(o=n[e],t);;){if(!(h|a)){l.push(i),a!==s?(l.push(o),e<g-1&&(r.push(l),l=[])):e===g-1&&l.push(o);break}if(h&a)break;h?h=bn(i=un(i,o,h,t),t):a=bn(o=un(i,o,a,t),t)}h=s}return l.length&&r.push(l),r}function un(n,t,r,e){return 8&r?[n[0]+(t[0]-n[0])*(e[3]-n[1])/(t[1]-n[1]),e[3]]:4&r?[n[0]+(t[0]-n[0])*(e[1]-n[1])/(t[1]-n[1]),e[1]]:2&r?[e[2],n[1]+(t[1]-n[1])*(e[2]-n[0])/(t[0]-n[0])]:1&r?[e[0],n[1]+(t[1]-n[1])*(e[0]-n[0])/(t[0]-n[0])]:null}function bn(n,t){var r=0;return n[0]<t[0]?r|=1:n[0]>t[2]&&(r|=2),n[1]<t[1]?r|=4:n[1]>t[3]&&(r|=8),r}function dn(n,t){n.beginPath(),t.forEach(function(t,r){n[0===r?"moveTo":"lineTo"].apply(n,t)})}function pn(n,t){return Math.floor(n/t)*t}function fn(n,t){return n/t}cn.polyline=cn,cn.polygon=function(n,t){var r,e,i,o,a,s,g;for(e=1;e<=8;e*=2){for(r=[],o=!(bn(i=n[n.length-1],t)&e),a=0;a<n.length;a++)(g=!(bn(s=n[a],t)&e))!==o&&r.push(un(i,s,e,t)),g&&r.push(s),i=s,o=g;if(!(n=r).length)break}return r};var vn={empty:function(){},debug:function(n,t,r){void 0===r&&(r={});var e=r.ctx,i=r.unit,o=r.scale;void 0===o&&(o=1),e.strokeStyle="black",e.lineWidth=i/12,e.strokeRect(n,t,i,i)},square:function(n,t,r){void 0===r&&(r={});var e=r.ctx,i=r.unit,o=r.scale;void 0===o&&(o=1);var a=pn(i*o,fn(i,24));a<0||e.fillRect(n+i/2-a/2,t+i/2-a/2,a,a)},square_offset:function(n,t,r){void 0===r&&(r={});var e=r.ctx,i=r.unit,o=r.scale;void 0===o&&(o=1);var a=pn(i*o,fn(i,24))-10;a<0||e.fillRect(n+i/2-a/2,t+i/2-a/2,a,a)},vertical_line:function(n,t,r){void 0===r&&(r={});var e=r.ctx,i=r.unit,o=r.scale;void 0===o&&(o=1);var a=pn(i*o,fn(i,24));a<0||e.fillRect(n+i/2-a/2,t,a,i)},vertical_line_offset:function(n,t,r){void 0===r&&(r={});var e=r.ctx,i=r.unit,o=r.scale;void 0===o&&(o=1);var a=pn(i*o,fn(i,24))-10;a<0||e.fillRect(n+i/2-a/2,t,a,i)},horizontal_line:function(n,t,r){void 0===r&&(r={});var e=r.ctx,i=r.unit,o=r.scale;void 0===o&&(o=1);var a=pn(i*o,fn(i,24));a<0||e.fillRect(n,t+i/2-a/2,i,a)},horizontal_line_offset:function(n,t,r){void 0===r&&(r={});var e=r.ctx,i=r.unit,o=r.scale;void 0===o&&(o=1);var a=pn(i*o,fn(i,24))-10;a<0||e.fillRect(n,t+i/2-a/2,i,a)},diagonal:function(n,t,r){void 0===r&&(r={});var e=r.ctx,i=r.unit,o=r.scale;void 0===o&&(o=1);var a=pn(i*o,fn(i,24));a<0||(e.beginPath(),e.moveTo(n+i-a,t),e.lineTo(n+i,t),e.lineTo(n+a,t+i),e.lineTo(n,t+i),e.fill())},diamond:function(n,t,r){void 0===r&&(r={});var e=r.ctx,i=r.unit,o=r.scale;void 0===o&&(o=1);var a=pn(i*o,fn(i,24))-1;a<0||(dn(e,ln.polygon([[n+i/2,t+a],[n+i-a,t+i/2],[n+i/2,t+i-a],[n+a,t+i/2]],[n,t,n+i,t+i])),e.fill())},circle:function(n,t,r){void 0===r&&(r={});var e=r.ctx,i=r.unit,o=r.scale;void 0===o&&(o=1);var a=pn((i-1)*o,fn(i,24));if(!(a<0)){for(var s=[],g=0;g<360;g+=10){var h=rn(g);s.push([n+i/2+Math.sin(h)*a,t+i/2+Math.cos(h)*a])}dn(e,ln.polygon(s,[n,t,n+i,t+i])),e.closePath(),e.fill()}},ffp:function(n,t,r){void 0===r&&(r={});var e=r.ctx,i=r.unit,o=r.scale;void 0===o&&(o=1);var a="FFP".split(""),s=a[Math.floor(Math.random()*a.length)];s&&(e.font=1.2*i+"px Space Mono",e.fillText(s,n,t+i))}},mn=function(n){void 0===n&&(n={});var t=n.width,r=n.height,e=n.unit;void 0===e&&(e=24);var i=n.line,o=n.gradient,a=n.pattern;void 0===a&&(a=hn(vn.debug));var s=n.foregroundColor;void 0===s&&(s="black");var g=n.backgroundColor;void 0===g&&(g="white"),this.width=t,this.height=r,this.unit=e,this.line=i,this.gradient=o,this.pattern=a,this.backgroundColor=g,this.foregroundColor=s,this.grid=[],this.cells=[],this._populate()};mn.prototype._populate=function(){for(var n=0;n<this.width;n+=this.unit)for(var t=Math.floor(n/this.unit),r=this.line.compute(t)*this.height;r<this.height;r+=this.unit){var e=Math.floor(r/this.unit);this.setCell(t,e)}},mn.prototype.setCell=function(n,t){this.grid[n]||(this.grid[n]=[]);var r={i:n,j:t,x:n*this.unit,y:t*this.unit,shouldRender:!0};this.grid[n][t]=r,this.cells.push(r)},mn.prototype.hasCell=function(n,t){return this.grid[n]&&this.grid[n][t]},mn.prototype.isInFrontOf=function(n,t){var r=Math.floor(n/this.unit),e=Math.floor(t/this.unit);return this.hasCell(r,e)},mn.prototype.behind=function(n){this.grid.forEach(function(t){t.forEach(function(t){t&&t.shouldRender&&(t.shouldRender=!n.some(function(n){return n.isInFrontOf(t.x,t.y)}))})})},mn.prototype.render=function(n){var t=this;this.cells.forEach(function(r){r.shouldRender&&t.pattern(r.x,r.y,{ctx:n,unit:t.unit,backgroundColor:t.backgroundColor,foregroundColor:t.foregroundColor,scale:t.gradient.compute(r.x,r.y,t.width,t.height)})})};var _n=r(function(n){!function(){var t,r,e,i,o;function a(n,t){var r,e=Object.keys(t);for(r=0;r<e.length;r++)n=n.replace(new RegExp("\\{"+e[r]+"\\}","gi"),t[e[r]]);return n}function s(n){var t,r,e;if(!n)throw new Error("cannot create a random attribute name for an undefined object");t="ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz",r="";do{for(r="",e=0;e<12;e++)r+=t[Math.floor(Math.random()*t.length)]}while(n[r]);return r}o=function(n,t){var r,e,i,o={};for(n=n.split(","),t=t||10,r=0;r<n.length;r+=2)e="&"+n[r+1]+";",i=parseInt(n[r],t),o[e]="&#"+i+";";return o["\\xa0"]="&#160;",o}("50,nbsp,51,iexcl,52,cent,53,pound,54,curren,55,yen,56,brvbar,57,sect,58,uml,59,copy,5a,ordf,5b,laquo,5c,not,5d,shy,5e,reg,5f,macr,5g,deg,5h,plusmn,5i,sup2,5j,sup3,5k,acute,5l,micro,5m,para,5n,middot,5o,cedil,5p,sup1,5q,ordm,5r,raquo,5s,frac14,5t,frac12,5u,frac34,5v,iquest,60,Agrave,61,Aacute,62,Acirc,63,Atilde,64,Auml,65,Aring,66,AElig,67,Ccedil,68,Egrave,69,Eacute,6a,Ecirc,6b,Euml,6c,Igrave,6d,Iacute,6e,Icirc,6f,Iuml,6g,ETH,6h,Ntilde,6i,Ograve,6j,Oacute,6k,Ocirc,6l,Otilde,6m,Ouml,6n,times,6o,Oslash,6p,Ugrave,6q,Uacute,6r,Ucirc,6s,Uuml,6t,Yacute,6u,THORN,6v,szlig,70,agrave,71,aacute,72,acirc,73,atilde,74,auml,75,aring,76,aelig,77,ccedil,78,egrave,79,eacute,7a,ecirc,7b,euml,7c,igrave,7d,iacute,7e,icirc,7f,iuml,7g,eth,7h,ntilde,7i,ograve,7j,oacute,7k,ocirc,7l,otilde,7m,ouml,7n,divide,7o,oslash,7p,ugrave,7q,uacute,7r,ucirc,7s,uuml,7t,yacute,7u,thorn,7v,yuml,ci,fnof,sh,Alpha,si,Beta,sj,Gamma,sk,Delta,sl,Epsilon,sm,Zeta,sn,Eta,so,Theta,sp,Iota,sq,Kappa,sr,Lambda,ss,Mu,st,Nu,su,Xi,sv,Omicron,t0,Pi,t1,Rho,t3,Sigma,t4,Tau,t5,Upsilon,t6,Phi,t7,Chi,t8,Psi,t9,Omega,th,alpha,ti,beta,tj,gamma,tk,delta,tl,epsilon,tm,zeta,tn,eta,to,theta,tp,iota,tq,kappa,tr,lambda,ts,mu,tt,nu,tu,xi,tv,omicron,u0,pi,u1,rho,u2,sigmaf,u3,sigma,u4,tau,u5,upsilon,u6,phi,u7,chi,u8,psi,u9,omega,uh,thetasym,ui,upsih,um,piv,812,bull,816,hellip,81i,prime,81j,Prime,81u,oline,824,frasl,88o,weierp,88h,image,88s,real,892,trade,89l,alefsym,8cg,larr,8ch,uarr,8ci,rarr,8cj,darr,8ck,harr,8dl,crarr,8eg,lArr,8eh,uArr,8ei,rArr,8ej,dArr,8ek,hArr,8g0,forall,8g2,part,8g3,exist,8g5,empty,8g7,nabla,8g8,isin,8g9,notin,8gb,ni,8gf,prod,8gh,sum,8gi,minus,8gn,lowast,8gq,radic,8gt,prop,8gu,infin,8h0,ang,8h7,and,8h8,or,8h9,cap,8ha,cup,8hb,int,8hk,there4,8hs,sim,8i5,cong,8i8,asymp,8j0,ne,8j1,equiv,8j4,le,8j5,ge,8k2,sub,8k3,sup,8k4,nsub,8k6,sube,8k7,supe,8kl,oplus,8kn,otimes,8l5,perp,8m5,sdot,8o8,lceil,8o9,rceil,8oa,lfloor,8ob,rfloor,8p9,lang,8pa,rang,9ea,loz,9j0,spades,9j3,clubs,9j5,hearts,9j6,diams,ai,OElig,aj,oelig,b0,Scaron,b1,scaron,bo,Yuml,m6,circ,ms,tilde,802,ensp,803,emsp,809,thinsp,80c,zwnj,80d,zwj,80e,lrm,80f,rlm,80j,ndash,80k,mdash,80o,lsquo,80p,rsquo,80q,sbquo,80s,ldquo,80t,rdquo,80u,bdquo,810,dagger,811,Dagger,81g,permil,81p,lsaquo,81q,rsaquo,85c,euro",32),t={strokeStyle:{svgAttr:"stroke",canvas:"#000000",svg:"none",apply:"stroke"},fillStyle:{svgAttr:"fill",canvas:"#000000",svg:null,apply:"fill"},lineCap:{svgAttr:"stroke-linecap",canvas:"butt",svg:"butt",apply:"stroke"},lineJoin:{svgAttr:"stroke-linejoin",canvas:"miter",svg:"miter",apply:"stroke"},miterLimit:{svgAttr:"stroke-miterlimit",canvas:10,svg:4,apply:"stroke"},lineWidth:{svgAttr:"stroke-width",canvas:1,svg:1,apply:"stroke"},globalAlpha:{svgAttr:"opacity",canvas:1,svg:1,apply:"fill stroke"},font:{canvas:"10px sans-serif"},shadowColor:{canvas:"#000000"},shadowOffsetX:{canvas:0},shadowOffsetY:{canvas:0},shadowBlur:{canvas:0},textAlign:{canvas:"start"},textBaseline:{canvas:"alphabetic"}},(e=function(n,t){this.__root=n,this.__ctx=t}).prototype.addColorStop=function(n,t){var r,e=this.__ctx.__createElement("stop");e.setAttribute("offset",n),-1!==t.indexOf("rgba")?(r=/rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d?\.?\d*)\s*\)/gi.exec(t),e.setAttribute("stop-color",a("rgb({r},{g},{b})",{r:r[1],g:r[2],b:r[3]})),e.setAttribute("stop-opacity",r[4])):e.setAttribute("stop-color",t),this.__root.appendChild(e)},i=function(n,t){this.__root=n,this.__ctx=t},(r=function(n){var t,e={width:500,height:500,enableMirroring:!1};if(arguments.length>1?((t=e).width=arguments[0],t.height=arguments[1]):t=n||e,!(this instanceof r))return new r(t);this.width=t.width||e.width,this.height=t.height||e.height,this.enableMirroring=void 0!==t.enableMirroring?t.enableMirroring:e.enableMirroring,this.canvas=this,this.__document=t.document||document,this.__canvas=this.__document.createElement("canvas"),this.__ctx=this.__canvas.getContext("2d"),this.__setDefaultStyles(),this.__stack=[this.__getStyleState()],this.__groupStack=[],this.__root=this.__document.createElementNS("http://www.w3.org/2000/svg","svg"),this.__root.setAttribute("version",1.1),this.__root.setAttribute("xmlns","http://www.w3.org/2000/svg"),this.__root.setAttributeNS("http://www.w3.org/2000/xmlns/","xmlns:xlink","http://www.w3.org/1999/xlink"),this.__root.setAttribute("width",this.width),this.__root.setAttribute("height",this.height),this.__ids={},this.__defs=this.__document.createElementNS("http://www.w3.org/2000/svg","defs"),this.__root.appendChild(this.__defs),this.__currentElement=this.__document.createElementNS("http://www.w3.org/2000/svg","g"),this.__root.appendChild(this.__currentElement)}).prototype.__createElement=function(n,t,r){void 0===t&&(t={});var e,i,o=this.__document.createElementNS("http://www.w3.org/2000/svg",n),a=Object.keys(t);for(r&&(o.setAttribute("fill","none"),o.setAttribute("stroke","none")),e=0;e<a.length;e++)o.setAttribute(i=a[e],t[i]);return o},r.prototype.__setDefaultStyles=function(){var n,r,e=Object.keys(t);for(n=0;n<e.length;n++)this[r=e[n]]=t[r].canvas},r.prototype.__applyStyleState=function(n){var t,r,e=Object.keys(n);for(t=0;t<e.length;t++)this[r=e[t]]=n[r]},r.prototype.__getStyleState=function(){var n,r,e={},i=Object.keys(t);for(n=0;n<i.length;n++)e[r=i[n]]=this[r];return e},r.prototype.__applyStyleToCurrentElement=function(n){var r,o,s,g,h,l=Object.keys(t);for(r=0;r<l.length;r++)if(s=this[l[r]],(o=t[l[r]]).apply)if(-1!==o.apply.indexOf("fill")&&s instanceof i){if(s.__ctx)for(;s.__ctx.__defs.childNodes.length;)g=s.__ctx.__defs.childNodes[0].getAttribute("id"),this.__ids[g]=g,this.__defs.appendChild(s.__ctx.__defs.childNodes[0]);this.__currentElement.setAttribute("fill",a("url(#{id})",{id:s.__root.getAttribute("id")}))}else-1!==o.apply.indexOf("fill")&&s instanceof e?this.__currentElement.setAttribute("fill",a("url(#{id})",{id:s.__root.getAttribute("id")})):-1!==o.apply.indexOf(n)&&o.svg!==s&&("stroke"!==o.svgAttr&&"fill"!==o.svgAttr||-1===s.indexOf("rgba")?this.__currentElement.setAttribute(o.svgAttr,s):(h=/rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d?\.?\d*)\s*\)/gi.exec(s),this.__currentElement.setAttribute(o.svgAttr,a("rgb({r},{g},{b})",{r:h[1],g:h[2],b:h[3]})),this.__currentElement.setAttribute(o.svgAttr+"-opacity",h[4])))},r.prototype.__closestGroupOrSvg=function(n){return"g"===(n=n||this.__currentElement).nodeName||"svg"===n.nodeName?n:this.__closestGroupOrSvg(n.parentNode)},r.prototype.getSerializedSvg=function(n){var t,r,e,i,a,s=(new XMLSerializer).serializeToString(this.__root);if(/xmlns="http:\/\/www\.w3\.org\/2000\/svg".+xmlns="http:\/\/www\.w3\.org\/2000\/svg/gi.test(s)&&(s=s.replace('xmlns="http://www.w3.org/2000/svg','xmlns:xlink="http://www.w3.org/1999/xlink')),n)for(t=Object.keys(o),r=0;r<t.length;r++)i=o[e=t[r]],(a=new RegExp(e,"gi")).test(s)&&(s=s.replace(a,i));return s},r.prototype.getSvg=function(){return this.__root},r.prototype.save=function(){var n=this.__createElement("g"),t=this.__closestGroupOrSvg();this.__groupStack.push(t),t.appendChild(n),this.__currentElement=n,this.__stack.push(this.__getStyleState())},r.prototype.restore=function(){this.__currentElement=this.__groupStack.pop();var n=this.__stack.pop();this.__applyStyleState(n)},r.prototype.__addTransform=function(n){var t=this.__closestGroupOrSvg();if(t.childNodes.length>0){var r=this.__createElement("g");t.appendChild(r),this.__currentElement=r}var e=this.__currentElement.getAttribute("transform");e?e+=" ":e="",this.__currentElement.setAttribute("transform",e+=n)},r.prototype.scale=function(n,t){void 0===t&&(t=n),this.__addTransform(a("scale({x},{y})",{x:n,y:t}))},r.prototype.rotate=function(n){var t=180*n/Math.PI;this.__addTransform(a("rotate({angle},{cx},{cy})",{angle:t,cx:0,cy:0}))},r.prototype.translate=function(n,t){this.__addTransform(a("translate({x},{y})",{x:n,y:t}))},r.prototype.transform=function(n,t,r,e,i,o){this.__addTransform(a("matrix({a},{b},{c},{d},{e},{f})",{a:n,b:t,c:r,d:e,e:i,f:o}))},r.prototype.beginPath=function(){var n;this.__currentDefaultPath="",this.__currentPosition={},n=this.__createElement("path",{},!0),this.__closestGroupOrSvg().appendChild(n),this.__currentElement=n},r.prototype.__applyCurrentDefaultPath=function(){if("path"!==this.__currentElement.nodeName)throw new Error("Attempted to apply path command to node "+this.__currentElement.nodeName);this.__currentElement.setAttribute("d",this.__currentDefaultPath)},r.prototype.__addPathCommand=function(n){this.__currentDefaultPath+=" ",this.__currentDefaultPath+=n},r.prototype.moveTo=function(n,t){"path"!==this.__currentElement.nodeName&&this.beginPath(),this.__currentPosition={x:n,y:t},this.__addPathCommand(a("M {x} {y}",{x:n,y:t}))},r.prototype.closePath=function(){this.__addPathCommand("Z")},r.prototype.lineTo=function(n,t){this.__currentPosition={x:n,y:t},this.__currentDefaultPath.indexOf("M")>-1?this.__addPathCommand(a("L {x} {y}",{x:n,y:t})):this.__addPathCommand(a("M {x} {y}",{x:n,y:t}))},r.prototype.bezierCurveTo=function(n,t,r,e,i,o){this.__currentPosition={x:i,y:o},this.__addPathCommand(a("C {cp1x} {cp1y} {cp2x} {cp2y} {x} {y}",{cp1x:n,cp1y:t,cp2x:r,cp2y:e,x:i,y:o}))},r.prototype.quadraticCurveTo=function(n,t,r,e){this.__currentPosition={x:r,y:e},this.__addPathCommand(a("Q {cpx} {cpy} {x} {y}",{cpx:n,cpy:t,x:r,y:e}))};var g=function(n){var t=Math.sqrt(n[0]*n[0]+n[1]*n[1]);return[n[0]/t,n[1]/t]};r.prototype.arcTo=function(n,t,r,e,i){var o=this.__currentPosition&&this.__currentPosition.x,a=this.__currentPosition&&this.__currentPosition.y;if(void 0!==o&&void 0!==a){if(i<0)throw new Error("IndexSizeError: The radius provided ("+i+") is negative.");if(o===n&&a===t||n===r&&t===e||0===i)this.lineTo(n,t);else{var s=g([o-n,a-t]),h=g([r-n,e-t]);if(s[0]*h[1]!=s[1]*h[0]){var l=Math.acos(Math.abs(s[0]*h[0]+s[1]*h[1])),c=g([s[0]+h[0],s[1]+h[1]]),u=i/Math.sin(l/2),b=n+u*c[0],d=t+u*c[1],p=[-s[1],s[0]],f=[h[1],-h[0]],v=function(n){var t=n[0];return n[1]>=0?Math.acos(t):-Math.acos(t)},m=v(p),_=v(f);this.lineTo(b+p[0]*i,d+p[1]*i),this.arc(b,d,i,m,_)}else this.lineTo(n,t)}}},r.prototype.stroke=function(){"path"===this.__currentElement.nodeName&&this.__currentElement.setAttribute("paint-order","fill stroke markers"),this.__applyCurrentDefaultPath(),this.__applyStyleToCurrentElement("stroke")},r.prototype.fill=function(){"path"===this.__currentElement.nodeName&&this.__currentElement.setAttribute("paint-order","stroke fill markers"),this.__applyCurrentDefaultPath(),this.__applyStyleToCurrentElement("fill")},r.prototype.rect=function(n,t,r,e){"path"!==this.__currentElement.nodeName&&this.beginPath(),this.moveTo(n,t),this.lineTo(n+r,t),this.lineTo(n+r,t+e),this.lineTo(n,t+e),this.lineTo(n,t),this.closePath()},r.prototype.fillRect=function(n,t,r,e){var i;i=this.__createElement("rect",{x:n,y:t,width:r,height:e},!0),this.__closestGroupOrSvg().appendChild(i),this.__currentElement=i,this.__applyStyleToCurrentElement("fill")},r.prototype.strokeRect=function(n,t,r,e){var i;i=this.__createElement("rect",{x:n,y:t,width:r,height:e},!0),this.__closestGroupOrSvg().appendChild(i),this.__currentElement=i,this.__applyStyleToCurrentElement("stroke")},r.prototype.clearRect=function(n,t,r,e){var i,o=this.__closestGroupOrSvg();i=this.__createElement("rect",{x:n,y:t,width:r,height:e,fill:"#FFFFFF"},!0),o.appendChild(i)},r.prototype.createLinearGradient=function(n,t,r,i){var o=this.__createElement("linearGradient",{id:s(this.__ids),x1:n+"px",x2:r+"px",y1:t+"px",y2:i+"px",gradientUnits:"userSpaceOnUse"},!1);return this.__defs.appendChild(o),new e(o,this)},r.prototype.createRadialGradient=function(n,t,r,i,o,a){var g=this.__createElement("radialGradient",{id:s(this.__ids),cx:i+"px",cy:o+"px",r:a+"px",fx:n+"px",fy:t+"px",gradientUnits:"userSpaceOnUse"},!1);return this.__defs.appendChild(g),new e(g,this)},r.prototype.__parseFont=function(){var n=/^\s*(?=(?:(?:[-a-z]+\s*){0,2}(italic|oblique))?)(?=(?:(?:[-a-z]+\s*){0,2}(small-caps))?)(?=(?:(?:[-a-z]+\s*){0,2}(bold(?:er)?|lighter|[1-9]00))?)(?:(?:normal|\1|\2|\3)\s*){0,3}((?:xx?-)?(?:small|large)|medium|smaller|larger|[.\d]+(?:\%|in|[cem]m|ex|p[ctx]))(?:\s*\/\s*(normal|[.\d]+(?:\%|in|[cem]m|ex|p[ctx])))?\s*([-,\"\sa-z]+?)\s*$/i.exec(this.font),t={style:n[1]||"normal",size:n[4]||"10px",family:n[6]||"sans-serif",weight:n[3]||"normal",decoration:n[2]||"normal",href:null};return"underline"===this.__fontUnderline&&(t.decoration="underline"),this.__fontHref&&(t.href=this.__fontHref),t},r.prototype.__wrapTextLink=function(n,t){if(n.href){var r=this.__createElement("a");return r.setAttributeNS("http://www.w3.org/1999/xlink","xlink:href",n.href),r.appendChild(t),r}return t},r.prototype.__applyText=function(n,t,r,e){var i,o,a=this.__parseFont(),s=this.__closestGroupOrSvg(),g=this.__createElement("text",{"font-family":a.family,"font-size":a.size,"font-style":a.style,"font-weight":a.weight,"text-decoration":a.decoration,x:t,y:r,"text-anchor":(i=this.textAlign,o={left:"start",right:"end",center:"middle",start:"start",end:"end"},o[i]||o.start),"dominant-baseline":function(n){var t={alphabetic:"alphabetic",hanging:"hanging",top:"text-before-edge",bottom:"text-after-edge",middle:"central"};return t[n]||t.alphabetic}(this.textBaseline)},!0);g.appendChild(this.__document.createTextNode(n)),this.__currentElement=g,this.__applyStyleToCurrentElement(e),s.appendChild(this.__wrapTextLink(a,g))},r.prototype.fillText=function(n,t,r){this.__applyText(n,t,r,"fill")},r.prototype.strokeText=function(n,t,r){this.__applyText(n,t,r,"stroke")},r.prototype.measureText=function(n){return this.__ctx.font=this.font,this.__ctx.measureText(n)},r.prototype.arc=function(n,t,r,e,i,o){if(e!==i){(e%=2*Math.PI)===(i%=2*Math.PI)&&(i=(i+2*Math.PI-.001*(o?-1:1))%(2*Math.PI));var s=n+r*Math.cos(i),g=t+r*Math.sin(i),h=n+r*Math.cos(e),l=t+r*Math.sin(e),c=o?0:1,u=0,b=i-e;b<0&&(b+=2*Math.PI),u=o?b>Math.PI?0:1:b>Math.PI?1:0,this.lineTo(h,l),this.__addPathCommand(a("A {rx} {ry} {xAxisRotation} {largeArcFlag} {sweepFlag} {endX} {endY}",{rx:r,ry:r,xAxisRotation:0,largeArcFlag:u,sweepFlag:c,endX:s,endY:g})),this.__currentPosition={x:s,y:g}}},r.prototype.clip=function(){var n=this.__closestGroupOrSvg(),t=this.__createElement("clipPath"),r=s(this.__ids),e=this.__createElement("g");n.removeChild(this.__currentElement),t.setAttribute("id",r),t.appendChild(this.__currentElement),this.__defs.appendChild(t),n.setAttribute("clip-path",a("url(#{id})",{id:r})),n.appendChild(e),this.__currentElement=e},r.prototype.drawImage=function(){var n,t,e,i,o,a,s,g,h,l,c,u,b,d,p=Array.prototype.slice.call(arguments),f=p[0],v=0,m=0;if(3===p.length)n=p[1],t=p[2],e=o=f.width,i=a=f.height;else if(5===p.length)n=p[1],t=p[2],e=p[3],i=p[4],o=f.width,a=f.height;else{if(9!==p.length)throw new Error("Inavlid number of arguments passed to drawImage: "+arguments.length);v=p[1],m=p[2],o=p[3],a=p[4],n=p[5],t=p[6],e=p[7],i=p[8]}if(s=this.__closestGroupOrSvg(),c=this.__currentElement,f instanceof r){for(h=(g=f.getSvg()).childNodes[0];h.childNodes.length;)d=h.childNodes[0].getAttribute("id"),this.__ids[d]=d,this.__defs.appendChild(h.childNodes[0]);s.appendChild(l=g.childNodes[1]),this.__currentElement=l,this.translate(n,t),this.__currentElement=c}else"CANVAS"!==f.nodeName&&"IMG"!==f.nodeName||((u=this.__createElement("image")).setAttribute("width",e),u.setAttribute("height",i),u.setAttribute("preserveAspectRatio","none"),(v||m||o!==f.width||a!==f.height)&&((b=this.__document.createElement("canvas")).width=e,b.height=i,b.getContext("2d").drawImage(f,v,m,o,a,0,0,e,i),f=b),u.setAttributeNS("http://www.w3.org/1999/xlink","xlink:href","CANVAS"===f.nodeName?f.toDataURL():f.getAttribute("src")),s.appendChild(u),this.__currentElement=u,this.translate(n,t),this.__currentElement=c)},r.prototype.createPattern=function(n,t){var e,o=this.__document.createElementNS("http://www.w3.org/2000/svg","pattern"),a=s(this.__ids);return o.setAttribute("id",a),o.setAttribute("width",n.width),o.setAttribute("height",n.height),"CANVAS"===n.nodeName||"IMG"===n.nodeName?((e=this.__document.createElementNS("http://www.w3.org/2000/svg","image")).setAttribute("width",n.width),e.setAttribute("height",n.height),e.setAttributeNS("http://www.w3.org/1999/xlink","xlink:href","CANVAS"===n.nodeName?n.toDataURL():n.getAttribute("src")),o.appendChild(e),this.__defs.appendChild(o)):n instanceof r&&(o.appendChild(n.__root.childNodes[1]),this.__defs.appendChild(o)),new i(o,this)},r.prototype.drawFocusRing=function(){},r.prototype.createImageData=function(){},r.prototype.getImageData=function(){},r.prototype.putImageData=function(){},r.prototype.globalCompositeOperation=function(){},r.prototype.setTransform=function(){},"object"==typeof window&&(window.C2S=r),n.exports=r}()}),wn=r(function(n,r){(function(){function r(n,t,r){var e=new XMLHttpRequest;e.open("GET",n),e.responseType="blob",e.onload=function(){a(e.response,t,r)},e.onerror=function(){console.error("could not download file")},e.send()}function e(n){var t=new XMLHttpRequest;t.open("HEAD",n,!1);try{t.send()}catch(n){}return 200<=t.status&&299>=t.status}function i(n){try{n.dispatchEvent(new MouseEvent("click"))}catch(r){var t=document.createEvent("MouseEvents");t.initMouseEvent("click",!0,!0,window,0,0,0,80,20,!1,!1,!1,!1,0,null),n.dispatchEvent(t)}}var o="object"==typeof window&&window.window===window?window:"object"==typeof self&&self.self===self?self:"object"==typeof t&&t.global===t?t:void 0,a=o.saveAs||("object"!=typeof window||window!==o?function(){}:"download"in HTMLAnchorElement.prototype?function(n,t,a){var s=o.URL||o.webkitURL,g=document.createElement("a");g.download=t=t||n.name||"download",g.rel="noopener","string"==typeof n?(g.href=n,g.origin===location.origin?i(g):e(g.href)?r(n,t,a):i(g,g.target="_blank")):(g.href=s.createObjectURL(n),setTimeout(function(){s.revokeObjectURL(g.href)},4e4),setTimeout(function(){i(g)},0))}:"msSaveOrOpenBlob"in navigator?function(n,t,o){if(t=t||n.name||"download","string"!=typeof n)navigator.msSaveOrOpenBlob(function(n,t){return void 0===t?t={autoBom:!1}:"object"!=typeof t&&(console.warn("Deprecated: Expected third argument to be a object"),t={autoBom:!t}),t.autoBom&&/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(n.type)?new Blob(["\ufeff",n],{type:n.type}):n}(n,o),t);else if(e(n))r(n,t,o);else{var a=document.createElement("a");a.href=n,a.target="_blank",setTimeout(function(){i(a)})}}:function(n,t,e,i){if((i=i||open("","_blank"))&&(i.document.title=i.document.body.innerText="downloading..."),"string"==typeof n)return r(n,t,e);var a="application/octet-stream"===n.type,s=/constructor/i.test(o.HTMLElement)||o.safari,g=/CriOS\/[\d]+/.test(navigator.userAgent);if((g||a&&s)&&"object"==typeof FileReader){var h=new FileReader;h.onloadend=function(){var n=h.result;n=g?n:n.replace(/^data:[^;]*;/,"data:attachment/file;"),i?i.location.href=n:location=n,i=null},h.readAsDataURL(n)}else{var l=o.URL||o.webkitURL,c=l.createObjectURL(n);i?i.location=c:location.href=c,i=null,setTimeout(function(){l.revokeObjectURL(c)},4e4)}});o.saveAs=a.saveAs=a,n.exports=a})()}),yn=function(n,t,r){var e=this;if(!n||!t)throw new Error("You must specify a width and a height");this.width=n,this.height=t,this.canvas=r,this.canvas&&(this.canvas.width=this.width,this.canvas.height=this.height,this.canvas.style.width=this.width+"px",this.canvas.style.height=this.height+"px"),this.ctx=this.canvas?this.canvas.getContext("2d"):new _n(n,t),this.ctx.isSVGCompatible=!this.canvas,this.ctx.beginSVGGroup=this.ctx.save,this.ctx.endSVGGroup=this.ctx.restore,this.ctx.group=function(n){e.ctx.beginSVGGroup(),n(),e.ctx.endSVGGroup()}},xn={svg:{configurable:!0},serializedSvg:{configurable:!0}},Sn={SUPPORTED_MIME_TYPES:{configurable:!0}};xn.svg.get=function(){return this.ctx.getSvg()},xn.serializedSvg.get=function(){return this.ctx.getSerializedSvg(!0)},yn.prototype.toBlob=function(n){return new Promise(function(t,r){var e=this;return n||(n=this.ctx.isSVGCompatible?"image/svg+xml":"image/png"),yn.isSupportedMimeType(n)?"image/svg+xml"!==n||this.ctx.isSVGCompatible?t("image/svg+xml"===n?new Blob([this.serializedSvg],{type:"image/svg+xml;charset=utf-8"}):new Promise(function(t){return e.canvas.toBlob(t,n)})):r(new Error("image/svg+xml mime type is not compatible with the current context.")):r(new Error("Invalid or unsupported mime type.\nSupported mime types are: "+yn.SUPPORTED_MIME_TYPES))}.bind(this))},yn.prototype.didMount=function(){},yn.prototype.mount=function(n,t){void 0===t&&(t=null),n&&!this.mounted&&(this.parent=n,this.el=this.canvas||this.svg,t?this.parent.insertBefore(this.el,t):this.parent.appendChild(this.el),this.mounted=!0,this.didMount(this.el))},yn.prototype.background=function(n){gn(0,0,this.width,this.height,{color:n,ctx:this.ctx})},yn.prototype.update=function(){this.mounted&&(this.prevEl=this.el,this.el=this.svg,this.parent.replaceChild(this.el,this.prevEl))},yn.prototype.copy=function(n){return void 0===n&&(n=document.createElement("canvas")),n.width=this.width,n.height=this.height,n.getContext("2d").drawImage(this.canvas,0,0),n},yn.prototype.clear=function(){this.mounted&&(this.el.querySelector("g").innerHTML="")},Sn.SUPPORTED_MIME_TYPES.get=function(){return["image/png","image/jpeg","image/svg+xml"]},yn.isSupportedMimeType=function(n){return yn.SUPPORTED_MIME_TYPES.includes(n)},yn.prototype.save=function(n,t){void 0===n&&(n=Date.now()),void 0===t&&(t={});var r=t.type;return void 0===r&&(r="image/png"),new Promise(function(t,e){return yn.isSupportedMimeType(r)?this.toBlob(r).then(function(r){try{return t(wn.saveAs(r,n))}catch(n){return e(n)}},e):e(new Error("Invalid or unsupported mime type.\nSupported mime types are: "+yn.SUPPORTED_MIME_TYPES))}.bind(this))},Object.defineProperties(yn.prototype,xn),Object.defineProperties(yn,Sn);var En=function(n){function t(t){void 0===t&&(t={});var r=t.groupGroundTogether;void 0===r&&(r=!0);var e=t.backgroundColor;void 0===e&&(e="transparent"),n.call(this,t.width,t.height,t.canvas),this.backgroundColor=e,this.groupGroundTogether=r,this.grounds=[]}return n&&(t.__proto__=n),(t.prototype=Object.create(n&&n.prototype)).constructor=t,t.from=function(n,r){void 0===r&&(r={});var e=new t({width:n[0].width,height:n[0].height,backgroundColor:r.backgroundColor,groupGroundTogether:r.groupGroundTogether,canvas:r.canvas});return e.grounds=n,e},t.prototype.render=function(t){void 0===t&&(t=this.ctx),n.prototype.background.call(this,this.backgroundColor);var r=[];return this.grounds.forEach(function(n){n.behind(r),n.render(t),r.push(n)}),this},t.prototype.makeGround=function(n){this.grounds.push(new mn({width:this.width,height:this.height,unit:this.unit,line:n.line,gradient:n.gradient,pattern:n.pattern}))},t.prototype.ensureSVGContext=function(){return this.ctx.isSVGCompatible?this:t.from(this.grounds,{backgroundColor:this.backgroundColor,groupGroundTogether:this.groupGroundTogether}).render()},t.prototype.save=function(t,r){void 0===r&&(r={});var e=r.type;return"image/svg+xml"!==e||this.ctx.isSVGCompatible?n.prototype.save.call(this,t,{type:e}):this.ensureSVGContext().save(t,{type:e})},t}(yn),Mn=function(n){void 0===n&&(n=function(n){return.5}),this._equation=n,this.points=[]};function An(n,t){return void 0===t&&(t=Math.random),n[Math.floor(t()*n.length)]}Mn.prototype.compute=function(n,t){void 0===t&&(t={});var r=t.force;return void 0===r&&(r=!1),(r||void 0===this.points[n])&&(this.points[n]=this._equation(n)),this.points[n]},Mn.perlin=function(n){void 0===n&&(n={});var t=n.seed;void 0===t&&(t=null);var r=n.octaves;void 0===r&&(r=2);var e=n.lacunarity;void 0===e&&(e=2);var i=n.gain;void 0===i&&(i=.5);var o=n.resolution;void 0===o&&(o=32);var a=new $.Perlin1(t).transform(function(n){return on(this.gen(n/o),-1,1)});return function(n){for(var t=0,o=.5,s=1,g=0;g<r;g++)t+=o*a(s*n),s*=e,o*=i;return Math.sin(t)}},Mn.simplex=function(n){void 0===n&&(n={});var t=n.seed;void 0===t&&(t=null);var r=n.octaves;void 0===r&&(r=2);var e=Math.pow(2,r);return new $.Simplex1(t).transform(function(n){return(Math.sin(1/this.gen(n/e))+1)/2})};var Cn,kn,Tn=function(n){function t(t){(n=(0|t)%2147483647)<=0&&(n+=2147483646)}function r(){return n=48271*n%2147483647}return t(n),{seed:t,nextInt:r,nextFloat:function(){return(r()-1)/2147483646}}},On=Date.now(),Pn=Tn(On),Nn={set seed(n){Pn=Tn(On=n)},get seed(){return On},reset:function(){Pn=Tn(On)},random:function(){return Pn.nextFloat()},randomOf:function(n){return An(n,Pn.nextFloat)},randomFloat:function(n,t){return Pn.nextFloat()*(t-n)+n},randomInt:function(n,t){return Math.floor(Pn.nextFloat()*(t-n)+n)}},jn="undefined"==typeof window?global:window,Gn=[],Rn=[],In=[],qn=null,zn=null,Fn=!1,Un=!1;function Dn(n){var t;if(void 0===n&&(n=0),null===zn&&(zn=n),Cn+=kn=n-zn,zn=n,qn=Fn?null:jn.requestAnimationFrame(Dn),Fn&&(Fn=!1),Un){for(t=0;t<In.length;t++)In[t](kn);for(t=0;t<Gn.length;t++)Gn[t](kn);for(t=0;t<Rn.length;t++)Rn[t](kn)}else for(t=0;t<Gn.length;t++)Gn[t](kn)}function Ln(){Un=!!(Rn.length>0||In.length>0)}function Vn(n,t,r){return!(!t||!n)&&(!~n.indexOf(t)&&((r=!!r)?n.unshift(t):n.push(t),!0))}function Bn(n,t){if(!t)return!1;var r=n.indexOf(t);return!!~r&&(n.splice(r,1),!(0!==n.length))}function Hn(n){Fn=!1,qn||(zn=null,(n=!!n)?Dn():qn=jn.requestAnimationFrame(Dn))}function Yn(){qn&&(jn.cancelAnimationFrame(qn),qn=null)}var Xn={add:function(n,t){Vn(Gn,n,t)&&Hn()},addAfter:function(n,t){Vn(Rn,n,t)&&Ln()},addBefore:function(n,t){Vn(In,n,t)&&Ln()},remove:function(n){Bn(Gn,n)&&Yn()},removeAfter:function(n,t){Bn(Rn,n)&&Ln()},removeBefore:function(n){Bn(In,n)&&Ln()},start:Hn,stop:Yn,time:Cn,dt:kn,requestOnce:function(){qn||(Fn=!0,zn=null,qn=jn.requestAnimationFrame(Dn))},dispose:function(){Yn(),Gn.length=0,Rn.length=0,In.length=0,Un=!1,zn=null,Cn=0,kn=0}},Jn="date;heure;présences;capacité;% occupation;entrées;sorties\n01/10/18;00:00;267;864;30,90;2;3\n01/10/18;00:30;265;864;30,67;0;2\n01/10/18;01:00;265;864;30,67;0;0\n01/10/18;01:30;265;864;30,67;0;0\n01/10/18;02:00;265;864;30,67;0;0\n01/10/18;02:30;265;864;30,67;0;0\n01/10/18;03:00;265;864;30,67;0;0\n01/10/18;03:30;265;864;30,67;0;0\n01/10/18;04:00;265;864;30,67;0;0\n01/10/18;04:30;265;864;30,67;0;1\n01/10/18;05:00;264;864;30,56;1;2\n01/10/18;05:30;264;864;30,56;1;0\n01/10/18;06:00;264;864;30,56;2;2\n01/10/18;06:30;273;864;31,60;16;3\n01/10/18;07:00;276;864;31,94;25;9\n01/10/18;07:30;299;864;34,61;34;15\n01/10/18;08:00;313;864;36,23;61;23\n01/10/18;08:30;401;864;46,41;104;20\n01/10/18;09:00;442;864;51,16;91;19\n01/10/18;09:30;536;864;62,04;73;21\n01/10/18;10:00;562;864;65,05;69;23\n01/10/18;10:30;621;864;71,88;77;47\n01/10/18;11:00;628;864;72,69;63;56\n01/10/18;11:30;657;864;76,04;81;57\n01/10/18;12:00;671;864;77,66;86;58\n01/10/18;12:30;710;864;82,18;69;43\n01/10/18;13:00;715;864;82,75;45;67\n01/10/18;13:30;702;864;81,25;85;65\n01/10/18;14:00;714;864;82,64;78;58\n01/10/18;14:30;715;864;82,75;73;91\n01/10/18;15:00;716;864;82,87;54;74\n01/10/18;15:30;649;864;75,12;45;102\n01/10/18;16:00;625;864;72,34;54;74\n01/10/18;16:30;598;864;69,21;47;65\n01/10/18;17:00;598;864;69,21;47;60\n01/10/18;17:30;554;864;64,12;36;82\n01/10/18;18:00;544;864;62,96;57;91\n01/10/18;18:30;474;864;54,86;45;97\n01/10/18;19:00;455;864;52,66;41;79\n01/10/18;19:30;400;864;46,30;32;55\n01/10/18;20:00;393;864;45,49;25;23\n01/10/18;20:30;396;864;45,83;12;17\n01/10/18;21:00;388;864;44,91;6;13\n01/10/18;21:30;369;864;42,71;5;18\n01/10/18;22:00;366;864;42,36;8;17\n01/10/18;22:30;347;864;40,16;5;24\n01/10/18;23:00;340;864;39,35;1;13\n01/10/18;23:30;322;864;37,27;0;9\n02/10/18;00:00;319;864;36,92;0;1\n02/10/18;00:30;318;864;36,81;0;0\n02/10/18;01:00;318;864;36,81;1;3\n02/10/18;01:30;316;864;36,57;0;0\n02/10/18;02:00;316;864;36,57;0;1\n02/10/18;02:30;315;864;36,46;0;0\n02/10/18;03:00;315;864;36,46;0;0\n02/10/18;03:30;314;864;36,34;0;1\n02/10/18;04:00;314;864;36,34;0;1\n02/10/18;04:30;313;864;36,23;0;2\n02/10/18;05:00;311;864;36,00;0;0\n02/10/18;05:30;312;864;36,11;3;1\n02/10/18;06:00;313;864;36,23;5;0\n02/10/18;06:30;320;864;37,04;10;6\n02/10/18;07:00;328;864;37,96;27;10\n02/10/18;07:30;352;864;40,74;39;26\n02/10/18;08:00;348;864;40,28;43;26\n02/10/18;08:30;407;864;47,11;74;14\n02/10/18;09:00;451;864;52,20;100;19\n02/10/18;09:30;551;864;63,77;94;21\n02/10/18;10:00;586;864;67,82;87;28\n02/10/18;10:30;665;864;76,97;97;49\n02/10/18;11:00;695;864;80,44;79;49\n02/10/18;11:30;710;864;82,18;66;74\n02/10/18;12:00;721;864;83,45;82;61\n02/10/18;12:30;734;864;84,95;50;49\n02/10/18;13:00;740;864;85,65;49;49\n02/10/18;13:30;736;864;85,19;69;73\n02/10/18;14:00;737;864;85,30;72;75\n02/10/18;14:30;745;864;86,23;88;60\n02/10/18;15:00;754;864;87,27;73;84\n02/10/18;15:30;735;864;85,07;66;99\n02/10/18;16:00;705;864;81,60;48;86\n02/10/18;16:30;672;864;77,78;66;81\n02/10/18;17:00;647;864;74,88;48;96\n02/10/18;17:30;588;864;68,06;47;82\n02/10/18;18:00;573;864;66,32;50;75\n02/10/18;18:30;522;864;60,42;46;87\n02/10/18;19:00;495;864;57,29;46;111\n02/10/18;19:30;422;864;48,84;40;62\n02/10/18;20:00;415;864;48,03;30;26\n02/10/18;20:30;427;864;49,42;25;20\n02/10/18;21:00;425;864;49,19;16;21\n02/10/18;21:30;415;864;48,03;10;17\n02/10/18;22:00;410;864;47,45;6;27\n02/10/18;22:30;370;864;42,82;4;34\n02/10/18;23:00;359;864;41,55;5;26\n02/10/18;23:30;330;864;38,19;2;14\n03/10/18;00:00;329;864;38,08;2;13\n03/10/18;00:30;314;864;36,34;0;7\n03/10/18;01:00;310;864;35,88;1;3\n03/10/18;01:30;310;864;35,88;0;0\n03/10/18;02:00;310;864;35,88;0;0\n03/10/18;02:30;310;864;35,88;0;0\n03/10/18;03:00;310;864;35,88;0;1\n03/10/18;03:30;309;864;35,76;0;0\n03/10/18;04:00;309;864;35,76;0;0\n03/10/18;04:30;309;864;35,76;0;0\n03/10/18;05:00;309;864;35,76;0;0\n03/10/18;05:30;310;864;35,88;3;0\n03/10/18;06:00;313;864;36,23;4;2\n03/10/18;06:30;322;864;37,27;15;3\n03/10/18;07:00;325;864;37,62;26;9\n03/10/18;07:30;344;864;39,81;39;27\n03/10/18;08:00;356;864;41,20;65;23\n03/10/18;08:30;437;864;50,58;92;23\n03/10/18;09:00;479;864;55,44;95;16\n03/10/18;09:30;592;864;68,52;97;22\n03/10/18;10:00;626;864;72,45;94;27\n03/10/18;10:30;724;864;83,80;80;44\n03/10/18;11:00;724;864;83,80;50;53\n03/10/18;11:30;719;864;83,22;67;67\n03/10/18;12:00;717;864;82,99;86;84\n03/10/18;12:30;721;864;83,45;51;48\n03/10/18;13:00;723;864;83,68;46;48\n03/10/18;13:30;729;864;84,38;69;64\n03/10/18;14:00;731;864;84,61;77;70\n03/10/18;14:30;740;864;85,65;66;62\n03/10/18;15:00;740;864;85,65;65;64\n03/10/18;15:30;734;864;84,95;70;70\n03/10/18;16:00;739;864;85,53;56;91\n03/10/18;16:30;671;864;77,66;63;100\n03/10/18;17:00;668;864;77,31;59;77\n03/10/18;17:30;634;864;73,38;67;86\n03/10/18;18:00;630;864;72,92;46;89\n03/10/18;18:30;553;864;64,00;51;109\n03/10/18;19:00;526;864;60,88;57;121\n03/10/18;19:30;471;864;54,51;74;57\n03/10/18;20:00;503;864;58,22;44;29\n03/10/18;20:30;503;864;58,22;33;26\n03/10/18;21:00;501;864;57,99;13;23\n03/10/18;21:30;485;864;56,13;12;31\n03/10/18;22:00;471;864;54,51;4;52\n03/10/18;22:30;416;864;48,15;8;36\n03/10/18;23:00;395;864;45,72;3;42\n03/10/18;23:30;353;864;40,86;2;12\n04/10/18;00:00;346;864;40,05;1;11\n04/10/18;00:30;335;864;38,77;0;5\n04/10/18;01:00;331;864;38,31;0;1\n04/10/18;01:30;329;864;38,08;1;2\n04/10/18;02:00;329;864;38,08;0;3\n04/10/18;02:30;325;864;37,62;0;1\n04/10/18;03:00;325;864;37,62;0;1\n04/10/18;03:30;324;864;37,50;0;0\n04/10/18;04:00;324;864;37,50;0;1\n04/10/18;04:30;323;864;37,38;0;0\n04/10/18;05:00;323;864;37,38;1;0\n04/10/18;05:30;324;864;37,50;0;0\n04/10/18;06:00;324;864;37,50;4;1\n04/10/18;06:30;333;864;38,54;11;5\n04/10/18;07:00;334;864;38,66;38;13\n04/10/18;07:30;358;864;41,44;40;16\n04/10/18;08:00;383;864;44,33;44;27\n04/10/18;08:30;464;864;53,70;90;21\n04/10/18;09:00;505;864;58,45;97;26\n04/10/18;09:30;571;864;66,09;86;26\n04/10/18;10:00;602;864;69,68;106;26\n04/10/18;10:30;694;864;80,32;98;55\n04/10/18;11:00;722;864;83,56;60;51\n04/10/18;11:30;728;864;84,26;56;58\n04/10/18;12:00;728;864;84,26;84;72\n04/10/18;12:30;736;864;85,19;42;42\n04/10/18;13:00;734;864;84,95;50;48\n04/10/18;13:30;743;864;86,00;68;55\n04/10/18;14:00;750;864;86,81;66;69\n04/10/18;14:30;746;864;86,34;64;63\n04/10/18;15:00;746;864;86,34;77;80\n04/10/18;15:30;743;864;86,00;60;68\n04/10/18;16:00;741;864;85,76;67;91\n04/10/18;16:30;700;864;81,02;67;80\n04/10/18;17:00;704;864;81,48;70;93\n04/10/18;17:30;666;864;77,08;64;93\n04/10/18;18:00;650;864;75,23;68;91\n04/10/18;18:30;589;864;68,17;53;102\n04/10/18;19:00;582;864;67,36;39;114\n04/10/18;19:30;492;864;56,94;56;55\n04/10/18;20:00;500;864;57,87;66;32\n04/10/18;20:30;539;864;62,38;49;26\n04/10/18;21:00;547;864;63,31;16;22\n04/10/18;21:30;537;864;62,15;8;26\n04/10/18;22:00;523;864;60,53;6;46\n04/10/18;22:30;472;864;54,63;2;39\n04/10/18;23:00;463;864;53,59;4;45\n04/10/18;23:30;407;864;47,11;2;41\n05/10/18;00:00;393;864;45,49;3;25\n05/10/18;00:30;367;864;42,48;1;9\n05/10/18;01:00;366;864;42,36;1;8\n05/10/18;01:30;360;864;41,67;0;2\n05/10/18;02:00;359;864;41,55;0;1\n05/10/18;02:30;358;864;41,44;0;1\n05/10/18;03:00;357;864;41,32;1;1\n05/10/18;03:30;358;864;41,44;2;1\n05/10/18;04:00;358;864;41,44;0;1\n05/10/18;04:30;357;864;41,32;0;0\n05/10/18;05:00;357;864;41,32;1;1\n05/10/18;05:30;359;864;41,55;3;2\n05/10/18;06:00;358;864;41,44;2;5\n05/10/18;06:30;360;864;41,67;14;10\n05/10/18;07:00;369;864;42,71;30;8\n05/10/18;07:30;390;864;45,14;36;26\n05/10/18;08:00;397;864;45,95;60;12\n05/10/18;08:30;480;864;55,56;90;16\n05/10/18;09:00;515;864;59,61;99;21\n05/10/18;09:30;634;864;73,38;98;22\n05/10/18;10:00;656;864;75,93;101;37\n05/10/18;10:30;735;864;85,07;105;58\n05/10/18;11:00;746;864;86,34;90;74\n05/10/18;11:30;759;864;87,85;70;73\n05/10/18;12:00;758;864;87,73;91;83\n05/10/18;12:30;747;864;86,46;56;57\n05/10/18;13:00;748;864;86,57;60;57\n05/10/18;13:30;751;864;86,92;60;75\n05/10/18;14:00;744;864;86,11;92;83\n05/10/18;14:30;747;864;86,46;92;87\n05/10/18;15:00;755;864;87,38;80;89\n05/10/18;15:30;735;864;85,07;77;89\n05/10/18;16:00;771;864;89,24;70;92\n05/10/18;16:30;756;864;87,50;83;91\n05/10/18;17:00;737;864;85,30;87;99\n05/10/18;17:30;730;864;84,49;64;107\n05/10/18;18:00;698;864;80,79;66;115\n05/10/18;18:30;606;864;70,14;60;106\n05/10/18;19:00;590;864;68,29;52;100\n05/10/18;19:30;530;864;61,34;58;70\n05/10/18;20:00;533;864;61,69;68;40\n05/10/18;20:30;592;864;68,52;69;26\n05/10/18;21:00;608;864;70,37;40;25\n05/10/18;21:30;615;864;71,18;27;34\n05/10/18;22:00;606;864;70,14;10;43\n05/10/18;22:30;558;864;64,58;5;48\n05/10/18;23:00;530;864;61,34;0;44\n05/10/18;23:30;465;864;53,82;3;37\n06/10/18;00:00;448;864;51,85;2;40\n06/10/18;00:30;401;864;46,41;4;31\n06/10/18;01:00;395;864;45,72;2;8\n06/10/18;01:30;380;864;43,98;0;9\n06/10/18;02:00;378;864;43,75;0;6\n06/10/18;02:30;372;864;43,06;1;6\n06/10/18;03:00;367;864;42,48;1;0\n06/10/18;03:30;369;864;42,71;2;1\n06/10/18;04:00;369;864;42,71;0;0\n06/10/18;04:30;368;864;42,59;0;3\n06/10/18;05:00;364;864;42,13;0;1\n06/10/18;05:30;364;864;42,13;1;0\n06/10/18;06:00;364;864;42,13;0;1\n06/10/18;06:30;364;864;42,13;1;0\n06/10/18;07:00;364;864;42,13;3;1\n06/10/18;07:30;367;864;42,48;6;4\n06/10/18;08:00;368;864;42,59;17;8\n06/10/18;08:30;388;864;44,91;31;8\n06/10/18;09:00;409;864;47,34;55;8\n06/10/18;09:30;492;864;56,94;98;22\n06/10/18;10:00;543;864;62,85;116;25\n06/10/18;10:30;671;864;77,66;128;44\n06/10/18;11:00;706;864;81,71;110;65\n06/10/18;11:30;773;864;89,47;119;83\n06/10/18;12:00;781;864;90,39;109;74\n06/10/18;12:30;811;864;93,87;59;59\n06/10/18;13:00;813;864;94,10;61;61\n06/10/18;13:30;812;864;93,98;49;48\n06/10/18;14:00;811;864;93,87;61;60\n06/10/18;14:30;811;864;93,87;59;65\n06/10/18;15:00;804;864;93,06;98;97\n06/10/18;15:30;789;864;91,32;80;85\n06/10/18;16:00;804;864;93,06;86;82\n06/10/18;16:30;802;864;92,82;88;84\n06/10/18;17:00;802;864;92,82;95;99\n06/10/18;17:30;795;864;92,01;98;103\n06/10/18;18:00;794;864;91,90;95;130\n06/10/18;18:30;745;864;86,23;89;141\n06/10/18;19:00;694;864;80,32;60;137\n06/10/18;19:30;613;864;70,95;68;76\n06/10/18;20:00;627;864;72,57;75;41\n06/10/18;20:30;682;864;78,94;74;39\n06/10/18;21:00;693;864;80,21;48;54\n06/10/18;21:30;678;864;78,47;34;45\n06/10/18;22:00;672;864;77,78;15;56\n06/10/18;22:30;618;864;71,53;13;43\n06/10/18;23:00;589;864;68,17;13;75\n06/10/18;23:30;510;864;59,03;4;53\n07/10/18;00:00;480;864;55,56;3;41\n07/10/18;00:30;424;864;49,07;4;39\n07/10/18;01:00;417;864;48,26;0;18\n07/10/18;01:30;399;864;46,18;1;9\n07/10/18;02:00;390;864;45,14;0;7\n07/10/18;02:30;383;864;44,33;1;5\n07/10/18;03:00;380;864;43,98;0;5\n07/10/18;03:30;374;864;43,29;0;4\n07/10/18;04:00;372;864;43,06;1;1\n07/10/18;04:30;372;864;43,06;0;2\n07/10/18;05:00;371;864;42,94;0;0\n07/10/18;05:30;371;864;42,94;2;2\n07/10/18;06:00;371;864;42,94;1;0\n07/10/18;06:30;373;864;43,17;2;1\n07/10/18;07:00;373;864;43,17;14;2\n07/10/18;07:30;394;864;45,60;10;1\n07/10/18;08:00;394;864;45,60;2;6\n07/10/18;08:30;386;864;44,68;1;4\n07/10/18;09:00;384;864;44,44;0;5\n07/10/18;09:30;372;864;43,06;5;12\n07/10/18;10:00;368;864;42,59;6;9\n07/10/18;10:30;365;864;42,25;4;10\n07/10/18;11:00;362;864;41,90;4;14\n07/10/18;11:30;347;864;40,16;2;11\n07/10/18;12:00;342;864;39,58;5;10\n07/10/18;12:30;331;864;38,31;7;11\n07/10/18;13:00;330;864;38,19;0;9\n07/10/18;13:30;323;864;37,38;4;11\n07/10/18;14:00;317;864;36,69;2;6\n07/10/18;14:30;310;864;35,88;8;10\n07/10/18;15:00;312;864;36,11;8;15\n07/10/18;15:30;303;864;35,07;10;11\n07/10/18;16:00;306;864;35,42;18;11\n07/10/18;16:30;309;864;35,76;18;20\n07/10/18;17:00;308;864;35,65;20;6\n07/10/18;17:30;322;864;37,27;23;16\n07/10/18;18:00;327;864;37,85;18;17\n07/10/18;18:30;328;864;37,96;9;13\n07/10/18;19:00;326;864;37,73;12;12\n07/10/18;19:30;332;864;38,43;22;8\n07/10/18;20:00;339;864;39,24;9;11\n07/10/18;20:30;338;864;39,12;12;9\n07/10/18;21:00;342;864;39,58;16;11\n07/10/18;21:30;344;864;39,81;5;6\n07/10/18;22:00;342;864;39,58;4;5\n07/10/18;22:30;341;864;39,47;3;6\n07/10/18;23:00;338;864;39,12;2;3\n07/10/18;23:30;335;864;38,77;2;4\n08/10/18;00:00;336;864;38,89;0;4\n08/10/18;00:30;331;864;38,31;0;1\n08/10/18;01:00;331;864;38,31;0;0\n08/10/18;01:30;331;864;38,31;0;0\n08/10/18;02:00;331;864;38,31;0;0\n08/10/18;02:30;331;864;38,31;1;0\n08/10/18;03:00;332;864;38,43;0;0\n08/10/18;03:30;332;864;38,43;0;0\n08/10/18;04:00;332;864;38,43;0;0\n08/10/18;04:30;332;864;38,43;0;1\n08/10/18;05:00;331;864;38,31;2;2\n08/10/18;05:30;331;864;38,31;2;0\n08/10/18;06:00;334;864;38,66;2;2\n08/10/18;06:30;334;864;38,66;7;7\n08/10/18;07:00;339;864;39,24;16;8\n08/10/18;07:30;350;864;40,51;41;22\n08/10/18;08:00;363;864;42,01;60;23\n08/10/18;08:30;450;864;52,08;98;8\n08/10/18;09:00;496;864;57,41;95;22\n08/10/18;09:30;605;864;70,02;87;19\n08/10/18;10:00;637;864;73,73;90;21\n08/10/18;10:30;719;864;83,22;77;40\n08/10/18;11:00;732;864;84,72;63;52\n08/10/18;11:30;760;864;87,96;81;52\n08/10/18;12:00;786;864;90,97;88;69\n08/10/18;12:30;794;864;91,90;58;55\n08/10/18;13:00;788;864;91,20;49;67\n08/10/18;13:30;779;864;90,16;70;59\n08/10/18;14:00;786;864;90,97;85;79\n08/10/18;14:30;801;864;92,71;69;57\n08/10/18;15:00;803;864;92,94;80;90\n08/10/18;15:30;776;864;89,81;61;86\n08/10/18;16:00;765;864;88,54;70;102\n08/10/18;16:30;718;864;83,10;61;91\n08/10/18;17:00;698;864;80,79;45;78\n08/10/18;17:30;628;864;72,69;46;95\n08/10/18;18:00;618;864;71,53;54;82\n08/10/18;18:30;551;864;63,77;34;91\n08/10/18;19:00;531;864;61,46;36;102\n08/10/18;19:30;441;864;51,04;23;51\n08/10/18;20:00;438;864;50,69;21;28\n08/10/18;20:30;430;864;49,77;10;19\n08/10/18;21:00;426;864;49,31;11;10\n08/10/18;21:30;414;864;47,92;6;20\n08/10/18;22:00;409;864;47,34;3;16\n08/10/18;22:30;386;864;44,68;5;18\n08/10/18;23:00;385;864;44,56;2;9\n08/10/18;23:30;375;864;43,40;0;3\n09/10/18;00:00;372;864;43,06;0;4\n09/10/18;00:30;368;864;42,59;0;2\n09/10/18;01:00;367;864;42,48;1;0\n09/10/18;01:30;367;864;42,48;0;1\n09/10/18;02:00;367;864;42,48;0;0\n09/10/18;02:30;367;864;42,48;0;1\n09/10/18;03:00;366;864;42,36;0;0\n09/10/18;03:30;366;864;42,36;0;0\n09/10/18;04:00;366;864;42,36;0;0\n09/10/18;04:30;366;864;42,36;0;0\n09/10/18;05:00;366;864;42,36;0;1\n09/10/18;05:30;367;864;42,48;3;0\n09/10/18;06:00;367;864;42,48;1;3\n09/10/18;06:30;368;864;42,59;13;8\n09/10/18;07:00;374;864;43,29;22;12\n09/10/18;07:30;393;864;45,49;43;18\n09/10/18;08:00;419;864;48,50;50;27\n09/10/18;08:30;443;864;51,27;105;16\n09/10/18;09:00;541;864;62,62;101;13\n09/10/18;09:30;657;864;76,04;101;20\n09/10/18;10:00;699;864;80,90;101;28\n09/10/18;10:30;783;864;90,63;70;43\n09/10/18;11:00;801;864;92,71;78;55\n09/10/18;11:30;809;864;93,63;59;55\n09/10/18;12:00;811;864;93,87;62;62\n09/10/18;12:30;814;864;94,21;51;46\n09/10/18;13:00;817;864;94,56;37;42\n09/10/18;13:30;814;864;94,21;77;76\n09/10/18;14:00;815;864;94,33;59;58\n09/10/18;14:30;811;864;93,87;68;68\n09/10/18;15:00;814;864;94,21;50;63\n09/10/18;15:30;798;864;92,36;62;72\n09/10/18;16:00;796;864;92,13;64;72\n09/10/18;16:30;761;864;88,08;59;88\n09/10/18;17:00;747;864;86,46;44;83\n09/10/18;17:30;703;864;81,37;60;92\n09/10/18;18:00;653;864;75,58;49;92\n09/10/18;18:30;603;864;69,79;60;92\n09/10/18;19:00;598;864;69,21;52;109\n09/10/18;19:30;536;864;62,04;58;66\n09/10/18;20:00;536;864;62,04;41;32\n09/10/18;20:30;541;864;62,62;26;31\n09/10/18;21:00;542;864;62,73;12;19\n09/10/18;21:30;524;864;60,65;6;24\n09/10/18;22:00;515;864;59,61;5;41\n09/10/18;22:30;474;864;54,86;5;39\n09/10/18;23:00;438;864;50,69;1;19\n09/10/18;23:30;411;864;47,57;2;21\n10/10/18;00:00;402;864;46,53;0;14\n10/10/18;00:30;392;864;45,37;1;2\n10/10/18;01:00;392;864;45,37;2;1\n10/10/18;01:30;393;864;45,49;0;0\n10/10/18;02:00;393;864;45,49;0;0\n10/10/18;02:30;393;864;45,49;0;0\n10/10/18;03:00;393;864;45,49;0;0\n10/10/18;03:30;393;864;45,49;0;0\n10/10/18;04:00;393;864;45,49;0;1\n10/10/18;04:30;392;864;45,37;0;0\n10/10/18;05:00;392;864;45,37;0;0\n10/10/18;05:30;392;864;45,37;6;0\n10/10/18;06:00;398;864;46,06;3;1\n10/10/18;06:30;401;864;46,41;13;11\n10/10/18;07:00;405;864;46,88;28;14\n10/10/18;07:30;422;864;48,84;32;21\n10/10/18;08:00;436;864;50,46;65;14\n10/10/18;08:30;499;864;57,75;69;25\n10/10/18;09:00;533;864;61,69;97;16\n10/10/18;09:30;650;864;75,23;95;23\n10/10/18;10:00;690;864;79,86;98;25\n10/10/18;10:30;776;864;89,81;84;45\n10/10/18;11:00;794;864;91,90;78;50\n10/10/18;11:30;822;864;95,14;79;70\n10/10/18;12:00;819;864;94,79;74;72\n10/10/18;12:30;824;864;95,37;54;54\n10/10/18;13:00;821;864;95,02;45;45\n10/10/18;13:30;827;864;95,72;69;66\n10/10/18;14:00;827;864;95,72;65;65\n10/10/18;14:30;820;864;94,91;45;52\n10/10/18;15:00;824;864;95,37;65;69\n10/10/18;15:30;813;864;94,10;76;79\n10/10/18;16:00;818;864;94,68;69;89\n10/10/18;16:30;776;864;89,81;55;69\n10/10/18;17:00;777;864;89,93;63;74\n10/10/18;17:30;749;864;86,69;70;94\n10/10/18;18:00;744;864;86,11;52;100\n10/10/18;18:30;663;864;76,74;58;107\n10/10/18;19:00;640;864;74,07;33;109\n10/10/18;19:30;559;864;64,70;60;60\n10/10/18;20:00;564;864;65,28;36;41\n10/10/18;20:30;575;864;66,55;33;19\n10/10/18;21:00;576;864;66,67;11;25\n10/10/18;21:30;541;864;62,62;7;31\n10/10/18;22:00;530;864;61,34;3;57\n10/10/18;22:30;457;864;52,89;6;38\n10/10/18;23:00;448;864;51,85;10;30\n10/10/18;23:30;422;864;48,84;1;13\n11/10/18;00:00;420;864;48,61;1;12\n11/10/18;00:30;401;864;46,41;0;10\n11/10/18;01:00;399;864;46,18;0;5\n11/10/18;01:30;394;864;45,60;1;0\n11/10/18;02:00;395;864;45,72;0;0\n11/10/18;02:30;395;864;45,72;0;1\n11/10/18;03:00;394;864;45,60;0;1\n11/10/18;03:30;393;864;45,49;0;0\n11/10/18;04:00;393;864;45,49;0;0\n11/10/18;04:30;392;864;45,37;0;1\n11/10/18;05:00;392;864;45,37;1;1\n11/10/18;05:30;392;864;45,37;3;2\n11/10/18;06:00;393;864;45,49;2;4\n11/10/18;06:30;392;864;45,37;10;8\n11/10/18;07:00;395;864;45,72;26;6\n11/10/18;07:30;415;864;48,03;38;30\n11/10/18;08:00;424;864;49,07;51;22\n11/10/18;08:30;497;864;57,52;87;11\n11/10/18;09:00;554;864;64,12;120;18\n11/10/18;09:30;648;864;75,00;103;27\n11/10/18;10:00;741;864;85,76;96;25\n11/10/18;10:30;803;864;92,94;93;51\n11/10/18;11:00;816;864;94,44;55;55\n11/10/18;11:30;815;864;94,33;49;52\n11/10/18;12:00;814;864;94,21;48;50\n11/10/18;12:30;814;864;94,21;38;37\n11/10/18;13:00;812;864;93,98;52;54\n11/10/18;13:30;813;864;94,10;56;58\n11/10/18;14:00;810;864;93,75;69;63\n11/10/18;14:30;820;864;94,91;54;51\n11/10/18;15:00;819;864;94,79;57;62\n11/10/18;15:30;825;864;95,49;72;72\n11/10/18;16:00;809;864;93,63;67;64\n11/10/18;16:30;793;864;91,78;53;94\n11/10/18;17:00;771;864;89,24;59;80\n11/10/18;17:30;734;864;84,95;73;89\n11/10/18;18:00;735;864;85,07;67;104\n11/10/18;18:30;695;864;80,44;77;93\n11/10/18;19:00;682;864;78,94;57;92\n11/10/18;19:30;648;864;75,00;75;71\n11/10/18;20:00;651;864;75,35;53;40\n11/10/18;20:30;661;864;76,50;37;46\n11/10/18;21:00;651;864;75,35;12;39\n11/10/18;21:30;614;864;71,06;7;27\n11/10/18;22:00;607;864;70,25;9;50\n11/10/18;22:30;547;864;63,31;4;43\n11/10/18;23:00;516;864;59,72;5;41\n11/10/18;23:30;479;864;55,44;3;19\n12/10/18;00:00;474;864;54,86;3;21\n12/10/18;00:30;449;864;51,97;1;10\n12/10/18;01:00;449;864;51,97;0;6\n12/10/18;01:30;442;864;51,16;0;1\n12/10/18;02:00;442;864;51,16;0;2\n12/10/18;02:30;436;864;50,46;0;4\n12/10/18;03:00;436;864;50,46;0;0\n12/10/18;03:30;434;864;50,23;0;2\n12/10/18;04:00;434;864;50,23;0;1\n12/10/18;04:30;433;864;50,12;0;0\n12/10/18;05:00;433;864;50,12;1;1\n12/10/18;05:30;433;864;50,12;1;0\n12/10/18;06:00;434;864;50,23;1;2\n12/10/18;06:30;439;864;50,81;17;6\n12/10/18;07:00;444;864;51,39;21;16\n12/10/18;07:30;468;864;54,17;48;22\n12/10/18;08:00;477;864;55,21;55;26\n12/10/18;08:30;548;864;63,43;96;25\n12/10/18;09:00;590;864;68,29;112;22\n12/10/18;09:30;695;864;80,44;86;33\n12/10/18;10:00;726;864;84,03;62;34\n12/10/18;10:30;751;864;86,92;55;48\n12/10/18;11:00;749;864;86,69;48;48\n12/10/18;11:30;767;864;88,77;81;51\n12/10/18;12:00;788;864;91,20;98;52\n12/10/18;12:30;821;864;95,02;45;45\n12/10/18;13:00;825;864;95,49;45;46\n12/10/18;13:30;824;864;95,37;60;57\n12/10/18;14:00;828;864;95,83;58;57\n12/10/18;14:30;820;864;94,91;86;97\n12/10/18;15:00;816;864;94,44;81;81\n12/10/18;15:30;824;864;95,37;83;82\n12/10/18;16:00;814;864;94,21;70;99\n12/10/18;16:30;783;864;90,63;80;100\n12/10/18;17:00;766;864;88,66;60;107\n12/10/18;17:30;700;864;81,02;76;91\n12/10/18;18:00;699;864;80,90;59;78\n12/10/18;18:30;670;864;77,55;62;86\n12/10/18;19:00;651;864;75,35;80;99\n12/10/18;19:30;628;864;72,69;64;75\n12/10/18;20:00;632;864;73,15;66;35\n12/10/18;20:30;678;864;78,47;52;32\n12/10/18;21:00;683;864;79,05;29;34\n12/10/18;21:30;679;864;78,59;30;31\n12/10/18;22:00;676;864;78,24;17;56\n12/10/18;22:30;615;864;71,18;9;42\n12/10/18;23:00;594;864;68,75;3;44\n12/10/18;23:30;535;864;61,92;2;45\n13/10/18;00:00;514;864;59,49;2;41\n13/10/18;00:30;469;864;54,28;4;25\n13/10/18;01:00;461;864;53,36;3;11\n13/10/18;01:30;449;864;51,97;1;6\n13/10/18;02:00;449;864;51,97;0;2\n13/10/18;02:30;445;864;51,50;0;3\n13/10/18;03:00;445;864;51,50;1;3\n13/10/18;03:30;440;864;50,93;1;1\n13/10/18;04:00;441;864;51,04;2;1\n13/10/18;04:30;440;864;50,93;0;3\n13/10/18;05:00;439;864;50,81;0;0\n13/10/18;05:30;441;864;51,04;2;1\n13/10/18;06:00;439;864;50,81;0;2\n13/10/18;06:30;439;864;50,81;3;3\n13/10/18;07:00;437;864;50,58;3;2\n13/10/18;07:30;437;864;50,58;3;5\n13/10/18;08:00;434;864;50,23;8;9\n13/10/18;08:30;441;864;51,04;17;8\n13/10/18;09:00;449;864;51,97;55;14\n13/10/18;09:30;528;864;61,11;86;15\n13/10/18;10:00;573;864;66,32;115;23\n13/10/18;10:30;703;864;81,37;122;48\n13/10/18;11:00;732;864;84,72;113;72\n13/10/18;11:30;790;864;91,44;119;88\n13/10/18;12:00;798;864;92,36;104;72\n13/10/18;12:30;837;864;96,88;82;71\n13/10/18;13:00;836;864;96,76;55;53\n13/10/18;13:30;836;864;96,76;50;49\n13/10/18;14:00;826;864;95,60;70;88\n13/10/18;14:30;822;864;95,14;93;79\n13/10/18;15:00;830;864;96,06;88;81\n13/10/18;15:30;831;864;96,18;94;94\n13/10/18;16:00;833;864;96,41;81;84\n13/10/18;16:30;834;864;96,53;91;88\n13/10/18;17:00;835;864;96,64;103;100\n13/10/18;17:30;836;864;96,76;86;90\n13/10/18;18:00;834;864;96,53;95;102\n13/10/18;18:30;785;864;90,86;54;121\n13/10/18;19:00;750;864;86,81;82;132\n13/10/18;19:30;709;864;82,06;98;83\n13/10/18;20:00;737;864;85,30;109;41\n13/10/18;20:30;841;864;97,34;86;35\n13/10/18;21:00;843;864;97,57;39;44\n13/10/18;21:30;832;864;96,30;38;39\n13/10/18;22:00;822;864;95,14;23;68\n13/10/18;22:30;756;864;87,50;18;66\n13/10/18;23:00;728;864;84,26;11;87\n13/10/18;23:30;618;864;71,53;4;68\n14/10/18;00:00;594;864;68,75;0;67\n14/10/18;00:30;511;864;59,14;8;40\n14/10/18;01:00;501;864;57,99;3;28\n14/10/18;01:30;469;864;54,28;2;19\n14/10/18;02:00;460;864;53,24;1;9\n14/10/18;02:30;449;864;51,97;1;8\n14/10/18;03:00;447;864;51,74;1;3\n14/10/18;03:30;443;864;51,27;1;2\n14/10/18;04:00;443;864;51,27;0;4\n14/10/18;04:30;437;864;50,58;0;3\n14/10/18;05:00;435;864;50,35;0;1\n14/10/18;05:30;435;864;50,35;2;0\n14/10/18;06:00;435;864;50,35;0;1\n14/10/18;06:30;434;864;50,23;0;2\n14/10/18;07:00;430;864;49,77;0;4\n14/10/18;07:30;425;864;49,19;0;5\n14/10/18;08:00;424;864;49,07;1;3\n14/10/18;08:30;419;864;48,50;1;4\n14/10/18;09:00;418;864;48,38;1;6\n14/10/18;09:30;401;864;46,41;6;20\n14/10/18;10:00;399;864;46,18;17;17\n14/10/18;10:30;404;864;46,76;19;9\n14/10/18;11:00;410;864;47,45;21;13\n14/10/18;11:30;416;864;48,15;25;17\n14/10/18;12:00;423;864;48,96;29;19\n14/10/18;12:30;450;864;52,08;35;11\n14/10/18;13:00;459;864;53,13;22;10\n14/10/18;13:30;462;864;53,47;13;28\n14/10/18;14:00;452;864;52,31;20;24\n14/10/18;14:30;450;864;52,08;28;36\n14/10/18;15:00;450;864;52,08;28;28\n14/10/18;15:30;439;864;50,81;21;30\n14/10/18;16:00;436;864;50,46;25;30\n14/10/18;16:30;436;864;50,46;28;17\n14/10/18;17:00;444;864;51,39;26;31\n14/10/18;17:30;435;864;50,35;22;26\n14/10/18;18:00;430;864;49,77;25;39\n14/10/18;18:30;409;864;47,34;15;25\n14/10/18;19:00;408;864;47,22;18;16\n14/10/18;19:30;415;864;48,03;19;11\n14/10/18;20:00;420;864;48,61;23;9\n14/10/18;20:30;439;864;50,81;13;8\n14/10/18;21:00;440;864;50,93;5;6\n14/10/18;21:30;436;864;50,46;5;5\n14/10/18;22:00;436;864;50,46;1;10\n14/10/18;22:30;420;864;48,61;2;12\n14/10/18;23:00;417;864;48,26;2;8\n14/10/18;23:30;409;864;47,34;1;4\n15/10/18;00:00;409;864;47,34;1;0\n15/10/18;00:30;409;864;47,34;0;1\n15/10/18;01:00;408;864;47,22;1;1\n15/10/18;01:30;409;864;47,34;0;0\n15/10/18;02:00;409;864;47,34;0;0\n15/10/18;02:30;409;864;47,34;0;0\n15/10/18;03:00;409;864;47,34;0;0\n15/10/18;03:30;409;864;47,34;0;0\n15/10/18;04:00;409;864;47,34;0;0\n15/10/18;04:30;409;864;47,34;0;0\n15/10/18;05:00;409;864;47,34;1;0\n15/10/18;05:30;410;864;47,45;1;1\n15/10/18;06:00;411;864;47,57;1;3\n15/10/18;06:30;405;864;46,88;6;8\n15/10/18;07:00;416;864;48,15;35;7\n15/10/18;07:30;452;864;52,31;37;11\n15/10/18;08:00;466;864;53,94;52;22\n15/10/18;08:30;531;864;61,46;103;10\n15/10/18;09:00;579;864;67,01;99;16\n15/10/18;09:30;704;864;81,48;97;19\n15/10/18;10:00;742;864;85,88;80;19\n15/10/18;10:30;819;864;94,79;70;39\n15/10/18;11:00;828;864;95,83;74;44\n15/10/18;11:30;877;864;101,50;88;66\n15/10/18;12:00;881;864;101,97;72;74\n15/10/18;12:30;877;864;101,50;57;56\n15/10/18;13:00;878;864;101,62;48;54\n15/10/18;13:30;871;864;100,81;72;65\n15/10/18;14:00;878;864;101,62;77;79\n15/10/18;14:30;880;864;101,85;65;65\n15/10/18;15:00;875;864;101,27;68;90\n15/10/18;15:30;851;864;98,50;63;65\n15/10/18;16:00;853;864;98,73;45;72\n15/10/18;16:30;795;864;92,01;49;95\n15/10/18;17:00;779;864;90,16;61;70\n15/10/18;17:30;755;864;87,38;68;93\n15/10/18;18:00;742;864;85,88;46;105\n15/10/18;18:30;648;864;75,00;40;107\n15/10/18;19:00;615;864;71,18;38;81\n15/10/18;19:30;551;864;63,77;31;65\n15/10/18;20:00;537;864;62,15;24;31\n15/10/18;20:30;522;864;60,42;14;28\n15/10/18;21:00;515;864;59,61;7;13\n15/10/18;21:30;497;864;57,52;2;24\n15/10/18;22:00;487;864;56,37;5;19\n15/10/18;22:30;463;864;53,59;5;26\n15/10/18;23:00;454;864;52,55;0;10\n15/10/18;23:30;443;864;51,27;3;10\n16/10/18;00:00;437;864;50,58;0;0\n16/10/18;00:30;437;864;50,58;0;2\n16/10/18;01:00;435;864;50,35;0;0\n16/10/18;01:30;436;864;50,46;1;1\n16/10/18;02:00;435;864;50,35;0;1\n16/10/18;02:30;434;864;50,23;0;0\n16/10/18;03:00;434;864;50,23;0;0\n16/10/18;03:30;434;864;50,23;0;0\n16/10/18;04:00;434;864;50,23;0;0\n16/10/18;04:30;434;864;50,23;0;0\n16/10/18;05:00;434;864;50,23;0;0\n16/10/18;05:30;434;864;50,23;1;0\n16/10/18;06:00;435;864;50,35;2;1\n16/10/18;06:30;439;864;50,81;13;4\n16/10/18;07:00;444;864;51,39;36;16\n16/10/18;07:30;472;864;54,63;41;16\n16/10/18;08:00;489;864;56,60;50;26\n16/10/18;08:30;553;864;64,00;88;20\n16/10/18;09:00;582;864;67,36;112;17\n16/10/18;09:30;713;864;82,52;103;19\n16/10/18;10:00;759;864;87,85;106;29\n16/10/18;10:30;857;864;99,19;89;42\n16/10/18;11:00;885;864;102,43;58;57\n16/10/18;11:30;881;864;101,97;73;72\n16/10/18;12:00;886;864;102,55;72;73\n16/10/18;12:30;884;864;102,31;45;44\n16/10/18;13:00;884;864;102,31;47;49\n16/10/18;13:30;882;864;102,08;70;64\n16/10/18;14:00;884;864;102,31;63;67\n16/10/18;14:30;887;864;102,66;79;75\n16/10/18;15:00;884;864;102,31;59;57\n16/10/18;15:30;885;864;102,43;57;68\n16/10/18;16:00;874;864;101,16;58;80\n16/10/18;16:30;846;864;97,92;61;82\n16/10/18;17:00;831;864;96,18;63;97\n16/10/18;17:30;780;864;90,28;58;89\n16/10/18;18:00;764;864;88,43;64;74\n16/10/18;18:30;731;864;84,61;46;89\n16/10/18;19:00;710;864;82,18;55;118\n16/10/18;19:30;627;864;72,57;64;77\n16/10/18;20:00;628;864;72,69;32;26\n16/10/18;20:30;630;864;72,92;25;29\n16/10/18;21:00;630;864;72,92;10;29\n16/10/18;21:30;598;864;69,21;9;29\n16/10/18;22:00;591;864;68,40;6;43\n16/10/18;22:30;539;864;62,38;7;45\n16/10/18;23:00;516;864;59,72;3;36\n16/10/18;23:30;474;864;54,86;1;18\n17/10/18;00:00;467;864;54,05;2;20\n17/10/18;00:30;450;864;52,08;1;1\n17/10/18;01:00;449;864;51,97;0;1\n17/10/18;01:30;448;864;51,85;1;2\n17/10/18;02:00;447;864;51,74;0;2\n17/10/18;02:30;445;864;51,50;0;0\n17/10/18;03:00;445;864;51,50;0;0\n17/10/18;03:30;443;864;51,27;0;3\n17/10/18;04:00;442;864;51,16;0;0\n17/10/18;04:30;442;864;51,16;0;0\n17/10/18;05:00;442;864;51,16;0;1\n17/10/18;05:30;444;864;51,39;3;0\n17/10/18;06:00;444;864;51,39;4;0\n17/10/18;06:30;451;864;52,20;13;5\n17/10/18;07:00;454;864;52,55;24;9\n17/10/18;07:30;484;864;56,02;41;14\n17/10/18;08:00;498;864;57,64;52;19\n17/10/18;08:30;579;864;67,01;80;17\n17/10/18;09:00;593;864;68,63;113;21\n17/10/18;09:30;715;864;82,75;87;24\n17/10/18;10:00;746;864;86,34;103;21\n17/10/18;10:30;851;864;98,50;72;52\n17/10/18;11:00;851;864;98,50;52;52\n17/10/18;11:30;854;864;98,84;68;69\n17/10/18;12:00;847;864;98,03;60;52\n17/10/18;12:30;855;864;98,96;45;44\n17/10/18;13:00;854;864;98,84;50;61\n17/10/18;13:30;853;864;98,73;66;45\n17/10/18;14:00;864;864;100,00;81;69\n17/10/18;14:30;870;864;100,69;65;63\n17/10/18;15:00;878;864;101,62;67;67\n17/10/18;15:30;870;864;100,69;74;76\n17/10/18;16:00;877;864;101,50;57;91\n17/10/18;16:30;831;864;96,18;71;88\n17/10/18;17:00;825;864;95,49;76;95\n17/10/18;17:30;792;864;91,67;58;96\n17/10/18;18:00;765;864;88,54;56;101\n17/10/18;18:30;718;864;83,10;56;96\n17/10/18;19:00;681;864;78,82;53;108\n17/10/18;19:30;629;864;72,80;61;56\n17/10/18;20:00;629;864;72,80;72;40\n17/10/18;20:30;663;864;76,74;35;34\n17/10/18;21:00;662;864;76,62;12;26\n17/10/18;21:30;637;864;73,73;9;23\n17/10/18;22:00;634;864;73,38;7;51\n17/10/18;22:30;571;864;66,09;4;51\n17/10/18;23:00;543;864;62,85;10;52\n17/10/18;23:30;482;864;55,79;1;25\n18/10/18;00:00;477;864;55,21;0;13\n18/10/18;00:30;455;864;52,66;1;14\n18/10/18;01:00;451;864;52,20;0;4\n18/10/18;01:30;446;864;51,62;0;2\n18/10/18;02:00;445;864;51,50;0;1\n18/10/18;02:30;444;864;51,39;0;0\n18/10/18;03:00;444;864;51,39;0;0\n18/10/18;03:30;444;864;51,39;0;1\n18/10/18;04:00;443;864;51,27;0;0\n18/10/18;04:30;333;864;38,54;1;0\n18/10/18;05:00;333;864;38,54;1;0\n18/10/18;05:30;333;864;38,54;0;0\n18/10/18;06:00;333;864;38,54;7;1\n18/10/18;06:30;338;864;39,12;8;10\n18/10/18;07:00;337;864;39,00;30;3\n18/10/18;07:30;370;864;42,82;44;21\n18/10/18;08:00;387;864;44,79;49;24\n18/10/18;08:30;436;864;50,46;78;20\n18/10/18;09:00;471;864;54,51;118;15\n18/10/18;09:30;608;864;70,37;119;23\n18/10/18;10:00;714;864;82,64;114;42\n18/10/18;10:30;752;864;87,04;67;53\n18/10/18;11:00;754;864;87,27;43;44\n18/10/18;11:30;748;864;86,57;59;56\n18/10/18;12:00;752;864;87,04;48;49\n18/10/18;12:30;751;864;86,92;48;47\n18/10/18;13:00;751;864;86,92;39;36\n18/10/18;13:30;751;864;86,92;59;61\n18/10/18;14:00;750;864;86,81;71;48\n18/10/18;14:30;770;864;89,12;60;61\n18/10/18;15:00;772;864;89,35;58;75\n18/10/18;15:30;759;864;87,85;79;78\n18/10/18;16:00;757;864;87,62;68;81\n18/10/18;16:30;741;864;85,76;62;69\n18/10/18;17:00;734;864;84,95;52;82\n18/10/18;17:30;690;864;79,86;77;92\n18/10/18;18:00;687;864;79,51;62;89\n18/10/18;18:30;645;864;74,65;76;103\n18/10/18;19:00;634;864;73,38;72;123\n18/10/18;19:30;583;864;67,48;85;77\n18/10/18;20:00;588;864;68,06;92;36\n18/10/18;20:30;654;864;75,69;48;35\n18/10/18;21:00;658;864;76,16;23;28\n18/10/18;21:30;641;864;74,19;6;55\n18/10/18;22:00;605;864;70,02;11;50\n18/10/18;22:30;529;864;61,23;5;69\n18/10/18;23:00;501;864;57,99;5;67\n18/10/18;23:30;410;864;47,45;2;50\n19/10/18;00:00;393;864;45,49;3;22\n19/10/18;00:30;370;864;42,82;1;13\n19/10/18;01:00;360;864;41,67;0;7\n19/10/18;01:30;351;864;40,63;0;3\n19/10/18;02:00;349;864;40,39;0;4\n19/10/18;02:30;344;864;39,81;0;1\n19/10/18;03:00;344;864;39,81;0;1\n19/10/18;03:30;343;864;39,70;0;2\n19/10/18;04:00;341;864;39,47;1;0\n19/10/18;04:30;342;864;39,58;0;0\n19/10/18;05:00;342;864;39,58;2;3\n19/10/18;05:30;341;864;39,47;1;1\n19/10/18;06:00;341;864;39,47;7;0\n19/10/18;06:30;350;864;40,51;11;9\n19/10/18;07:00;351;864;40,63;32;12\n19/10/18;07:30;378;864;43,75;38;15\n19/10/18;08:00;393;864;45,49;57;29\n19/10/18;08:30;443;864;51,27;73;13\n19/10/18;09:00;532;864;61,57;118;22\n19/10/18;09:30;608;864;70,37;101;24\n19/10/18;10:00;652;864;75,46;104;30\n19/10/18;10:30;746;864;86,34;96;62\n19/10/18;11:00;757;864;87,62;74;71\n19/10/18;11:30;758;864;87,73;75;72\n19/10/18;12:00;765;864;88,54;71;68\n19/10/18;12:30;767;864;88,77;55;54\n19/10/18;13:00;769;864;89,00;42;44\n19/10/18;13:30;766;864;88,66;52;55\n19/10/18;14:00;764;864;88,43;59;67\n19/10/18;14:30;760;864;87,96;83;74\n19/10/18;15:00;764;864;88,43;74;72\n19/10/18;15:30;765;864;88,54;62;77\n19/10/18;16:00;746;864;86,34;62;63\n19/10/18;16:30;722;864;83,56;63;88\n19/10/18;17:00;718;864;83,10;49;97\n19/10/18;17:30;653;864;75,58;54;97\n19/10/18;18:00;627;864;72,57;62;107\n19/10/18;18:30;566;864;65,51;48;98\n19/10/18;19:00;530;864;61,34;45;88\n19/10/18;19:30;471;864;54,51;44;63\n19/10/18;20:00;469;864;54,28;53;27\n19/10/18;20:30;510;864;59,03;42;24\n19/10/18;21:00;512;864;59,26;35;26\n19/10/18;21:30;523;864;60,53;22;19\n19/10/18;22:00;523;864;60,53;14;39\n19/10/18;22:30;485;864;56,13;9;27\n19/10/18;23:00;480;864;55,56;6;38\n19/10/18;23:30;429;864;49,65;6;45\n20/10/18;00:00;409;864;47,34;6;25\n20/10/18;00:30;379;864;43,87;5;21\n20/10/18;01:00;372;864;43,06;1;18\n20/10/18;01:30;355;864;41,09;2;9\n20/10/18;02:00;348;864;40,28;0;5\n20/10/18;02:30;341;864;39,47;0;3\n20/10/18;03:00;340;864;39,35;0;3\n20/10/18;03:30;336;864;38,89;1;3\n20/10/18;04:00;335;864;38,77;0;0\n20/10/18;04:30;335;864;38,77;0;0\n20/10/18;05:00;335;864;38,77;2;0\n20/10/18;05:30;338;864;39,12;2;1\n20/10/18;06:00;338;864;39,12;1;2\n20/10/18;06:30;337;864;39,00;1;3\n20/10/18;07:00;335;864;38,77;5;2\n20/10/18;07:30;338;864;39,12;2;3\n20/10/18;08:00;337;864;39,00;10;4\n20/10/18;08:30;357;864;41,32;28;11\n20/10/18;09:00;360;864;41,67;38;14\n20/10/18;09:30;404;864;46,76;90;21\n20/10/18;10:00;450;864;52,08;107;31\n20/10/18;10:30;565;864;65,39;114;40\n20/10/18;11:00;600;864;69,44;110;58\n20/10/18;11:30;683;864;79,05;117;58\n20/10/18;12:00;713;864;82,52;115;71\n20/10/18;12:30;762;864;88,19;78;65\n20/10/18;13:00;767;864;88,77;64;61\n20/10/18;13:30;768;864;88,89;64;68\n20/10/18;14:00;765;864;88,54;69;67\n20/10/18;14:30;764;864;88,43;61;61\n20/10/18;15:00;768;864;88,89;93;91\n20/10/18;15:30;769;864;89,00;81;81\n20/10/18;16:00;768;864;88,89;94;93\n20/10/18;16:30;765;864;88,54;86;88\n20/10/18;17:00;767;864;88,77;95;94\n20/10/18;17:30;760;864;87,96;98;114\n20/10/18;18:00;749;864;86,69;91;129\n20/10/18;18:30;693;864;80,21;79;124\n20/10/18;19:00;666;864;77,08;65;136\n20/10/18;19:30;582;864;67,36;83;79\n20/10/18;20:00;595;864;68,87;78;41\n20/10/18;20:30;654;864;75,69;76;35\n20/10/18;21:00;670;864;77,55;45;39\n20/10/18;21:30;687;864;79,51;44;44\n20/10/18;22:00;677;864;78,36;19;61\n20/10/18;22:30;592;864;68,52;23;65\n20/10/18;23:00;592;864;68,52;13;61\n20/10/18;23:30;519;864;60,07;4;56\n21/10/18;00:00;491;864;56,83;6;62\n21/10/18;00:30;416;864;48,15;1;40\n21/10/18;01:00;397;864;45,95;7;22\n21/10/18;01:30;371;864;42,94;2;17\n21/10/18;02:00;364;864;42,13;1;12\n21/10/18;02:30;347;864;40,16;0;9\n21/10/18;03:00;344;864;39,81;1;7\n21/10/18;03:30;338;864;39,12;0;0\n21/10/18;04:00;338;864;39,12;0;1\n21/10/18;04:30;336;864;38,89;0;1\n21/10/18;05:00;336;864;38,89;0;1\n21/10/18;05:30;335;864;38,77;0;1\n21/10/18;06:00;334;864;38,66;1;1\n21/10/18;06:30;333;864;38,54;0;3\n21/10/18;07:00;330;864;38,19;0;3\n21/10/18;07:30;324;864;37,50;0;5\n21/10/18;08:00;323;864;37,38;1;4\n21/10/18;08:30;317;864;36,69;0;7\n21/10/18;09:00;313;864;36,23;2;5\n21/10/18;09:30;307;864;35,53;2;10\n21/10/18;10:00;302;864;34,95;8;14\n21/10/18;10:30;298;864;34,49;12;14\n21/10/18;11:00;296;864;34,26;19;16\n21/10/18;11:30;303;864;35,07;16;13\n21/10/18;12:00;300;864;34,72;25;17\n21/10/18;12:30;318;864;36,81;30;13\n21/10/18;13:00;328;864;37,96;27;16\n21/10/18;13:30;341;864;39,47;18;10\n21/10/18;14:00;348;864;40,28;20;11\n21/10/18;14:30;355;864;41,09;17;19\n21/10/18;15:00;354;864;40,97;25;23\n21/10/18;15:30;356;864;41,20;22;22\n21/10/18;16:00;353;864;40,86;23;29\n21/10/18;16:30;343;864;39,70;21;26\n21/10/18;17:00;342;864;39,58;20;28\n21/10/18;17:30;325;864;37,62;14;27\n21/10/18;18:00;320;864;37,04;14;13\n21/10/18;18:30;323;864;37,38;18;17\n21/10/18;19:00;322;864;37,27;25;19\n21/10/18;19:30;328;864;37,96;26;8\n21/10/18;20:00;347;864;40,16;15;10\n21/10/18;20:30;351;864;40,63;12;7\n21/10/18;21:00;353;864;40,86;6;9\n21/10/18;21:30;345;864;39,93;8;14\n21/10/18;22:00;344;864;39,81;5;6\n21/10/18;22:30;340;864;39,35;1;5\n21/10/18;23:00;337;864;39,00;2;5\n21/10/18;23:30;335;864;38,77;2;3\n22/10/18;00:00;333;864;38,54;2;7\n22/10/18;00:30;329;864;38,08;1;2\n22/10/18;01:00;329;864;38,08;0;2\n22/10/18;01:30;327;864;37,85;0;0\n22/10/18;02:00;327;864;37,85;0;0\n22/10/18;02:30;328;864;37,96;1;0\n22/10/18;03:00;328;864;37,96;0;0\n22/10/18;03:30;328;864;37,96;0;0\n22/10/18;04:00;328;864;37,96;0;0\n22/10/18;04:30;326;864;37,73;0;2\n22/10/18;05:00;326;864;37,73;0;0\n22/10/18;05:30;327;864;37,85;2;0\n22/10/18;06:00;328;864;37,96;2;2\n22/10/18;06:30;334;864;38,66;11;5\n22/10/18;07:00;363;864;42,01;31;6\n22/10/18;07:30;373;864;43,17;38;22\n22/10/18;08:00;378;864;43,75;53;30\n22/10/18;08:30;447;864;51,74;72;19\n22/10/18;09:00;479;864;55,44;75;18\n22/10/18;09:30;575;864;66,55;86;16\n22/10/18;10:00;593;864;68,63;75;26\n22/10/18;10:30;676;864;78,24;80;29\n22/10/18;11:00;685;864;79,28;69;43\n22/10/18;11:30;719;864;83,22;74;58\n22/10/18;12:00;745;864;86,23;85;63\n22/10/18;12:30;755;864;87,38;66;52\n22/10/18;13:00;754;864;87,27;47;46\n22/10/18;13:30;755;864;87,38;58;59\n22/10/18;14:00;756;864;87,50;80;61\n22/10/18;14:30;773;864;89,47;77;80\n22/10/18;15:00;775;864;89,70;65;72\n22/10/18;15:30;742;864;85,88;78;98\n22/10/18;16:00;742;864;85,88;70;88\n22/10/18;16:30;703;864;81,37;66;90\n22/10/18;17:00;685;864;79,28;58;88\n22/10/18;17:30;635;864;73,50;54;90\n22/10/18;18:00;630;864;72,92;57;110\n22/10/18;18:30;524;864;60,65;44;108\n22/10/18;19:00;485;864;56,13;46;111\n22/10/18;19:30;432;864;50,00;38;54\n22/10/18;20:00;440;864;50,93;33;17\n22/10/18;20:30;439;864;50,81;10;21\n22/10/18;21:00;434;864;50,23;4;13\n22/10/18;21:30;405;864;46,88;3;29\n22/10/18;22:00;394;864;45,60;3;21\n22/10/18;22:30;365;864;42,25;3;24\n22/10/18;23:00;354;864;40,97;1;13\n22/10/18;23:30;348;864;40,28;1;6\n23/10/18;00:00;344;864;39,81;1;4\n23/10/18;00:30;345;864;39,93;0;0\n23/10/18;01:00;345;864;39,93;0;1\n23/10/18;01:30;344;864;39,81;0;0\n23/10/18;02:00;344;864;39,81;0;0\n23/10/18;02:30;344;864;39,81;0;0\n23/10/18;03:00;344;864;39,81;0;0\n23/10/18;03:30;344;864;39,81;0;0\n23/10/18;04:00;344;864;39,81;0;0\n23/10/18;04:30;344;864;39,81;0;0\n23/10/18;05:00;343;864;39,70;0;1\n23/10/18;05:30;344;864;39,81;1;0\n23/10/18;06:00;345;864;39,93;4;1\n23/10/18;06:30;352;864;40,74;12;7\n23/10/18;07:00;352;864;40,74;24;11\n23/10/18;07:30;383;864;44,33;36;17\n23/10/18;08:00;445;864;51,50;56;22\n23/10/18;08:30;490;864;56,71;98;18\n23/10/18;09:00;546;864;63,19;109;19\n23/10/18;09:30;646;864;74,77;83;17\n23/10/18;10:00;679;864;78,59;89;27\n23/10/18;10:30;753;864;87,15;83;43\n23/10/18;11:00;752;864;87,04;46;41\n23/10/18;11:30;758;864;87,73;65;69\n23/10/18;12:00;758;864;87,73;68;63\n23/10/18;12:30;764;864;88,43;35;37\n23/10/18;13:00;763;864;88,31;43;42\n23/10/18;13:30;763;864;88,31;63;62\n23/10/18;14:00;760;864;87,96;52;51\n23/10/18;14:30;773;864;89,47;54;47\n23/10/18;15:00;771;864;89,24;59;64\n23/10/18;15:30;772;864;89,35;70;67\n23/10/18;16:00;772;864;89,35;68;71\n23/10/18;16:30;749;864;86,69;75;95\n23/10/18;17:00;726;864;84,03;60;98\n23/10/18;17:30;673;864;77,89;66;98\n23/10/18;18:00;674;864;78,01;78;95\n23/10/18;18:30;610;864;70,60;60;111\n23/10/18;19:00;600;864;69,44;57;103\n23/10/18;19:30;545;864;63,08;64;73\n23/10/18;20:00;554;864;64,12;52;33\n23/10/18;20:30;561;864;64,93;23;31\n23/10/18;21:00;551;864;63,77;14;35\n23/10/18;21:30;506;864;58,56;4;39\n23/10/18;22:00;487;864;56,37;2;49\n23/10/18;22:30;414;864;47,92;2;41\n23/10/18;23:00;393;864;45,49;3;36\n23/10/18;23:30;361;864;41,78;1;21\n24/10/18;00:00;353;864;40,86;0;10\n24/10/18;00:30;343;864;39,70;0;6\n24/10/18;01:00;343;864;39,70;1;1\n24/10/18;01:30;343;864;39,70;0;0\n24/10/18;02:00;342;864;39,58;0;1\n24/10/18;02:30;342;864;39,58;0;0\n24/10/18;03:00;342;864;39,58;0;0\n24/10/18;03:30;342;864;39,58;0;0\n24/10/18;04:00;342;864;39,58;0;0\n24/10/18;04:30;341;864;39,47;0;1\n24/10/18;05:00;341;864;39,47;1;1\n24/10/18;05:30;341;864;39,47;1;1\n24/10/18;06:00;343;864;39,70;3;1\n24/10/18;06:30;348;864;40,28;17;8\n24/10/18;07:00;359;864;41,55;31;8\n24/10/18;07:30;374;864;43,29;31;16\n24/10/18;08:00;394;864;45,60;39;17\n24/10/18;08:30;472;864;54,63;83;21\n24/10/18;09:00;510;864;59,03;102;13\n24/10/18;09:30;628;864;72,69;97;25\n24/10/18;10:00;673;864;77,89;105;28\n24/10/18;10:30;767;864;88,77;96;39\n24/10/18;11:00;776;864;89,81;67;59\n24/10/18;11:30;780;864;90,28;53;52\n24/10/18;12:00;776;864;89,81;69;70\n24/10/18;12:30;779;864;90,16;36;35\n24/10/18;13:00;777;864;89,93;49;46\n24/10/18;13:30;779;864;90,16;59;59\n24/10/18;14:00;779;864;90,16;72;75\n24/10/18;14:30;784;864;90,74;67;58\n24/10/18;15:00;782;864;90,51;79;80\n24/10/18;15:30;781;864;90,39;76;73\n24/10/18;16:00;771;864;89,24;76;85\n24/10/18;16:30;754;864;87,27;69;92\n24/10/18;17:00;734;864;84,95;50;97\n24/10/18;17:30;667;864;77,20;59;95\n24/10/18;18:00;665;864;76,97;79;110\n24/10/18;18:30;602;864;69,68;57;98\n24/10/18;19:00;557;864;64,47;68;133\n24/10/18;19:30;521;864;60,30;56;61\n24/10/18;20:00;536;864;62,04;46;35\n24/10/18;20:30;526;864;60,88;16;27\n24/10/18;21:00;529;864;61,23;11;16\n24/10/18;21:30;499;864;57,75;5;30\n24/10/18;22:00;478;864;55,32;8;53\n24/10/18;22:30;423;864;48,96;4;33\n24/10/18;23:00;401;864;46,41;3;37\n24/10/18;23:30;369;864;42,71;0;19\n25/10/18;00:00;367;864;42,48;1;5\n25/10/18;00:30;359;864;41,55;1;6\n25/10/18;01:00;357;864;41,32;0;3\n25/10/18;01:30;355;864;41,09;0;1\n25/10/18;02:00;355;864;41,09;0;0\n25/10/18;02:30;355;864;41,09;0;0\n25/10/18;03:00;355;864;41,09;0;1\n25/10/18;03:30;354;864;40,97;0;0\n25/10/18;04:00;354;864;40,97;0;0\n25/10/18;04:30;355;864;41,09;1;0\n25/10/18;05:00;355;864;41,09;0;1\n25/10/18;05:30;353;864;40,86;1;2\n25/10/18;06:00;353;864;40,86;3;3\n25/10/18;06:30;364;864;42,13;20;8\n25/10/18;07:00;375;864;43,40;33;8\n25/10/18;07:30;409;864;47,34;28;8\n25/10/18;08:00;425;864;49,19;65;20\n25/10/18;08:30;502;864;58,10;76;23\n25/10/18;09:00;513;864;59,38;98;17\n25/10/18;09:30;641;864;74,19;84;27\n25/10/18;10:00;675;864;78,13;86;31\n25/10/18;10:30;757;864;87,62;98;44\n25/10/18;11:00;781;864;90,39;70;43\n25/10/18;11:30;787;864;91,09;71;64\n25/10/18;12:00;786;864;90,97;62;65\n25/10/18;12:30;783;864;90,63;46;47\n25/10/18;13:00;787;864;91,09;58;52\n25/10/18;13:30;786;864;90,97;63;64\n25/10/18;14:00;788;864;91,20;63;63\n25/10/18;14:30;784;864;90,74;55;57\n25/10/18;15:00;786;864;90,97;55;55\n25/10/18;15:30;781;864;90,39;60;66\n25/10/18;16:00;765;864;88,54;64;98\n25/10/18;16:30;732;864;84,72;73;84\n25/10/18;17:00;716;864;82,87;58;74\n25/10/18;17:30;685;864;79,28;61;96\n25/10/18;18:00;663;864;76,74;57;98\n25/10/18;18:30;600;864;69,44;58;101\n25/10/18;19:00;592;864;68,52;58;99\n25/10/18;19:30;545;864;63,08;67;75\n25/10/18;20:00;552;864;63,89;66;27\n25/10/18;20:30;603;864;69,79;46;35\n25/10/18;21:00;591;864;68,40;17;30\n25/10/18;21:30;561;864;64,93;17;44\n25/10/18;22:00;545;864;63,08;8;52\n25/10/18;22:30;464;864;53,70;3;57\n25/10/18;23:00;454;864;52,55;4;37\n25/10/18;23:30;399;864;46,18;1;33\n26/10/18;00:00;381;864;44,10;1;17\n26/10/18;00:30;373;864;43,17;0;9\n26/10/18;01:00;369;864;42,71;0;7\n26/10/18;01:30;363;864;42,01;0;3\n26/10/18;02:00;360;864;41,67;0;2\n26/10/18;02:30;359;864;41,55;0;1\n26/10/18;03:00;359;864;41,55;0;1\n26/10/18;03:30;358;864;41,44;0;0\n26/10/18;04:00;358;864;41,44;0;0\n26/10/18;04:30;357;864;41,32;0;1\n26/10/18;05:00;358;864;41,44;3;2\n26/10/18;05:30;357;864;41,32;2;3\n26/10/18;06:00;358;864;41,44;1;0\n26/10/18;06:30;358;864;41,44;18;5\n26/10/18;07:00;374;864;43,29;26;9\n26/10/18;07:30;399;864;46,18;29;12\n26/10/18;08:00;421;864;48,73;61;22\n26/10/18;08:30;491;864;56,83;76;25\n26/10/18;09:00;555;864;64,24;86;23\n26/10/18;09:30;624;864;72,22;84;15\n26/10/18;10:00;673;864;77,89;90;26\n26/10/18;10:30;749;864;86,69;118;55\n26/10/18;11:00;785;864;90,86;79;48\n26/10/18;11:30;776;864;89,81;77;85\n26/10/18;12:00;776;864;89,81;87;77\n26/10/18;12:30;782;864;90,51;54;53\n26/10/18;13:00;778;864;90,05;51;56\n26/10/18;13:30;780;864;90,28;65;60\n26/10/18;14:00;778;864;90,05;77;77\n26/10/18;14:30;779;864;90,16;82;82\n26/10/18;15:00;781;864;90,39;75;76\n26/10/18;15:30;771;864;89,24;70;77\n26/10/18;16:00;776;864;89,81;88;85\n26/10/18;16:30;743;864;86,00;68;99\n26/10/18;17:00;732;864;84,72;73;89\n26/10/18;17:30;686;864;79,40;63;104\n26/10/18;18:00;652;864;75,46;48;116\n26/10/18;18:30;581;864;67,25;66;105\n26/10/18;19:00;539;864;62,38;61;97\n26/10/18;19:30;543;864;62,85;61;54\n26/10/18;20:00;552;864;63,89;53;39\n26/10/18;20:30;579;864;67,01;42;24\n26/10/18;21:00;587;864;67,94;39;26\n26/10/18;21:30;579;864;67,01;18;30\n26/10/18;22:00;560;864;64,81;13;54\n26/10/18;22:30;503;864;58,22;11;46\n26/10/18;23:00;489;864;56,60;4;27\n26/10/18;23:30;440;864;50,93;2;41\n27/10/18;00:00;423;864;48,96;4;26\n27/10/18;00:30;403;864;46,64;4;18\n27/10/18;01:00;396;864;45,83;1;9\n27/10/18;01:30;387;864;44,79;0;10\n27/10/18;02:00;385;864;44,56;2;3\n27/10/18;02:30;378;864;43,75;0;6\n27/10/18;03:00;374;864;43,29;0;4\n27/10/18;03:30;370;864;42,82;0;4\n27/10/18;04:00;369;864;42,71;0;0\n27/10/18;04:30;369;864;42,71;0;0\n27/10/18;05:00;369;864;42,71;0;0\n27/10/18;05:30;370;864;42,82;1;0\n27/10/18;06:00;370;864;42,82;0;1\n27/10/18;06:30;367;864;42,48;0;2\n27/10/18;07:00;369;864;42,71;3;2\n27/10/18;07:30;374;864;43,29;9;3\n27/10/18;08:00;376;864;43,52;13;4\n27/10/18;08:30;395;864;45,72;19;6\n27/10/18;09:00;404;864;46,76;38;14\n27/10/18;09:30;479;864;55,44;82;17\n27/10/18;10:00;521;864;60,30;103;32\n27/10/18;10:30;623;864;72,11;113;43\n27/10/18;11:00;630;864;72,92;117;55\n27/10/18;11:30;717;864;82,99;104;75\n27/10/18;12:00;734;864;84,95;114;66\n27/10/18;12:30;767;864;88,77;85;78\n27/10/18;13:00;784;864;90,74;80;72\n27/10/18;13:30;780;864;90,28;59;59\n27/10/18;14:00;777;864;89,93;76;73\n27/10/18;14:30;783;864;90,63;91;87\n27/10/18;15:00;788;864;91,20;100;103\n27/10/18;15:30;785;864;90,86;87;87\n27/10/18;16:00;783;864;90,63;94;90\n27/10/18;16:30;786;864;90,97;107;107\n27/10/18;17:00;781;864;90,39;88;94\n27/10/18;17:30;772;864;89,35;93;95\n27/10/18;18:00;770;864;89,12;80;115\n27/10/18;18:30;710;864;82,18;62;103\n27/10/18;19:00;646;864;74,77;45;145\n27/10/18;19:30;580;864;67,13;60;78\n27/10/18;20:00;581;864;67,25;59;39\n27/10/18;20:30;603;864;69,79;33;31\n27/10/18;21:00;605;864;70,02;27;32\n27/10/18;21:30;606;864;70,14;36;30\n27/10/18;22:00;590;864;68,29;13;45\n27/10/18;22:30;543;864;62,85;13;42\n27/10/18;23:00;526;864;60,88;6;50\n27/10/18;23:30;469;864;54,28;0;31\n28/10/18;00:00;446;864;51,62;2;50\n28/10/18;00:30;403;864;46,64;2;21\n28/10/18;01:00;386;864;44,68;0;20\n28/10/18;01:30;375;864;43,40;1;6\n28/10/18;02:00;373;864;43,17;2;6\n28/10/18;02:30;368;864;42,59;0;6\n28/10/18;03:00;364;864;42,13;0;2\n28/10/18;03:30;362;864;41,90;0;1\n28/10/18;04:00;361;864;41,78;0;1\n28/10/18;04:30;361;864;41,78;0;0\n28/10/18;05:00;363;864;42,01;2;3\n28/10/18;05:30;359;864;41,55;0;1\n28/10/18;06:00;359;864;41,55;0;0\n28/10/18;06:30;358;864;41,44;0;2\n28/10/18;07:00;357;864;41,32;0;2\n28/10/18;07:30;350;864;40,51;0;5\n28/10/18;08:00;349;864;40,39;0;10\n28/10/18;08:30;335;864;38,77;1;7\n28/10/18;09:00;329;864;38,08;0;8\n28/10/18;09:30;317;864;36,69;4;13\n28/10/18;10:00;315;864;36,46;9;10\n28/10/18;10:30;317;864;36,69;15;13\n28/10/18;11:00;320;864;37,04;14;8\n28/10/18;11:30;336;864;38,89;30;17\n28/10/18;12:00;341;864;39,47;25;17\n28/10/18;12:30;360;864;41,67;29;14\n28/10/18;13:00;360;864;41,67;19;15\n28/10/18;13:30;372;864;43,06;27;18\n28/10/18;14:00;375;864;43,40;13;20\n28/10/18;14:30;357;864;41,32;19;28\n28/10/18;15:00;351;864;40,63;22;33\n28/10/18;15:30;339;864;39,24;17;21\n28/10/18;16:00;338;864;39,12;22;24\n28/10/18;16:30;336;864;38,89;22;23\n28/10/18;17:00;344;864;39,81;34;32\n28/10/18;17:30;329;864;38,08;13;24\n28/10/18;18:00;324;864;37,50;10;14\n28/10/18;18:30;334;864;38,66;19;9\n28/10/18;19:00;333;864;38,54;19;18\n28/10/18;19:30;352;864;40,74;27;10\n28/10/18;20:00;357;864;41,32;18;7\n28/10/18;20:30;365;864;42,25;7;4\n28/10/18;21:00;364;864;42,13;6;12\n28/10/18;21:30;352;864;40,74;3;11\n28/10/18;22:00;346;864;40,05;0;11\n28/10/18;22:30;339;864;39,24;1;3\n28/10/18;23:00;335;864;38,77;3;9\n28/10/18;23:30;333;864;38,54;1;1\n29/10/18;00:00;332;864;38,43;0;6\n29/10/18;00:30;327;864;37,85;0;0\n29/10/18;01:00;327;864;37,85;0;0\n29/10/18;01:30;327;864;37,85;0;0\n29/10/18;02:00;327;864;37,85;0;0\n29/10/18;02:30;327;864;37,85;0;0\n29/10/18;03:00;327;864;37,85;0;0\n29/10/18;03:30;327;864;37,85;0;0\n29/10/18;04:00;327;864;37,85;0;0\n29/10/18;04:30;327;864;37,85;0;1\n29/10/18;05:00;326;864;37,73;1;2\n29/10/18;05:30;326;864;37,73;2;0\n29/10/18;06:00;330;864;38,19;5;1\n29/10/18;06:30;337;864;39,00;13;6\n29/10/18;07:00;338;864;39,12;24;10\n29/10/18;07:30;374;864;43,29;39;9\n29/10/18;08:00;385;864;44,56;59;23\n29/10/18;08:30;457;864;52,89;66;18\n29/10/18;09:00;497;864;57,52;93;17\n29/10/18;09:30;590;864;68,29;71;20\n29/10/18;10:00;608;864;70,37;88;25\n29/10/18;10:30;701;864;81,13;86;37\n29/10/18;11:00;704;864;81,48;68;57\n29/10/18;11:30;738;864;85,42;91;55\n29/10/18;12:00;743;864;86,00;95;83\n29/10/18;12:30;751;864;86,92;63;64\n29/10/18;13:00;773;864;89,47;59;54\n29/10/18;13:30;756;864;87,50;79;75\n29/10/18;14:00;768;864;88,89;94;74\n29/10/18;14:30;785;864;90,86;74;74\n29/10/18;15:00;789;864;91,32;73;80\n29/10/18;15:30;760;864;87,96;72;84\n29/10/18;16:00;762;864;88,19;55;91\n29/10/18;16:30;698;864;80,79;59;102\n29/10/18;17:00;644;864;74,54;42;106\n29/10/18;17:30;583;864;67,48;53;100\n29/10/18;18:00;559;864;64,70;36;94\n29/10/18;18:30;468;864;54,17;32;89\n29/10/18;19:00;431;864;49,88;31;88\n29/10/18;19:30;400;864;46,30;31;34\n29/10/18;20:00;399;864;46,18;21;26\n29/10/18;20:30;398;864;46,06;18;16\n29/10/18;21:00;394;864;45,60;4;15\n29/10/18;21:30;379;864;43,87;5;22\n29/10/18;22:00;354;864;40,97;4;25\n29/10/18;22:30;338;864;39,12;1;14\n29/10/18;23:00;334;864;38,66;2;3\n29/10/18;23:30;333;864;38,54;1;2\n30/10/18;00:00;333;864;38,54;0;0\n30/10/18;00:30;332;864;38,43;0;1\n30/10/18;01:00;332;864;38,43;1;1\n30/10/18;01:30;332;864;38,43;0;0\n30/10/18;02:00;332;864;38,43;1;0\n30/10/18;02:30;333;864;38,54;0;0\n30/10/18;03:00;333;864;38,54;0;0\n30/10/18;03:30;333;864;38,54;0;0\n30/10/18;04:00;333;864;38,54;0;0\n30/10/18;04:30;333;864;38,54;0;0\n30/10/18;05:00;332;864;38,43;1;1\n30/10/18;05:30;333;864;38,54;2;1\n30/10/18;06:00;333;864;38,54;2;3\n30/10/18;06:30;335;864;38,77;16;9\n30/10/18;07:00;342;864;39,58;19;9\n30/10/18;07:30;373;864;43,17;47;13\n30/10/18;08:00;391;864;45,25;55;29\n30/10/18;08:30;488;864;56,48;93;16\n30/10/18;09:00;520;864;60,19;109;19\n30/10/18;09:30;603;864;69,79;80;27\n30/10/18;10:00;650;864;75,23;90;37\n30/10/18;10:30;735;864;85,07;108;42\n30/10/18;11:00;772;864;89,35;102;60\n30/10/18;11:30;784;864;90,74;81;82\n30/10/18;12:00;787;864;91,09;49;51\n30/10/18;12:30;788;864;91,20;50;50\n30/10/18;13:00;788;864;91,20;57;59\n30/10/18;13:30;786;864;90,97;62;65\n30/10/18;14:00;785;864;90,86;63;62\n30/10/18;14:30;786;864;90,97;50;51\n30/10/18;15:00;785;864;90,86;85;82\n30/10/18;15:30;784;864;90,74;71;73\n30/10/18;16:00;782;864;90,51;65;70\n30/10/18;16:30;753;864;87,15;58;97\n30/10/18;17:00;732;864;84,72;73;94\n30/10/18;17:30;694;864;80,32;72;97\n30/10/18;18:00;673;864;77,89;71;109\n30/10/18;18:30;611;864;70,72;65;122\n30/10/18;19:00;507;864;58,68;42;111\n30/10/18;19:30;498;864;57,64;50;77\n30/10/18;20:00;503;864;58,22;39;38\n30/10/18;20:30;500;864;57,87;25;30\n30/10/18;21:00;494;864;57,18;7;13\n30/10/18;21:30;478;864;55,32;4;23\n30/10/18;22:00;471;864;54,51;3;40\n30/10/18;22:30;420;864;48,61;6;31\n30/10/18;23:00;398;864;46,06;2;32\n30/10/18;23:30;363;864;42,01;0;18\n31/10/18;00:00;356;864;41,20;2;17\n31/10/18;00:30;344;864;39,81;0;3\n31/10/18;01:00;344;864;39,81;0;2\n31/10/18;01:30;342;864;39,58;0;0\n31/10/18;02:00;342;864;39,58;0;0\n31/10/18;02:30;342;864;39,58;0;0\n31/10/18;03:00;342;864;39,58;0;0\n31/10/18;03:30;342;864;39,58;0;0\n31/10/18;04:00;342;864;39,58;0;0\n31/10/18;04:30;342;864;39,58;0;1\n31/10/18;05:00;341;864;39,47;0;0\n31/10/18;05:30;340;864;39,35;1;1\n31/10/18;06:00;339;864;39,24;2;2\n31/10/18;06:30;349;864;40,39;17;7\n31/10/18;07:00;359;864;41,55;29;8\n31/10/18;07:30;384;864;44,44;35;14\n31/10/18;08:00;441;864;51,04;49;19\n31/10/18;08:30;442;864;51,16;85;25\n31/10/18;09:00;507;864;58,68;83;24\n31/10/18;09:30;601;864;69,56;91;20\n31/10/18;10:00;675;864;78,13;107;31\n31/10/18;10:30;730;864;84,49;109;58\n31/10/18;11:00;782;864;90,51;99;55\n31/10/18;11:30;783;864;90,63;70;70\n31/10/18;12:00;782;864;90,51;88;85\n31/10/18;12:30;788;864;91,20;69;69\n31/10/18;13:00;783;864;90,63;55;67\n31/10/18;13:30;773;864;89,47;89;80\n31/10/18;14:00;780;864;90,28;70;71\n31/10/18;14:30;780;864;90,28;81;83\n31/10/18;15:00;778;864;90,05;81;80\n31/10/18;15:30;775;864;89,70;87;99\n31/10/18;16:00;765;864;88,54;66;96\n31/10/18;16:30;716;864;82,87;62;93\n31/10/18;17:00;692;864;80,09;70;117\n31/10/18;17:30;633;864;73,26;66;95\n31/10/18;18:00;603;864;69,79;55;115\n31/10/18;18:30;530;864;61,34;41;77\n31/10/18;19:00;515;864;59,61;57;91\n31/10/18;19:30;494;864;57,18;49;51\n31/10/18;20:00;510;864;59,03;59;35\n31/10/18;20:30;542;864;62,73;53;23\n31/10/18;21:00;550;864;63,66;37;23\n31/10/18;21:30;561;864;64,93;24;28\n31/10/18;22:00;555;864;64,24;12;34\n31/10/18;22:30;522;864;60,42;12;33\n31/10/18;23:00;509;864;58,91;11;29\n31/10/18;23:30;465;864;53,82;2;36\n01/11/18;00:00;454;864;52,55;1;24\n01/11/18;00:30;414;864;47,92;4;31\n01/11/18;01:00;411;864;47,57;0;13\n01/11/18;01:30;391;864;45,25;0;7\n01/11/18;02:00;390;864;45,14;1;5\n01/11/18;02:30;384;864;44,44;1;4\n01/11/18;03:00;383;864;44,33;0;3\n01/11/18;03:30;380;864;43,98;0;2\n01/11/18;04:00;379;864;43,87;0;0\n01/11/18;04:30;376;864;43,52;0;4\n01/11/18;05:00;375;864;43,40;0;0\n01/11/18;05:30;375;864;43,40;0;0\n01/11/18;06:00;374;864;43,29;0;3\n01/11/18;06:30;369;864;42,71;0;3\n01/11/18;07:00;370;864;42,82;4;1\n01/11/18;07:30;370;864;42,82;2;6\n01/11/18;08:00;366;864;42,36;2;4\n01/11/18;08:30;363;864;42,01;2;6\n01/11/18;09:00;360;864;41,67;4;9\n01/11/18;09:30;352;864;40,74;10;16\n01/11/18;10:00;356;864;41,20;30;9\n01/11/18;10:30;386;864;44,68;42;22\n01/11/18;11:00;398;864;46,06;36;28\n01/11/18;11:30;413;864;47,80;43;25\n01/11/18;12:00;419;864;48,50;58;35\n01/11/18;12:30;478;864;55,32;76;23\n01/11/18;13:00;505;864;58,45;52;31\n01/11/18;13:30;520;864;60,19;40;30\n01/11/18;14:00;533;864;61,69;48;43\n01/11/18;14:30;538;864;62,27;72;55\n01/11/18;15:00;551;864;63,77;76;47\n01/11/18;15:30;584;864;67,59;70;60\n01/11/18;16:00;594;864;68,75;75;56\n01/11/18;16:30;617;864;71,41;81;71\n01/11/18;17:00;607;864;70,25;71;84\n01/11/18;17:30;565;864;65,39;42;87\n01/11/18;18:00;541;864;62,62;46;87\n01/11/18;18:30;472;864;54,63;29;79\n01/11/18;19:00;445;864;51,50;39;48\n01/11/18;19:30;450;864;52,08;29;27\n01/11/18;20:00;458;864;53,01;26;9\n01/11/18;20:30;469;864;54,28;15;18\n01/11/18;21:00;466;864;53,94;8;16\n01/11/18;21:30;445;864;51,50;12;29\n01/11/18;22:00;439;864;50,81;3;30\n01/11/18;22:30;401;864;46,41;1;18\n01/11/18;23:00;397;864;45,95;4;29\n01/11/18;23:30;360;864;41,67;1;18\n02/11/18;00:00;356;864;41,20;3;6\n02/11/18;00:30;351;864;40,63;2;5\n02/11/18;01:00;352;864;40,74;1;0\n02/11/18;01:30;352;864;40,74;0;0\n02/11/18;02:00;352;864;40,74;1;0\n02/11/18;02:30;354;864;40,97;1;0\n02/11/18;03:00;354;864;40,97;0;0\n02/11/18;03:30;354;864;40,97;0;0\n02/11/18;04:00;352;864;40,74;0;1\n02/11/18;04:30;352;864;40,74;0;0\n02/11/18;05:00;352;864;40,74;0;0\n02/11/18;05:30;353;864;40,86;1;0\n02/11/18;06:00;354;864;40,97;3;0\n02/11/18;06:30;356;864;41,20;7;4\n02/11/18;07:00;361;864;41,78;10;5\n02/11/18;07:30;374;864;43,29;24;6\n02/11/18;08:00;385;864;44,56;20;6\n02/11/18;08:30;422;864;48,84;40;9\n02/11/18;09:00;437;864;50,58;51;16\n02/11/18;09:30;527;864;61,00;109;18\n02/11/18;10:00;582;864;67,36;119;29\n02/11/18;10:30;704;864;81,48;112;43\n02/11/18;11:00;734;864;84,95;116;62\n02/11/18;11:30;779;864;90,16;72;58\n02/11/18;12:00;784;864;90,74;84;75\n02/11/18;12:30;795;864;92,01;58;51\n02/11/18;13:00;795;864;92,01;48;49\n02/11/18;13:30;796;864;92,13;48;46\n02/11/18;14:00;793;864;91,78;67;66\n02/11/18;14:30;789;864;91,32;73;74\n02/11/18;15:00;794;864;91,90;80;78\n02/11/18;15:30;788;864;91,20;89;97\n02/11/18;16:00;785;864;90,86;101;102\n02/11/18;16:30;789;864;91,32;109;106\n02/11/18;17:00;787;864;91,09;93;110\n02/11/18;17:30;752;864;87,04;87;121\n02/11/18;18:00;716;864;82,87;58;119\n02/11/18;18:30;615;864;71,18;46;120\n02/11/18;19:00;591;864;68,40;44;118\n02/11/18;19:30;540;864;62,50;63;47\n02/11/18;20:00;547;864;63,31;47;21\n02/11/18;20:30;573;864;66,32;39;32\n02/11/18;21:00;575;864;66,55;23;28\n02/11/18;21:30;560;864;64,81;17;38\n02/11/18;22:00;538;864;62,27;7;55\n02/11/18;22:30;476;864;55,09;6;40\n02/11/18;23:00;465;864;53,82;8;30\n02/11/18;23:30;422;864;48,84;3;36\n03/11/18;00:00;406;864;46,99;2;16\n03/11/18;00:30;382;864;44,21;3;18\n03/11/18;01:00;384;864;44,44;2;10\n03/11/18;01:30;373;864;43,17;1;5\n03/11/18;02:00;371;864;42,94;1;1\n03/11/18;02:30;367;864;42,48;0;4\n03/11/18;03:00;367;864;42,48;0;0\n03/11/18;03:30;366;864;42,36;0;1\n03/11/18;04:00;366;864;42,36;0;2\n03/11/18;04:30;364;864;42,13;0;0\n03/11/18;05:00;364;864;42,13;0;0\n03/11/18;05:30;365;864;42,25;1;0\n03/11/18;06:00;365;864;42,25;1;1\n03/11/18;06:30;366;864;42,36;2;0\n03/11/18;07:00;367;864;42,48;1;0\n03/11/18;07:30;368;864;42,59;4;1\n03/11/18;08:00;372;864;43,06;6;6\n03/11/18;08:30;379;864;43,87;13;5\n03/11/18;09:00;384;864;44,44;31;12\n03/11/18;09:30;453;864;52,43;86;17\n03/11/18;10:00;493;864;57,06;110;15\n03/11/18;10:30;638;864;73,84;119;28\n03/11/18;11:00;669;864;77,43;111;55\n03/11/18;11:30;738;864;85,42;104;61\n03/11/18;12:00;763;864;88,31;99;70\n03/11/18;12:30;792;864;91,67;71;56\n03/11/18;13:00;793;864;91,78;60;59\n03/11/18;13:30;797;864;92,25;55;54\n03/11/18;14:00;797;864;92,25;56;56\n03/11/18;14:30;793;864;91,78;68;67\n03/11/18;15:00;796;864;92,13;87;87\n03/11/18;15:30;786;864;90,97;98;104\n03/11/18;16:00;794;864;91,90;97;94\n03/11/18;16:30;794;864;91,90;88;85\n03/11/18;17:00;797;864;92,25;84;87\n03/11/18;17:30;768;864;88,89;90;121\n03/11/18;18:00;749;864;86,69;78;134\n03/11/18;18:30;651;864;75,35;58;118\n03/11/18;19:00;630;864;72,92;70;101\n03/11/18;19:30;608;864;70,37;59;56\n03/11/18;20:00;614;864;71,06;55;28\n03/11/18;20:30;660;864;76,39;55;31\n03/11/18;21:00;673;864;77,89;40;35\n03/11/18;21:30;654;864;75,69;19;45\n03/11/18;22:00;642;864;74,31;11;37\n03/11/18;22:30;573;864;66,32;11;65\n03/11/18;23:00;546;864;63,19;8;50\n03/11/18;23:30;491;864;56,83;4;38\n04/11/18;00:00;470;864;54,40;2;42\n04/11/18;00:30;429;864;49,65;3;25\n04/11/18;01:00;418;864;48,38;1;29\n04/11/18;01:30;395;864;45,72;3;5\n04/11/18;02:00;391;864;45,25;0;9\n04/11/18;02:30;384;864;44,44;0;2\n04/11/18;03:00;384;864;44,44;1;1\n04/11/18;03:30;384;864;44,44;0;0\n04/11/18;04:00;384;864;44,44;0;0\n04/11/18;04:30;381;864;44,10;0;3\n04/11/18;05:00;381;864;44,10;0;0\n04/11/18;05:30;381;864;44,10;1;0\n04/11/18;06:00;381;864;44,10;0;0\n04/11/18;06:30;379;864;43,87;0;2\n04/11/18;07:00;379;864;43,87;1;0\n04/11/18;07:30;379;864;43,87;0;2\n04/11/18;08:00;376;864;43,52;1;7\n04/11/18;08:30;364;864;42,13;2;11\n04/11/18;09:00;359;864;41,55;1;12\n04/11/18;09:30;346;864;40,05;2;9\n04/11/18;10:00;344;864;39,81;8;11\n04/11/18;10:30;339;864;39,24;12;13\n04/11/18;11:00;345;864;39,93;22;15\n04/11/18;11:30;351;864;40,63;30;19\n04/11/18;12:00;357;864;41,32;18;19\n04/11/18;12:30;360;864;41,67;23;18\n04/11/18;13:00;359;864;41,55;20;14\n04/11/18;13:30;370;864;42,82;14;11\n04/11/18;14:00;366;864;42,36;16;18\n04/11/18;14:30;370;864;42,82;22;21\n04/11/18;15:00;364;864;42,13;16;27\n04/11/18;15:30;356;864;41,20;23;23\n04/11/18;16:00;360;864;41,67;29;17\n04/11/18;16:30;357;864;41,32;13;26\n04/11/18;17:00;354;864;40,97;25;27\n04/11/18;17:30;351;864;40,63;13;16\n04/11/18;18:00;349;864;40,39;16;22\n04/11/18;18:30;346;864;40,05;19;13\n04/11/18;19:00;352;864;40,74;12;15\n04/11/18;19:30;353;864;40,86;23;13\n04/11/18;20:00;365;864;42,25;15;6\n04/11/18;20:30;378;864;43,75;14;4\n04/11/18;21:00;377;864;43,63;9;7\n04/11/18;21:30;370;864;42,82;4;13\n04/11/18;22:00;366;864;42,36;5;10\n04/11/18;22:30;360;864;41,67;0;2\n04/11/18;23:00;358;864;41,44;3;6\n04/11/18;23:30;356;864;41,20;2;4\n05/11/18;00:00;352;864;40,74;1;3\n05/11/18;00:30;352;864;40,74;2;3\n05/11/18;01:00;352;864;40,74;0;0\n05/11/18;01:30;352;864;40,74;0;0\n05/11/18;02:00;352;864;40,74;0;1\n05/11/18;02:30;351;864;40,63;0;0\n05/11/18;03:00;351;864;40,63;0;0\n05/11/18;03:30;351;864;40,63;0;0\n05/11/18;04:00;351;864;40,63;1;1\n05/11/18;04:30;349;864;40,39;0;1\n05/11/18;05:00;349;864;40,39;1;1\n05/11/18;05:30;349;864;40,39;1;0\n05/11/18;06:00;351;864;40,63;2;1\n05/11/18;06:30;356;864;41,20;11;3\n05/11/18;07:00;366;864;42,36;27;7\n05/11/18;07:30;384;864;44,44;26;20\n05/11/18;08:00;396;864;45,83;61;13\n05/11/18;08:30;478;864;55,32;94;17\n05/11/18;09:00;520;864;60,19;85;16\n05/11/18;09:30;649;864;75,12;107;13\n05/11/18;10:00;687;864;79,51;70;26\n05/11/18;10:30;734;864;84,95;61;38\n05/11/18;11:00;737;864;85,30;85;52\n05/11/18;11:30;784;864;90,74;78;58\n05/11/18;12:00;786;864;90,97;72;52\n05/11/18;12:30;820;864;94,91;79;65\n05/11/18;13:00;816;864;94,44;47;46\n05/11/18;13:30;816;864;94,44;64;62\n05/11/18;14:00;825;864;95,49;82;82\n05/11/18;14:30;819;864;94,79;66;64\n05/11/18;15:00;821;864;95,02;69;88\n05/11/18;15:30;809;864;93,63;79;69\n05/11/18;16:00;800;864;92,59;59;91\n05/11/18;16:30;736;864;85,19;50;93\n05/11/18;17:00;697;864;80,67;56;85\n05/11/18;17:30;680;864;78,70;50;82\n05/11/18;18:00;665;864;76,97;47;104\n05/11/18;18:30;588;864;68,06;47;76\n05/11/18;19:00;576;864;66,67;32;94\n05/11/18;19:30;504;864;58,33;46;64\n05/11/18;20:00;512;864;59,26;39;28\n05/11/18;20:30;516;864;59,72;12;17\n05/11/18;21:00;509;864;58,91;8;19\n05/11/18;21:30;485;864;56,13;6;20\n05/11/18;22:00;486;864;56,25;4;29\n05/11/18;22:30;440;864;50,93;5;25\n05/11/18;23:00;436;864;50,46;4;19\n05/11/18;23:30;412;864;47,69;1;12\n06/11/18;00:00;411;864;47,57;0;3\n06/11/18;00:30;406;864;46,99;1;3\n06/11/18;01:00;407;864;47,11;0;2\n06/11/18;01:30;405;864;46,88;0;0\n06/11/18;02:00;405;864;46,88;1;0\n06/11/18;02:30;406;864;46,99;0;0\n06/11/18;03:00;406;864;46,99;0;0\n06/11/18;03:30;406;864;46,99;0;0\n06/11/18;04:00;406;864;46,99;1;2\n06/11/18;04:30;404;864;46,76;0;0\n06/11/18;05:00;404;864;46,76;0;0\n06/11/18;05:30;404;864;46,76;1;1\n06/11/18;06:00;404;864;46,76;3;3\n06/11/18;06:30;412;864;47,69;17;7\n06/11/18;07:00;416;864;48,15;21;12\n06/11/18;07:30;441;864;51,04;43;23\n06/11/18;08:00;444;864;51,39;59;23\n06/11/18;08:30;521;864;60,30;82;14\n06/11/18;09:00;648;864;75,00;102;23\n06/11/18;09:30;675;864;78,13;88;23\n06/11/18;10:00;753;864;87,15;95;28\n06/11/18;10:30;806;864;93,29;88;37\n06/11/18;11:00;805;864;93,17;49;50\n06/11/18;11:30;804;864;93,06;58;61\n06/11/18;12:00;803;864;92,94;56;57\n06/11/18;12:30;806;864;93,29;47;47\n06/11/18;13:00;805;864;93,17;43;46\n06/11/18;13:30;793;864;91,78;73;69\n06/11/18;14:00;804;864;93,06;59;56\n06/11/18;14:30;820;864;94,91;75;55\n06/11/18;15:00;820;864;94,91;69;71\n06/11/18;15:30;818;864;94,68;79;83\n06/11/18;16:00;814;864;94,21;58;77\n06/11/18;16:30;774;864;89,58;59;89\n06/11/18;17:00;753;864;87,15;46;104\n06/11/18;17:30;699;864;80,90;57;79\n06/11/18;18:00;682;864;78,94;42;77\n06/11/18;18:30;620;864;71,76;54;90\n06/11/18;19:00;590;864;68,29;42;95\n06/11/18;19:30;528;864;61,11;35;69\n06/11/18;20:00;538;864;62,27;41;31\n06/11/18;20:30;536;864;62,04;17;21\n06/11/18;21:00;533;864;61,69;5;17\n06/11/18;21:30;513;864;59,38;7;23\n06/11/18;22:00;504;864;58,33;4;24\n06/11/18;22:30;475;864;54,98;4;25\n06/11/18;23:00;456;864;52,78;3;28\n06/11/18;23:30;422;864;48,84;2;18\n07/11/18;00:00;424;864;49,07;0;5\n07/11/18;00:30;419;864;48,50;1;2\n07/11/18;01:00;418;864;48,38;0;1\n07/11/18;01:30;417;864;48,26;0;0\n07/11/18;02:00;417;864;48,26;0;1\n07/11/18;02:30;415;864;48,03;0;1\n07/11/18;03:00;415;864;48,03;0;0\n07/11/18;03:30;415;864;48,03;0;0\n07/11/18;04:00;415;864;48,03;0;0\n07/11/18;04:30;418;864;48,38;3;0\n07/11/18;05:00;418;864;48,38;0;0\n07/11/18;05:30;419;864;48,50;1;0\n07/11/18;06:00;420;864;48,61;5;4\n07/11/18;06:30;424;864;49,07;16;9\n07/11/18;07:00;431;864;49,88;24;13\n07/11/18;07:30;442;864;51,16;31;18\n07/11/18;08:00;535;864;61,92;54;18\n07/11/18;08:30;537;864;62,15;82;15\n07/11/18;09:00;575;864;66,55;87;14\n07/11/18;09:30;678;864;78,47;94;24\n07/11/18;10:00;695;864;80,44;78;31\n07/11/18;10:30;786;864;90,97;104;40\n07/11/18;11:00;816;864;94,44;80;77\n07/11/18;11:30;811;864;93,87;77;78\n07/11/18;12:00;822;864;95,14;81;74\n07/11/18;12:30;825;864;95,49;66;56\n07/11/18;13:00;822;864;95,14;47;50\n07/11/18;13:30;822;864;95,14;79;75\n07/11/18;14:00;826;864;95,60;76;71\n07/11/18;14:30;838;864;96,99;80;72\n07/11/18;15:00;833;864;96,41;61;81\n07/11/18;15:30;819;864;94,79;83;79\n07/11/18;16:00;805;864;93,17;40;88\n07/11/18;16:30;757;864;87,62;60;89\n07/11/18;17:00;738;864;85,42;49;83\n07/11/18;17:30;685;864;79,28;46;94\n07/11/18;18:00;649;864;75,12;35;91\n07/11/18;18:30;579;864;67,01;47;86\n07/11/18;19:00;562;864;65,05;41;86\n07/11/18;19:30;503;864;58,22;42;62\n07/11/18;20:00;506;864;58,56;43;23\n07/11/18;20:30;531;864;61,46;25;12\n07/11/18;21:00;535;864;61,92;13;16\n07/11/18;21:30;517;864;59,84;4;22\n07/11/18;22:00;503;864;58,22;1;27\n07/11/18;22:30;471;864;54,51;3;21\n07/11/18;23:00;457;864;52,89;2;25\n07/11/18;23:30;429;864;49,65;4;22\n08/11/18;00:00;424;864;49,07;1;10\n08/11/18;00:30;414;864;47,92;0;3\n08/11/18;01:00;411;864;47,57;0;3\n08/11/18;01:30;412;864;47,69;2;0\n08/11/18;02:00;412;864;47,69;0;0\n08/11/18;02:30;412;864;47,69;0;0\n08/11/18;03:00;412;864;47,69;0;0\n08/11/18;03:30;413;864;47,80;1;0\n08/11/18;04:00;413;864;47,80;0;1\n08/11/18;04:30;412;864;47,69;1;0\n08/11/18;05:00;412;864;47,69;0;0\n08/11/18;05:30;414;864;47,92;2;0\n08/11/18;06:00;414;864;47,92;3;1\n08/11/18;06:30;420;864;48,61;15;5\n08/11/18;07:00;429;864;49,65;31;9\n08/11/18;07:30;472;864;54,63;43;13\n08/11/18;08:00;480;864;55,56;53;25\n08/11/18;08:30;576;864;66,67;103;15\n08/11/18;09:00;623;864;72,11;128;19\n08/11/18;09:30;765;864;88,54;96;16\n08/11/18;10:00;795;864;92,01;59;31\n08/11/18;10:30;813;864;94,10;48;47\n08/11/18;11:00;813;864;94,10;35;35\n08/11/18;11:30;809;864;93,63;47;49\n08/11/18;12:00;813;864;94,10;45;42\n08/11/18;12:30;811;864;93,87;31;33\n08/11/18;13:00;814;864;94,21;30;31\n08/11/18;13:30;811;864;93,87;52;52\n08/11/18;14:00;811;864;93,87;43;43\n08/11/18;14:30;808;864;93,52;45;46\n08/11/18;15:00;808;864;93,52;49;51\n08/11/18;15:30;808;864;93,52;63;66\n08/11/18;16:00;808;864;93,52;62;57\n08/11/18;16:30;789;864;91,32;56;85\n08/11/18;17:00;775;864;89,70;47;101\n08/11/18;17:30;688;864;79,63;54;92\n08/11/18;18:00;676;864;78,24;67;87\n08/11/18;18:30;620;864;71,76;45;90\n08/11/18;19:00;594;864;68,75;40;92\n08/11/18;19:30;562;864;65,05;64;62\n08/11/18;20:00;575;864;66,55;55;33\n08/11/18;20:30;584;864;67,59;26;30\n08/11/18;21:00;576;864;66,67;5;27\n08/11/18;21:30;555;864;64,24;11;20\n08/11/18;22:00;544;864;62,96;4;30\n08/11/18;22:30;506;864;58,56;5;33\n08/11/18;23:00;490;864;56,71;2;31\n08/11/18;23:30;448;864;51,85;2;28\n09/11/18;00:00;440;864;50,93;2;22\n09/11/18;00:30;418;864;48,38;1;7\n09/11/18;01:00;418;864;48,38;2;4\n09/11/18;01:30;416;864;48,15;0;1\n09/11/18;02:00;415;864;48,03;0;2\n09/11/18;02:30;413;864;47,80;0;0\n09/11/18;03:00;412;864;47,69;0;1\n09/11/18;03:30;411;864;47,57;0;1\n09/11/18;04:00;411;864;47,57;0;0\n09/11/18;04:30;410;864;47,45;0;1\n09/11/18;05:00;410;864;47,45;1;1\n09/11/18;05:30;409;864;47,34;1;2\n09/11/18;06:00;409;864;47,34;4;2\n09/11/18;06:30;418;864;48,38;15;8\n09/11/18;07:00;427;864;49,42;27;10\n09/11/18;07:30;446;864;51,62;33;12\n09/11/18;08:00;483;864;55,90;66;25\n09/11/18;08:30;539;864;62,38;82;18\n09/11/18;09:00;586;864;67,82;104;18\n09/11/18;09:30;709;864;82,06;102;18\n09/11/18;10:00;760;864;87,96;125;34\n09/11/18;10:30;824;864;95,37;56;50\n09/11/18;11:00;822;864;95,14;61;59\n09/11/18;11:30;832;864;96,30;80;72\n09/11/18;12:00;832;864;96,30;60;78\n09/11/18;12:30;831;864;96,18;56;37\n09/11/18;13:00;831;864;96,18;48;50\n09/11/18;13:30;831;864;96,18;73;73\n09/11/18;14:00;831;864;96,18;63;61\n09/11/18;14:30;825;864;95,49;63;67\n09/11/18;15:00;823;864;95,25;79;81\n09/11/18;15:30;802;864;92,82;61;89\n09/11/18;16:00;779;864;90,16;73;89\n09/11/18;16:30;775;864;89,70;74;82\n09/11/18;17:00;760;864;87,96;64;101\n09/11/18;17:30;710;864;82,18;57;89\n09/11/18;18:00;694;864;80,32;68;104\n09/11/18;18:30;626;864;72,45;35;84\n09/11/18;19:00;612;864;70,83;53;106\n09/11/18;19:30;542;864;62,73;58;73\n09/11/18;20:00;556;864;64,35;75;38\n09/11/18;20:30;618;864;71,53;56;17\n09/11/18;21:00;625;864;72,34;35;23\n09/11/18;21:30;639;864;73,96;22;17\n09/11/18;22:00;632;864;73,15;7;35\n09/11/18;22:30;590;864;68,29;11;38\n09/11/18;23:00;569;864;65,86;5;46\n09/11/18;23:30;508;864;58,80;7;42\n10/11/18;00:00;502;864;58,10;5;37\n10/11/18;00:30;450;864;52,08;4;33\n10/11/18;01:00;441;864;51,04;5;15\n10/11/18;01:30;432;864;50,00;2;6\n10/11/18;02:00;431;864;49,88;0;1\n10/11/18;02:30;430;864;49,77;0;2\n10/11/18;03:00;428;864;49,54;0;2\n10/11/18;03:30;422;864;48,84;0;4\n10/11/18;04:00;421;864;48,73;0;3\n10/11/18;04:30;419;864;48,50;0;0\n10/11/18;05:00;419;864;48,50;1;1\n10/11/18;05:30;418;864;48,38;1;2\n10/11/18;06:00;418;864;48,38;1;2\n10/11/18;06:30;417;864;48,26;3;1\n10/11/18;07:00;420;864;48,61;2;1\n10/11/18;07:30;423;864;48,96;7;4\n10/11/18;08:00;426;864;49,31;14;6\n10/11/18;08:30;433;864;50,12;22;20\n10/11/18;09:00;445;864;51,50;52;12\n10/11/18;09:30;513;864;59,38;78;24\n10/11/18;10:00;559;864;64,70;118;27\n10/11/18;10:30;660;864;76,39;105;52\n10/11/18;11:00;691;864;79,98;118;56\n10/11/18;11:30;744;864;86,11;112;96\n10/11/18;12:00;756;864;87,50;121;75\n10/11/18;12:30;832;864;96,30;104;67\n10/11/18;13:00;833;864;96,41;73;69\n10/11/18;13:30;835;864;96,64;48;51\n10/11/18;14:00;827;864;95,72;56;58\n10/11/18;14:30;826;864;95,60;78;77\n10/11/18;15:00;825;864;95,49;98;95\n10/11/18;15:30;831;864;96,18;88;91\n10/11/18;16:00;831;864;96,18;80;78\n10/11/18;16:30;829;864;95,95;85;100\n10/11/18;17:00;828;864;95,83;106;93\n10/11/18;17:30;827;864;95,72;109;110\n10/11/18;18:00;824;864;95,37;78;119\n10/11/18;18:30;758;864;87,73;68;105\n10/11/18;19:00;747;864;86,46;49;119\n10/11/18;19:30;670;864;77,55;66;73\n10/11/18;20:00;672;864;77,78;62;33\n10/11/18;20:30;739;864;85,53;92;36\n10/11/18;21:00;760;864;87,96;84;34\n10/11/18;21:30;809;864;93,63;40;40\n10/11/18;22:00;794;864;91,90;24;59\n10/11/18;22:30;739;864;85,53;14;54\n10/11/18;23:00;724;864;83,80;7;85\n10/11/18;23:30;592;864;68,52;4;79\n11/11/18;00:00;562;864;65,05;4;43\n11/11/18;00:30;503;864;58,22;4;42\n11/11/18;01:00;486;864;56,25;0;20\n11/11/18;01:30;468;864;54,17;0;9\n11/11/18;02:00;464;864;53,70;0;14\n11/11/18;02:30;449;864;51,97;2;5\n11/11/18;03:00;448;864;51,85;0;3\n11/11/18;03:30;446;864;51,62;0;1\n11/11/18;04:00;447;864;51,74;1;2\n11/11/18;04:30;441;864;51,04;0;3\n11/11/18;05:00;441;864;51,04;0;1\n11/11/18;05:30;439;864;50,81;0;0\n11/11/18;06:00;438;864;50,69;0;1\n11/11/18;06:30;438;864;50,69;0;0\n11/11/18;07:00;437;864;50,58;0;2\n11/11/18;07:30;432;864;50,00;0;4\n11/11/18;08:00;431;864;49,88;0;4\n11/11/18;08:30;427;864;49,42;2;4\n11/11/18;09:00;426;864;49,31;7;5\n11/11/18;09:30;430;864;49,77;13;9\n11/11/18;10:00;430;864;49,77;15;14\n11/11/18;10:30;440;864;50,93;29;15\n11/11/18;11:00;443;864;51,27;19;24\n11/11/18;11:30;453;864;52,43;29;12\n11/11/18;12:00;467;864;54,05;31;14\n11/11/18;12:30;478;864;55,32;25;25\n11/11/18;13:00;476;864;55,09;21;14\n11/11/18;13:30;482;864;55,79;13;17\n11/11/18;14:00;476;864;55,09;15;20\n11/11/18;14:30;474;864;54,86;17;20\n11/11/18;15:00;470;864;54,40;17;30\n11/11/18;15:30;456;864;52,78;22;27\n11/11/18;16:00;453;864;52,43;26;25\n11/11/18;16:30;446;864;51,62;19;22\n11/11/18;17:00;449;864;51,97;21;17\n11/11/18;17:30;450;864;52,08;18;27\n11/11/18;18:00;442;864;51,16;12;19\n11/11/18;18:30;437;864;50,58;18;15\n11/11/18;19:00;442;864;51,16;20;17\n11/11/18;19:30;451;864;52,20;20;8\n11/11/18;20:00;449;864;51,97;12;18\n11/11/18;20:30;444;864;51,39;8;12\n11/11/18;21:00;439;864;50,81;11;12\n11/11/18;21:30;436;864;50,46;2;13\n11/11/18;22:00;430;864;49,77;2;8\n11/11/18;22:30;421;864;48,73;3;7\n11/11/18;23:00;421;864;48,73;1;4\n11/11/18;23:30;401;864;46,41;1;2\n12/11/18;00:00;402;864;46,53;1;0\n12/11/18;00:30;403;864;46,64;1;0\n12/11/18;01:00;403;864;46,64;0;0\n12/11/18;01:30;402;864;46,53;0;1\n12/11/18;02:00;402;864;46,53;0;0\n12/11/18;02:30;402;864;46,53;0;0\n12/11/18;03:00;402;864;46,53;0;0\n12/11/18;03:30;402;864;46,53;0;0\n12/11/18;04:00;402;864;46,53;0;0\n12/11/18;04:30;402;864;46,53;0;0\n12/11/18;05:00;402;864;46,53;1;0\n12/11/18;05:30;405;864;46,88;3;1\n12/11/18;06:00;407;864;47,11;6;1\n12/11/18;06:30;412;864;47,69;15;8\n12/11/18;07:00;415;864;48,03;22;8\n12/11/18;07:30;443;864;51,27;25;11\n12/11/18;08:00;455;864;52,66;52;18\n12/11/18;08:30;535;864;61,92;97;16\n12/11/18;09:00;584;864;67,59;102;20\n12/11/18;09:30;697;864;80,67;78;16\n12/11/18;10:00;709;864;82,06;36;9\n12/11/18;10:30;735;864;85,07;44;23\n12/11/18;11:00;735;864;85,07;28;28\n12/11/18;11:30;735;864;85,07;48;46\n12/11/18;12:00;734;864;84,95;62;45\n12/11/18;12:30;790;864;91,44;75;24\n12/11/18;13:00;800;864;92,59;73;50\n12/11/18;13:30;826;864;95,60;63;56\n12/11/18;14:00;835;864;96,64;66;57\n12/11/18;14:30;837;864;96,88;62;62\n12/11/18;15:00;839;864;97,11;53;74\n12/11/18;15:30;823;864;95,25;75;77\n12/11/18;16:00;815;864;94,33;64;86\n12/11/18;16:30;784;864;90,74;55;88\n12/11/18;17:00;757;864;87,62;78;81\n12/11/18;17:30;705;864;81,60;46;119\n12/11/18;18:00;678;864;78,47;40;89\n12/11/18;18:30;603;864;69,79;37;102\n12/11/18;19:00;570;864;65,97;33;85\n12/11/18;19:30;513;864;59,38;33;41\n12/11/18;20:00;515;864;59,61;20;25\n12/11/18;20:30;507;864;58,68;20;14\n12/11/18;21:00;511;864;59,14;2;15\n12/11/18;21:30;496;864;57,41;6;18\n12/11/18;22:00;486;864;56,25;1;20\n12/11/18;22:30;465;864;53,82;2;12\n12/11/18;23:00;458;864;53,01;0;12\n12/11/18;23:30;447;864;51,74;2;6\n13/11/18;00:00;444;864;51,39;0;2\n13/11/18;00:30;441;864;51,04;2;2\n13/11/18;01:00;443;864;51,27;1;0\n13/11/18;01:30;444;864;51,39;1;1\n13/11/18;02:00;444;864;51,39;0;0\n13/11/18;02:30;443;864;51,27;0;1\n13/11/18;03:00;443;864;51,27;0;1\n13/11/18;03:30;442;864;51,16;0;0\n13/11/18;04:00;442;864;51,16;0;0\n13/11/18;04:30;442;864;51,16;0;0\n13/11/18;05:00;442;864;51,16;1;0\n13/11/18;05:30;444;864;51,39;3;0\n13/11/18;06:00;445;864;51,50;6;2\n13/11/18;06:30;454;864;52,55;14;7\n13/11/18;07:00;456;864;52,78;27;21\n13/11/18;07:30;476;864;55,09;45;21\n13/11/18;08:00;508;864;58,80;55;23\n13/11/18;08:30;574;864;66,44;91;13\n13/11/18;09:00;611;864;70,72;101;25\n13/11/18;09:30;720;864;83,33;112;18\n13/11/18;10:00;784;864;90,74;103;34\n13/11/18;10:30;862;864;99,77;59;34\n13/11/18;11:00;863;864;99,88;58;57\n13/11/18;11:30;863;864;99,88;55;57\n13/11/18;12:00;860;864;99,54;67;66\n13/11/18;12:30;862;864;99,77;35;33\n13/11/18;13:00;863;864;99,88;42;42\n13/11/18;13:30;869;864;100,58;59;56\n13/11/18;14:00;869;864;100,58;55;55\n13/11/18;14:30;869;864;100,58;53;54\n13/11/18;15:00;869;864;100,58;57;69\n13/11/18;15:30;851;864;98,50;54;73\n13/11/18;16:00;837;864;96,88;47;66\n13/11/18;16:30;781;864;90,39;47;94\n13/11/18;17:00;769;864;89,00;34;67\n13/11/18;17:30;735;864;85,07;62;67\n13/11/18;18:00;736;864;85,19;53;82\n13/11/18;18:30;686;864;79,40;46;80\n13/11/18;19:00;668;864;77,31;79;91\n13/11/18;19:30;650;864;75,23;59;67\n13/11/18;20:00;666;864;77,08;63;39\n13/11/18;20:30;666;864;77,08;25;28\n13/11/18;21:00;664;864;76,85;6;30\n13/11/18;21:30;613;864;70,95;7;39\n13/11/18;22:00;603;864;69,79;4;45\n13/11/18;22:30;534;864;61,81;3;41\n13/11/18;23:00;520;864;60,19;4;28\n13/11/18;23:30;486;864;56,25;4;28\n14/11/18;00:00;479;864;55,44;0;8\n14/11/18;00:30;465;864;53,82;0;5\n14/11/18;01:00;465;864;53,82;1;3\n14/11/18;01:30;463;864;53,59;0;0\n14/11/18;02:00;463;864;53,59;0;2\n14/11/18;02:30;459;864;53,13;0;2\n14/11/18;03:00;459;864;53,13;0;0\n14/11/18;03:30;459;864;53,13;0;0\n14/11/18;04:00;459;864;53,13;0;1\n14/11/18;04:30;460;864;53,24;3;0\n14/11/18;05:00;461;864;53,36;0;0\n14/11/18;05:30;462;864;53,47;7;2\n14/11/18;06:00;467;864;54,05;4;5\n14/11/18;06:30;468;864;54,17;15;8\n14/11/18;07:00;475;864;54,98;24;12\n14/11/18;07:30;498;864;57,64;30;12\n14/11/18;08:00;508;864;58,80;61;17\n14/11/18;08:30;596;864;68,98;87;11\n14/11/18;09:00;634;864;73,38;88;12\n14/11/18;09:30;760;864;87,96;97;26\n14/11/18;10:00;772;864;89,35;106;33\n14/11/18;10:30;857;864;99,19;105;51\n14/11/18;11:00;907;864;104,98;75;64\n14/11/18;11:30;901;864;104,28;72;78\n14/11/18;12:00;907;864;104,98;68;62\n14/11/18;12:30;917;864;106,13;52;50\n14/11/18;13:00;914;864;105,79;30;40\n14/11/18;13:30;910;864;105,32;64;53\n14/11/18;14:00;915;864;105,90;71;70\n14/11/18;14:30;910;864;105,32;58;61\n14/11/18;15:00;909;864;105,21;69;74\n14/11/18;15:30;906;864;104,86;75;70\n14/11/18;16:00;898;864;103,94;52;69\n14/11/18;16:30;883;864;102,20;62;93\n14/11/18;17:00;848;864;98,15;51;86\n14/11/18;17:30;789;864;91,32;46;85\n14/11/18;18:00;766;864;88,66;53;105\n14/11/18;18:30;722;864;83,56;48;71\n14/11/18;19:00;711;864;82,29;53;94\n14/11/18;19:30;667;864;77,20;55;57\n14/11/18;20:00;674;864;78,01;44;33\n14/11/18;20:30;688;864;79,63;27;26\n14/11/18;21:00;687;864;79,51;24;15\n14/11/18;21:30;679;864;78,59;6;27\n14/11/18;22:00;669;864;77,43;10;37\n14/11/18;22:30;627;864;72,57;3;31\n14/11/18;23:00;609;864;70,49;4;37\n14/11/18;23:30;568;864;65,74;3;24\n15/11/18;00:00;563;864;65,16;1;16\n15/11/18;00:30;538;864;62,27;2;13\n15/11/18;01:00;537;864;62,15;0;1\n15/11/18;01:30;536;864;62,04;0;0\n15/11/18;02:00;536;864;62,04;0;0\n15/11/18;02:30;537;864;62,15;1;0\n15/11/18;03:00;537;864;62,15;0;0\n15/11/18;03:30;537;864;62,15;0;0\n15/11/18;04:00;537;864;62,15;0;0\n15/11/18;04:30;537;864;62,15;0;0\n15/11/18;05:00;537;864;62,15;0;1\n15/11/18;05:30;538;864;62,27;7;1\n15/11/18;06:00;544;864;62,96;5;4\n15/11/18;06:30;551;864;63,77;20;4\n15/11/18;07:00;557;864;64,47;28;11\n15/11/18;07:30;582;864;67,36;30;24\n15/11/18;08:00;585;864;67,71;57;32\n15/11/18;08:30;658;864;76,16;89;13\n15/11/18;09:00;795;864;92,01;102;21\n15/11/18;09:30;795;864;92,01;123;23\n15/11/18;10:00;880;864;101,85;79;26\n15/11/18;10:30;951;864;110,07;80;46\n15/11/18;11:00;953;864;110,30;61;57\n15/11/18;11:30;957;864;110,76;60;62\n15/11/18;12:00;956;864;110,65;58;61\n15/11/18;12:30;958;864;110,88;48;45\n15/11/18;13:00;957;864;110,76;42;42\n15/11/18;13:30;955;864;110,53;66;67\n15/11/18;14:00;958;864;110,88;76;75\n15/11/18;14:30;954;864;110,42;64;64\n15/11/18;15:00;953;864;110,30;66;79\n15/11/18;15:30;941;864;108,91;78;73\n15/11/18;16:00;948;864;109,72;72;89\n15/11/18;16:30;912;864;105,56;58;101\n15/11/18;17:00;889;864;102,89;59;78\n15/11/18;17:30;856;864;99,07;75;91\n15/11/18;18:00;842;864;97,45;72;92\n15/11/18;18:30;811;864;93,87;66;80\n15/11/18;19:00;809;864;93,63;76;123\n15/11/18;19:30;771;864;89,24;78;74\n15/11/18;20:00;775;864;89,70;70;33\n15/11/18;20:30;817;864;94,56;41;41\n15/11/18;21:00;811;864;93,87;22;29\n15/11/18;21:30;787;864;91,09;9;34\n15/11/18;22:00;773;864;89,47;6;51\n15/11/18;22:30;704;864;81,48;5;51\n15/11/18;23:00;674;864;78,01;3;54\n15/11/18;23:30;603;864;69,79;1;40\n16/11/18;00:00;592;864;68,52;6;20\n16/11/18;00:30;567;864;65,63;3;16\n16/11/18;01:00;562;864;65,05;0;9\n16/11/18;01:30;553;864;64,00;0;4\n16/11/18;02:00;551;864;63,77;0;4\n16/11/18;02:30;549;864;63,54;1;0\n16/11/18;03:00;549;864;63,54;1;1\n16/11/18;03:30;548;864;63,43;0;1\n16/11/18;04:00;548;864;63,43;2;1\n16/11/18;04:30;549;864;63,54;0;0\n16/11/18;05:00;549;864;63,54;1;1\n16/11/18;05:30;549;864;63,54;1;0\n16/11/18;06:00;551;864;63,77;5;2\n16/11/18;06:30;560;864;64,81;15;7\n16/11/18;07:00;561;864;64,93;19;11\n16/11/18;07:30;572;864;66,20;27;21\n16/11/18;08:00;577;864;66,78;57;29\n16/11/18;08:30;659;864;76,27;90;26\n16/11/18;09:00;679;864;78,59;97;16\n16/11/18;09:30;801;864;92,71;105;17\n16/11/18;10:00;903;864;104,51;115;35\n16/11/18;10:30;940;864;108,80;82;60\n16/11/18;11:00;940;864;108,80;61;63\n16/11/18;11:30;938;864;108,56;60;56\n16/11/18;12:00;939;864;108,68;57;58\n16/11/18;12:30;938;864;108,56;51;51\n16/11/18;13:00;934;864;108,10;41;40\n16/11/18;13:30;937;864;108,45;55;57\n16/11/18;14:00;932;864;107,87;106;76\n16/11/18;14:30;967;864;111,92;72;71\n16/11/18;15:00;969;864;112,15;69;70\n16/11/18;15:30;954;864;110,42;84;94\n16/11/18;16:00;953;864;110,30;66;82\n16/11/18;16:30;918;864;106,25;64;94\n16/11/18;17:00;903;864;104,51;65;99\n16/11/18;17:30;850;864;98,38;67;97\n16/11/18;18:00;843;864;97,57;60;104\n16/11/18;18:30;765;864;88,54;59;103\n16/11/18;19:00;744;864;86,11;63;98\n16/11/18;19:30;717;864;82,99;65;61\n16/11/18;20:00;731;864;84,61;68;29\n16/11/18;20:30;780;864;90,28;55;26\n16/11/18;21:00;788;864;91,20;32;27\n16/11/18;21:30;781;864;90,39;15;31\n16/11/18;22:00;772;864;89,35;18;44\n16/11/18;22:30;727;864;84,14;12;40\n16/11/18;23:00;718;864;83,10;9;38\n16/11/18;23:30;672;864;77,78;2;32\n17/11/18;00:00;642;864;74,31;3;36\n17/11/18;00:30;604;864;69,91;0;41\n17/11/18;01:00;581;864;67,25;1;16\n17/11/18;01:30;571;864;66,09;1;4\n17/11/18;02:00;569;864;65,86;2;8\n17/11/18;02:30;559;864;64,70;0;6\n17/11/18;03:00;558;864;64,58;0;3\n17/11/18;03:30;554;864;64,12;0;1\n17/11/18;04:00;383;864;44,33;0;4\n17/11/18;04:30;382;864;44,21;0;0\n17/11/18;05:00;381;864;44,10;0;2\n17/11/18;05:30;382;864;44,21;2;1\n17/11/18;06:00;381;864;44,10;0;1\n17/11/18;06:30;380;864;43,98;2;2\n17/11/18;07:00;380;864;43,98;3;2\n17/11/18;07:30;381;864;44,10;7;4\n17/11/18;08:00;388;864;44,91;13;6\n17/11/18;08:30;398;864;46,06;15;4\n17/11/18;09:00;401;864;46,41;32;6\n17/11/18;09:30;431;864;49,88;30;8\n17/11/18;10:00;452;864;52,31;46;10\n17/11/18;10:30;525;864;60,76;67;17\n17/11/18;11:00;543;864;62,85;73;35\n17/11/18;11:30;589;864;68,17;58;45\n17/11/18;12:00;591;864;68,40;57;44\n17/11/18;12:30;608;864;70,37;45;34\n17/11/18;13:00;613;864;70,95;38;29\n17/11/18;13:30;620;864;71,76;28;27\n17/11/18;14:00;623;864;72,11;49;32\n17/11/18;14:30;655;864;75,81;66;37\n17/11/18;15:00;670;864;77,55;76;48\n17/11/18;15:30;708;864;81,94;79;55\n17/11/18;16:00;716;864;82,87;79;75\n17/11/18;16:30;721;864;83,45;71;74\n17/11/18;17:00;718;864;83,10;87;82\n17/11/18;17:30;709;864;82,06;62;82\n17/11/18;18:00;700;864;81,02;54;86\n17/11/18;18:30;621;864;71,88;36;100\n17/11/18;19:00;594;864;68,75;38;83\n17/11/18;19:30;549;864;63,54;34;49\n17/11/18;20:00;548;864;63,43;46;21\n17/11/18;20:30;568;864;65,74;32;28\n17/11/18;21:00;577;864;66,78;27;21\n17/11/18;21:30;576;864;66,67;29;33\n17/11/18;22:00;567;864;65,63;10;37\n17/11/18;22:30;528;864;61,11;8;31\n17/11/18;23:00;519;864;60,07;7;42\n17/11/18;23:30;465;864;53,82;5;40\n18/11/18;00:00;449;864;51,97;1;21\n18/11/18;00:30;411;864;47,57;2;33\n18/11/18;01:00;400;864;46,30;3;15\n18/11/18;01:30;379;864;43,87;0;9\n18/11/18;02:00;376;864;43,52;2;6\n18/11/18;02:30;372;864;43,06;1;4\n18/11/18;03:00;371;864;42,94;0;2\n18/11/18;03:30;369;864;42,71;0;0\n18/11/18;04:00;368;864;42,59;0;3\n18/11/18;04:30;365;864;42,25;0;1\n18/11/18;05:00;365;864;42,25;0;0\n18/11/18;05:30;366;864;42,36;2;2\n18/11/18;06:00;364;864;42,13;0;2\n18/11/18;06:30;362;864;41,90;0;3\n18/11/18;07:00;358;864;41,44;0;5\n18/11/18;07:30;351;864;40,63;0;5\n18/11/18;08:00;349;864;40,39;0;4\n18/11/18;08:30;340;864;39,35;2;9\n18/11/18;09:00;338;864;39,12;0;8\n18/11/18;09:30;322;864;37,27;4;13\n18/11/18;10:00;324;864;37,50;18;12\n18/11/18;10:30;330;864;38,19;17;13\n18/11/18;11:00;329;864;38,08;21;13\n18/11/18;11:30;340;864;39,35;23;13\n18/11/18;12:00;357;864;41,32;45;17\n18/11/18;12:30;390;864;45,14;40;20\n18/11/18;13:00;399;864;46,18;18;12\n18/11/18;13:30;404;864;46,76;19;22\n18/11/18;14:00;397;864;45,95;16;22\n18/11/18;14:30;391;864;45,25;22;27\n18/11/18;15:00;384;864;44,44;24;25\n18/11/18;15:30;383;864;44,33;31;26\n18/11/18;16:00;390;864;45,14;37;25\n18/11/18;16:30;408;864;47,22;43;40\n18/11/18;17:00;402;864;46,53;18;38\n18/11/18;17:30;378;864;43,75;24;33\n18/11/18;18:00;375;864;43,40;15;37\n18/11/18;18:30;340;864;39,35;16;26\n18/11/18;19:00;340;864;39,35;17;24\n18/11/18;19:30;336;864;38,89;17;18\n18/11/18;20:00;334;864;38,66;13;8\n18/11/18;20:30;348;864;40,28;12;2\n18/11/18;21:00;350;864;40,51;5;5\n18/11/18;21:30;342;864;39,58;2;16\n18/11/18;22:00;328;864;37,96;5;11\n18/11/18;22:30;362;864;41,90;2;6\n18/11/18;23:00;362;864;41,90;2;1\n18/11/18;23:30;363;864;42,01;1;2\n19/11/18;00:00;362;864;41,90;1;4\n19/11/18;00:30;359;864;41,55;0;0\n19/11/18;01:00;359;864;41,55;0;0\n19/11/18;01:30;358;864;41,44;0;1\n19/11/18;02:00;358;864;41,44;0;0\n19/11/18;02:30;358;864;41,44;0;0\n19/11/18;03:00;358;864;41,44;0;0\n19/11/18;03:30;357;864;41,32;0;1\n19/11/18;04:00;357;864;41,32;0;0\n19/11/18;04:30;356;864;41,20;0;1\n19/11/18;05:00;356;864;41,20;1;1\n19/11/18;05:30;356;864;41,20;2;2\n19/11/18;06:00;357;864;41,32;4;1\n19/11/18;06:30;365;864;42,25;14;6\n19/11/18;07:00;370;864;42,82;16;7\n19/11/18;07:30;388;864;44,91;40;13\n19/11/18;08:00;407;864;47,11;46;24\n19/11/18;08:30;414;864;47,92;76;16\n19/11/18;09:00;504;864;58,33;87;14\n19/11/18;09:30;641;864;74,19;135;15\n19/11/18;10:00;689;864;79,75;75;20\n19/11/18;10:30;753;864;87,15;81;48\n19/11/18;11:00;769;864;89,00;71;59\n19/11/18;11:30;793;864;91,78;85;60\n19/11/18;12:00;800;864;92,59;84;54\n19/11/18;12:30;834;864;96,53;51;49\n19/11/18;13:00;831;864;96,18;45;51\n19/11/18;13:30;821;864;95,02;75;70\n19/11/18;14:00;833;864;96,41;68;68\n19/11/18;14:30;820;864;94,91;63;81\n19/11/18;15:00;814;864;94,21;80;81\n19/11/18;15:30;805;864;93,17;62;79\n19/11/18;16:00;791;864;91,55;57;89\n19/11/18;16:30;723;864;83,68;49;92\n19/11/18;17:00;703;864;81,37;40;78\n19/11/18;17:30;653;864;75,58;49;79\n19/11/18;18:00;638;864;73,84;39;100\n19/11/18;18:30;563;864;65,16;38;85\n19/11/18;19:00;542;864;62,73;40;97\n19/11/18;19:30;462;864;53,47;26;47\n19/11/18;20:00;463;864;53,59;27;30\n19/11/18;20:30;456;864;52,78;16;16\n19/11/18;21:00;459;864;53,13;4;17\n19/11/18;21:30;431;864;49,88;5;25\n19/11/18;22:00;426;864;49,31;0;10\n19/11/18;22:30;408;864;47,22;0;18\n19/11/18;23:00;397;864;45,95;3;12\n19/11/18;23:30;387;864;44,79;3;4\n20/11/18;00:00;388;864;44,91;1;1\n20/11/18;00:30;387;864;44,79;0;1\n20/11/18;01:00;387;864;44,79;0;0\n20/11/18;01:30;388;864;44,91;1;0\n20/11/18;02:00;388;864;44,91;0;0\n20/11/18;02:30;387;864;44,79;0;1\n20/11/18;03:00;387;864;44,79;0;0\n20/11/18;03:30;387;864;44,79;0;0\n20/11/18;04:00;387;864;44,79;0;0\n20/11/18;04:30;386;864;44,68;1;1\n20/11/18;05:00;387;864;44,79;1;1\n20/11/18;05:30;388;864;44,91;3;0\n20/11/18;06:00;390;864;45,14;3;2\n20/11/18;06:30;393;864;45,49;24;8\n20/11/18;07:00;411;864;47,57;30;16\n20/11/18;07:30;427;864;49,42;30;20\n20/11/18;08:00;440;864;50,93;68;13\n20/11/18;08:30;520;864;60,19;77;20\n20/11/18;09:00;548;864;63,43;99;23\n20/11/18;09:30;671;864;77,66;103;18\n20/11/18;10:00;709;864;82,06;78;32\n20/11/18;10:30;777;864;89,93;85;36\n20/11/18;11:00;814;864;94,21;81;45\n20/11/18;11:30;831;864;96,18;55;55\n20/11/18;12:00;830;864;96,06;69;68\n20/11/18;12:30;826;864;95,60;47;50\n20/11/18;13:00;829;864;95,95;43;40\n20/11/18;13:30;834;864;96,53;44;44\n20/11/18;14:00;829;864;95,95;77;81\n20/11/18;14:30;828;864;95,83;33;56\n20/11/18;15:00;807;864;93,40;72;67\n20/11/18;15:30;808;864;93,52;66;69\n20/11/18;16:00;798;864;92,36;61;97\n20/11/18;16:30;762;864;88,19;58;86\n20/11/18;17:00;735;864;85,07;40;95\n20/11/18;17:30;679;864;78,59;62;75\n20/11/18;18:00;670;864;77,55;72;69\n20/11/18;18:30;656;864;75,93;63;86\n20/11/18;19:00;651;864;75,35;87;101\n20/11/18;19:30;613;864;70,95;50;92\n20/11/18;20:00;595;864;68,87;32;40\n20/11/18;20:30;588;864;68,06;23;31\n20/11/18;21:00;581;864;67,25;14;23\n20/11/18;21:30;562;864;65,05;7;38\n20/11/18;22:00;534;864;61,81;3;51\n20/11/18;22:30;471;864;54,51;2;32\n20/11/18;23:00;458;864;53,01;4;38\n20/11/18;23:30;415;864;48,03;2;17\n21/11/18;00:00;414;864;47,92;0;11\n21/11/18;00:30;401;864;46,41;0;4\n21/11/18;01:00;400;864;46,30;1;2\n21/11/18;01:30;398;864;46,06;0;2\n21/11/18;02:00;397;864;45,95;0;1\n21/11/18;02:30;396;864;45,83;0;0\n21/11/18;03:00;396;864;45,83;0;0\n21/11/18;03:30;396;864;45,83;0;0\n21/11/18;04:00;396;864;45,83;0;0\n21/11/18;04:30;396;864;45,83;1;1\n21/11/18;05:00;395;864;45,72;0;1\n21/11/18;05:30;395;864;45,72;2;0\n21/11/18;06:00;397;864;45,95;1;0\n21/11/18;06:30;399;864;46,18;23;13\n21/11/18;07:00;407;864;47,11;24;10\n21/11/18;07:30;438;864;50,69;37;13\n21/11/18;08:00;479;864;55,44;73;21\n21/11/18;08:30;538;864;62,27;90;16\n21/11/18;09:00;592;864;68,52;94;16\n21/11/18;09:30;702;864;81,25;106;26\n21/11/18;10:00;743;864;86,00;93;24\n21/11/18;10:30;805;864;93,17;76;56\n21/11/18;11:00;829;864;95,95;60;44\n21/11/18;11:30;830;864;96,06;84;84\n21/11/18;12:00;836;864;96,76;76;73\n21/11/18;12:30;842;864;97,45;59;53\n21/11/18;13:00;842;864;97,45;35;36\n21/11/18;13:30;841;864;97,34;64;63\n21/11/18;14:00;841;864;97,34;64;69\n21/11/18;14:30;839;864;97,11;57;56\n21/11/18;15:00;838;864;96,99;72;72\n21/11/18;15:30;834;864;96,53;69;71\n21/11/18;16:00;825;864;95,49;61;88\n21/11/18;16:30;797;864;92,25;70;90\n21/11/18;17:00;778;864;90,05;51;84\n21/11/18;17:30;731;864;84,61;64;93\n21/11/18;18:00;710;864;82,18;54;111\n21/11/18;18:30;660;864;76,39;57;100\n21/11/18;19:00;612;864;70,83;42;106\n21/11/18;19:30;562;864;65,05;60;55\n21/11/18;20:00;562;864;65,05;28;29\n21/11/18;20:30;563;864;65,16;21;25\n21/11/18;21:00;555;864;64,24;6;20\n21/11/18;21:30;534;864;61,81;5;19\n21/11/18;22:00;514;864;59,49;5;41\n21/11/18;22:30;473;864;54,75;5;25\n21/11/18;23:00;448;864;51,85;6;34\n21/11/18;23:30;423;864;48,96;1;24\n22/11/18;00:00;418;864;48,38;1;6\n22/11/18;00:30;410;864;47,45;0;6\n22/11/18;01:00;406;864;46,99;0;6\n22/11/18;01:30;400;864;46,30;0;1\n22/11/18;02:00;400;864;46,30;0;0\n22/11/18;02:30;400;864;46,30;0;0\n22/11/18;03:00;400;864;46,30;0;1\n22/11/18;03:30;399;864;46,18;0;0\n22/11/18;04:00;399;864;46,18;0;0\n22/11/18;04:30;399;864;46,18;0;0\n22/11/18;05:00;399;864;46,18;0;1\n22/11/18;05:30;398;864;46,06;3;1\n22/11/18;06:00;403;864;46,64;6;0\n22/11/18;06:30;413;864;47,80;23;4\n22/11/18;07:00;428;864;49,54;18;11\n22/11/18;07:30;436;864;50,46;41;16\n22/11/18;08:00;464;864;53,70;55;26\n22/11/18;08:30;539;864;62,38;94;16\n22/11/18;09:00;571;864;66,09;123;19\n22/11/18;09:30;730;864;84,49;109;26\n22/11/18;10:00;768;864;88,89;99;40\n22/11/18;10:30;809;864;93,63;52;50\n22/11/18;11:00;822;864;95,14;61;42\n22/11/18;11:30;829;864;95,95;58;54\n22/11/18;12:00;833;864;96,41;46;44\n22/11/18;12:30;833;864;96,41;38;41\n22/11/18;13:00;833;864;96,41;31;29\n22/11/18;13:30;833;864;96,41;54;53\n22/11/18;14:00;834;864;96,53;48;47\n22/11/18;14:30;833;864;96,41;58;59\n22/11/18;15:00;835;864;96,64;44;47\n22/11/18;15:30;830;864;96,06;62;65\n22/11/18;16:00;825;864;95,49;71;71\n22/11/18;16:30;818;864;94,68;72;69\n22/11/18;17:00;829;864;95,95;70;83\n22/11/18;17:30;782;864;90,51;63;100\n22/11/18;18:00;770;864;89,12;70;98\n22/11/18;18:30;721;864;83,45;75;110\n22/11/18;19:00;712;864;82,41;66;121\n22/11/18;19:30;688;864;79,63;98;64\n22/11/18;20:00;702;864;81,25;66;38\n22/11/18;20:30;716;864;82,87;22;39\n22/11/18;21:00;703;864;81,37;15;37\n22/11/18;21:30;661;864;76,50;9;46\n22/11/18;22:00;645;864;74,65;11;52\n22/11/18;22:30;565;864;65,39;2;54\n22/11/18;23:00;543;864;62,85;4;63\n22/11/18;23:30;482;864;55,79;2;19\n23/11/18;00:00;472;864;54,63;2;18\n23/11/18;00:30;450;864;52,08;1;15\n23/11/18;01:00;443;864;51,27;0;8\n23/11/18;01:30;439;864;50,81;1;4\n23/11/18;02:00;438;864;50,69;0;0\n23/11/18;02:30;437;864;50,58;0;2\n23/11/18;03:00;435;864;50,35;0;2\n23/11/18;03:30;433;864;50,12;1;2\n23/11/18;04:00;433;864;50,12;0;3\n23/11/18;04:30;430;864;49,77;0;0\n23/11/18;05:00;430;864;49,77;1;1\n23/11/18;05:30;430;864;49,77;2;2\n23/11/18;06:00;430;864;49,77;3;1\n23/11/18;06:30;440;864;50,93;27;11\n23/11/18;07:00;468;864;54,17;33;7\n23/11/18;07:30;480;864;55,56;32;20\n23/11/18;08:00;494;864;57,18;58;17\n23/11/18;08:30;569;864;65,86;89;15\n23/11/18;09:00;609;864;70,49;112;25\n23/11/18;09:30;742;864;85,88;117;26\n23/11/18;10:00;798;864;92,36;74;36\n23/11/18;10:30;819;864;94,79;58;50\n23/11/18;11:00;823;864;95,25;48;49\n23/11/18;11:30;825;864;95,49;64;60\n23/11/18;12:00;825;864;95,49;59;60\n23/11/18;12:30;829;864;95,95;57;52\n23/11/18;13:00;829;864;95,95;64;54\n23/11/18;13:30;840;864;97,22;47;46\n23/11/18;14:00;842;864;97,45;67;65\n23/11/18;14:30;844;864;97,69;73;70\n23/11/18;15:00;840;864;97,22;68;73\n23/11/18;15:30;842;864;97,45;84;90\n23/11/18;16:00;837;864;96,88;76;93\n23/11/18;16:30;798;864;92,36;59;83\n23/11/18;17:00;786;864;90,97;75;103\n23/11/18;17:30;739;864;85,53;56;90\n23/11/18;18:00;719;864;83,22;67;106\n23/11/18;18:30;654;864;75,69;41;101\n23/11/18;19:00;624;864;72,22;36;115\n23/11/18;19:30;538;864;62,27;60;56\n23/11/18;20:00;556;864;64,35;59;41\n23/11/18;20:30;600;864;69,44;51;16\n23/11/18;21:00;614;864;71,06;29;15\n23/11/18;21:30;624;864;72,22;17;14\n23/11/18;22:00;619;864;71,64;10;32\n23/11/18;22:30;591;864;68,40;11;31\n23/11/18;23:00;584;864;67,59;8;35\n23/11/18;23:30;533;864;61,69;11;39\n24/11/18;00:00;520;864;60,19;6;28\n24/11/18;00:30;488;864;56,48;5;22\n24/11/18;01:00;485;864;56,13;3;17\n24/11/18;01:30;468;864;54,17;1;9\n24/11/18;02:00;464;864;53,70;0;4\n24/11/18;02:30;457;864;52,89;0;4\n24/11/18;03:00;457;864;52,89;0;0\n24/11/18;03:30;457;864;52,89;0;1\n24/11/18;04:00;456;864;52,78;1;2\n24/11/18;04:30;455;864;52,66;0;0\n24/11/18;05:00;455;864;52,66;0;1\n24/11/18;05:30;453;864;52,43;1;1\n24/11/18;06:00;454;864;52,55;0;1\n24/11/18;06:30;457;864;52,89;5;0\n24/11/18;07:00;458;864;53,01;7;1\n24/11/18;07:30;465;864;53,82;9;4\n24/11/18;08:00;470;864;54,40;16;1\n24/11/18;08:30;484;864;56,02;15;13\n24/11/18;09:00;496;864;57,41;59;15\n24/11/18;09:30;583;864;67,48;111;16\n24/11/18;10:00;641;864;74,19;115;28\n24/11/18;10:30;775;864;89,70;127;41\n24/11/18;11:00;801;864;92,71;113;57\n24/11/18;11:30;858;864;99,31;61;54\n24/11/18;12:00;859;864;99,42;72;73\n24/11/18;12:30;858;864;99,31;61;59\n24/11/18;13:00;858;864;99,31;61;60\n24/11/18;13:30;856;864;99,07;43;46\n24/11/18;14:00;856;864;99,07;46;44\n24/11/18;14:30;846;864;97,92;42;66\n24/11/18;15:00;822;864;95,14;10;80\n24/11/18;15:30;771;864;89,24;97;74\n24/11/18;16:00;803;864;92,94;123;60\n24/11/18;16:30;851;864;98,50;73;69\n24/11/18;17:00;852;864;98,61;68;71\n24/11/18;17:30;839;864;97,11;81;90\n24/11/18;18:00;837;864;96,88;88;105\n24/11/18;18:30;816;864;94,44;71;100\n24/11/18;19:00;792;864;91,67;58;129\n24/11/18;19:30;685;864;79,28;75;93\n24/11/18;20:00;701;864;81,13;59;40\n24/11/18;20:30;760;864;87,96;82;28\n24/11/18;21:00;775;864;89,70;43;34\n24/11/18;21:30;778;864;90,05;28;37\n24/11/18;22:00;768;864;88,89;11;55\n24/11/18;22:30;708;864;81,94;10;39\n24/11/18;23:00;697;864;80,67;6;55\n24/11/18;23:30;619;864;71,64;5;52\n25/11/18;00:00;602;864;69,68;3;51\n25/11/18;00:30;537;864;62,15;2;37\n25/11/18;01:00;521;864;60,30;4;26\n25/11/18;01:30;493;864;57,06;2;13\n25/11/18;02:00;489;864;56,60;0;10\n25/11/18;02:30;475;864;54,98;1;7\n25/11/18;03:00;476;864;55,09;1;5\n25/11/18;03:30;471;864;54,51;0;0\n25/11/18;04:00;471;864;54,51;0;3\n25/11/18;04:30;467;864;54,05;0;5\n25/11/18;05:00;463;864;53,59;0;0\n25/11/18;05:30;463;864;53,59;1;0\n25/11/18;06:00;464;864;53,70;0;1\n25/11/18;06:30;463;864;53,59;0;3\n25/11/18;07:00;460;864;53,24;0;4\n25/11/18;07:30;455;864;52,66;0;2\n25/11/18;08:00;453;864;52,43;0;3\n25/11/18;08:30;445;864;51,50;0;7\n25/11/18;09:00;440;864;50,93;4;10\n25/11/18;09:30;435;864;50,35;11;13\n25/11/18;10:00;435;864;50,35;23;19\n25/11/18;10:30;469;864;54,28;50;13\n25/11/18;11:00;477;864;55,21;52;38\n25/11/18;11:30;505;864;58,45;48;32\n25/11/18;12:00;504;864;58,33;53;54\n25/11/18;12:30;548;864;63,43;80;17\n25/11/18;13:00;567;864;65,63;38;24\n25/11/18;13:30;582;864;67,36;29;32\n25/11/18;14:00;577;864;66,78;33;31\n25/11/18;14:30;580;864;67,13;46;41\n25/11/18;15:00;584;864;67,59;45;47\n25/11/18;15:30;585;864;67,71;52;52\n25/11/18;16:00;579;864;67,01;49;52\n25/11/18;16:30;582;864;67,36;49;54\n25/11/18;17:00;569;864;65,86;40;68\n25/11/18;17:30;512;864;59,26;33;70\n25/11/18;18:00;507;864;58,68;22;43\n25/11/18;18:30;462;864;53,47;20;52\n25/11/18;19:00;448;864;51,85;9;40\n25/11/18;19:30;426;864;49,31;13;9\n25/11/18;20:00;428;864;49,54;10;9\n25/11/18;20:30;426;864;49,31;6;6\n25/11/18;21:00;428;864;49,54;8;8\n25/11/18;21:30;423;864;48,96;7;11\n25/11/18;22:00;420;864;48,61;1;4\n25/11/18;22:30;419;864;48,50;1;1\n25/11/18;23:00;420;864;48,61;7;3\n25/11/18;23:30;420;864;48,61;0;4\n26/11/18;00:00;419;864;48,50;0;3\n26/11/18;00:30;416;864;48,15;0;0\n26/11/18;01:00;416;864;48,15;0;0\n26/11/18;01:30;416;864;48,15;0;0\n26/11/18;02:00;416;864;48,15;0;0\n26/11/18;02:30;416;864;48,15;0;0\n26/11/18;03:00;416;864;48,15;0;1\n26/11/18;03:30;415;864;48,03;0;0\n26/11/18;04:00;415;864;48,03;0;0\n26/11/18;04:30;414;864;47,92;0;1\n26/11/18;05:00;414;864;47,92;1;2\n26/11/18;05:30;414;864;47,92;3;0\n26/11/18;06:00;417;864;48,26;4;1\n26/11/18;06:30;420;864;48,61;11;8\n26/11/18;07:00;423;864;48,96;22;13\n26/11/18;07:30;436;864;50,46;32;14\n26/11/18;08:00;454;864;52,55;63;16\n26/11/18;08:30;543;864;62,85;92;15\n26/11/18;09:00;592;864;68,52;106;20\n26/11/18;09:30;699;864;80,90;82;21\n26/11/18;10:00;743;864;86,00;87;23\n26/11/18;10:30;816;864;94,44;79;37\n26/11/18;11:00;829;864;95,95;56;59\n26/11/18;11:30;830;864;96,06;70;62\n26/11/18;12:00;837;864;96,88;81;57\n26/11/18;12:30;856;864;99,07;44;44\n26/11/18;13:00;853;864;98,73;45;51\n26/11/18;13:30;849;864;98,26;70;62\n26/11/18;14:00;855;864;98,96;65;56\n26/11/18;14:30;853;864;98,73;70;72\n26/11/18;15:00;861;864;99,65;67;68\n26/11/18;15:30;844;864;97,69;80;93\n26/11/18;16:00;829;864;95,95;59;99\n26/11/18;16:30;773;864;89,47;62;98\n26/11/18;17:00;757;864;87,62;57;96\n26/11/18;17:30;698;864;80,79;55;99\n26/11/18;18:00;681;864;78,82;54;102\n26/11/18;18:30;608;864;70,37;43;80\n26/11/18;19:00;589;864;68,17;36;83\n26/11/18;19:30;532;864;61,57;27;51\n26/11/18;20:00;529;864;61,23;23;33\n26/11/18;20:30;514;864;59,49;13;21\n26/11/18;21:00;512;864;59,26;9;17\n26/11/18;21:30;493;864;57,06;4;17\n26/11/18;22:00;490;864;56,71;6;10\n26/11/18;22:30;471;864;54,51;2;19\n26/11/18;23:00;464;864;53,70;1;13\n26/11/18;23:30;453;864;52,43;0;6\n27/11/18;00:00;450;864;52,08;0;7\n27/11/18;00:30;444;864;51,39;0;5\n27/11/18;01:00;439;864;50,81;1;3\n27/11/18;01:30;437;864;50,58;1;1\n27/11/18;02:00;437;864;50,58;1;0\n27/11/18;02:30;438;864;50,69;0;0\n27/11/18;03:00;438;864;50,69;0;0\n27/11/18;03:30;438;864;50,69;0;0\n27/11/18;04:00;438;864;50,69;0;1\n27/11/18;04:30;437;864;50,58;0;1\n27/11/18;05:00;436;864;50,46;1;0\n27/11/18;05:30;438;864;50,69;2;0\n27/11/18;06:00;442;864;51,16;5;3\n27/11/18;06:30;451;864;52,20;21;9\n27/11/18;07:00;457;864;52,89;31;15\n27/11/18;07:30;476;864;55,09;32;21\n27/11/18;08:00;497;864;57,52;52;27\n27/11/18;08:30;556;864;64,35;91;20\n27/11/18;09:00;596;864;68,98;95;15\n27/11/18;09:30;697;864;80,67;82;23\n27/11/18;10:00;729;864;84,38;105;30\n27/11/18;10:30;826;864;95,60;79;37\n27/11/18;11:00;832;864;96,30;55;52\n27/11/18;11:30;833;864;96,41;54;58\n27/11/18;12:00;831;864;96,18;54;51\n27/11/18;12:30;834;864;96,53;51;50\n27/11/18;13:00;835;864;96,64;33;32\n27/11/18;13:30;837;864;96,88;52;51\n27/11/18;14:00;838;864;96,99;47;49\n27/11/18;14:30;842;864;97,45;59;53\n27/11/18;15:00;840;864;97,22;68;72\n27/11/18;15:30;829;864;95,95;72;73\n27/11/18;16:00;827;864;95,72;48;74\n27/11/18;16:30;786;864;90,97;52;78\n27/11/18;17:00;776;864;89,81;43;72\n27/11/18;17:30;727;864;84,14;60;85\n27/11/18;18:00;717;864;82,99;57;101\n27/11/18;18:30;642;864;74,31;52;113\n27/11/18;19:00;614;864;71,06;68;97\n27/11/18;19:30;591;864;68,40;71;64\n27/11/18;20:00;601;864;69,56;43;31\n27/11/18;20:30;611;864;70,72;32;31\n27/11/18;21:00;601;864;69,56;7;30\n27/11/18;21:30;569;864;65,86;9;29\n27/11/18;22:00;562;864;65,05;4;42\n27/11/18;22:30;509;864;58,91;7;34\n27/11/18;23:00;490;864;56,71;5;33\n27/11/18;23:30;451;864;52,20;3;25\n28/11/18;00:00;449;864;51,97;6;12\n28/11/18;00:30;443;864;51,27;2;7\n28/11/18;01:00;437;864;50,58;0;2\n28/11/18;01:30;437;864;50,58;1;0\n28/11/18;02:00;438;864;50,69;0;0\n28/11/18;02:30;438;864;50,69;0;0\n28/11/18;03:00;438;864;50,69;0;0\n28/11/18;03:30;438;864;50,69;0;0\n28/11/18;04:00;440;864;50,93;2;2\n28/11/18;04:30;437;864;50,58;0;1\n28/11/18;05:00;437;864;50,58;1;2\n28/11/18;05:30;437;864;50,58;3;0\n28/11/18;06:00;439;864;50,81;6;0\n28/11/18;06:30;450;864;52,08;17;9\n28/11/18;07:00;452;864;52,31;29;10\n28/11/18;07:30;488;864;56,48;40;19\n28/11/18;08:00;494;864;57,18;62;28\n28/11/18;08:30;559;864;64,70;72;23\n28/11/18;09:00;580;864;67,13;96;24\n28/11/18;09:30;651;864;75,35;71;31\n28/11/18;10:00;715;864;82,75;102;30\n28/11/18;10:30;798;864;92,36;102;47\n28/11/18;11:00;826;864;95,60;82;47\n28/11/18;11:30;854;864;98,84;77;76\n28/11/18;12:00;846;864;97,92;78;74\n28/11/18;12:30;856;864;99,07;42;42\n28/11/18;13:00;855;864;98,96;46;46\n28/11/18;13:30;854;864;98,84;61;65\n28/11/18;14:00;848;864;98,15;73;71\n28/11/18;14:30;855;864;98,96;65;66\n28/11/18;15:00;856;864;99,07;76;74\n28/11/18;15:30;854;864;98,84;65;73\n28/11/18;16:00;847;864;98,03;66;94\n28/11/18;16:30;805;864;93,17;69;95\n28/11/18;17:00;789;864;91,32;68;107\n28/11/18;17:30;739;864;85,53;65;86\n28/11/18;18:00;732;864;84,72;70;92\n28/11/18;18:30;711;864;82,29;77;82\n28/11/18;19:00;682;864;78,94;54;130\n28/11/18;19:30;646;864;74,77;91;75\n28/11/18;20:00;654;864;75,69;54;29\n28/11/18;20:30;670;864;77,55;28;34\n28/11/18;21:00;665;864;76,97;16;28\n28/11/18;21:30;637;864;73,73;8;39\n28/11/18;22:00;616;864;71,30;2;35\n28/11/18;22:30;570;864;65,97;10;32\n28/11/18;23:00;562;864;65,05;4;39\n28/11/18;23:30;504;864;58,33;2;32\n29/11/18;00:00;493;864;57,06;4;21\n29/11/18;00:30;477;864;55,21;0;8\n29/11/18;01:00;469;864;54,28;0;8\n29/11/18;01:30;467;864;54,05;0;1\n29/11/18;02:00;467;864;54,05;0;1\n29/11/18;02:30;466;864;53,94;0;0\n29/11/18;03:00;466;864;53,94;0;1\n29/11/18;03:30;465;864;53,82;0;0\n29/11/18;04:00;465;864;53,82;0;0\n29/11/18;04:30;467;864;54,05;2;0\n29/11/18;05:00;468;864;54,17;1;0\n29/11/18;05:30;469;864;54,28;1;0\n29/11/18;06:00;473;864;54,75;11;2\n29/11/18;06:30;483;864;55,90;15;1\n29/11/18;07:00;494;864;57,18;22;14\n29/11/18;07:30;505;864;58,45;34;22\n29/11/18;08:00;515;864;59,61;58;29\n29/11/18;08:30;587;864;67,94;84;22\n29/11/18;09:00;627;864;72,57;110;33\n29/11/18;09:30;732;864;84,72;101;31\n29/11/18;10:00;774;864;89,58;108;26\n29/11/18;10:30;859;864;99,42;80;52\n29/11/18;11:00;859;864;99,42;52;48\n29/11/18;11:30;860;864;99,54;57;57\n29/11/18;12:00;862;864;99,77;53;54\n29/11/18;12:30;867;864;100,35;36;35\n29/11/18;13:00;865;864;100,12;28;29\n29/11/18;13:30;864;864;100,00;62;63\n29/11/18;14:00;863;864;99,88;48;48\n29/11/18;14:30;861;864;99,65;75;73\n29/11/18;15:00;861;864;99,65;55;54\n29/11/18;15:30;852;864;98,61;71;79\n29/11/18;16:00;856;864;99,07;64;81\n29/11/18;16:30;831;864;96,18;73;78\n29/11/18;17:00;823;864;95,25;53;95\n29/11/18;17:30;781;864;90,39;65;76\n29/11/18;18:00;776;864;89,81;72;101\n29/11/18;18:30;719;864;83,22;60;105\n29/11/18;19:00;693;864;80,21;67;114\n29/11/18;19:30;650;864;75,23;77;71\n29/11/18;20:00;669;864;77,43;70;40\n29/11/18;20:30;700;864;81,02;48;35\n29/11/18;21:00;700;864;81,02;23;36\n29/11/18;21:30;692;864;80,09;18;25\n29/11/18;22:00;676;864;78,24;6;57\n29/11/18;22:30;594;864;68,75;7;61\n29/11/18;23:00;564;864;65,28;8;56\n29/11/18;23:30;505;864;58,45;2;37\n30/11/18;00:00;496;864;57,41;4;22\n30/11/18;00:30;471;864;54,51;1;11\n30/11/18;01:00;467;864;54,05;0;4\n30/11/18;01:30;459;864;53,13;1;6\n30/11/18;02:00;458;864;53,01;0;1\n30/11/18;02:30;457;864;52,89;0;0\n30/11/18;03:00;457;864;52,89;1;2\n30/11/18;03:30;456;864;52,78;0;0\n30/11/18;04:00;456;864;52,78;0;2\n30/11/18;04:30;453;864;52,43;0;2\n30/11/18;05:00;451;864;52,20;1;3\n30/11/18;05:30;449;864;51,97;4;0\n30/11/18;06:00;453;864;52,43;2;5\n30/11/18;06:30;458;864;53,01;20;6\n30/11/18;07:00;481;864;55,67;29;8\n30/11/18;07:30;484;864;56,02;30;23\n30/11/18;08:00;505;864;58,45;48;29\n30/11/18;08:30;527;864;61,00;93;16\n30/11/18;09:00;648;864;75,00;99;17\n30/11/18;09:30;718;864;83,10;103;33\n30/11/18;10:00;799;864;92,48;117;38\n30/11/18;10:30;855;864;98,96;93;51\n30/11/18;11:00;855;864;98,96;53;47\n30/11/18;11:30;860;864;99,54;77;78\n30/11/18;12:00;864;864;100,00;63;59\n30/11/18;12:30;869;864;100,58;44;45\n30/11/18;13:00;866;864;100,23;50;48\n30/11/18;13:30;863;864;99,88;72;72\n30/11/18;14:00;866;864;100,23;67;70\n30/11/18;14:30;863;864;99,88;69;68\n30/11/18;15:00;865;864;100,12;89;93\n30/11/18;15:30;853;864;98,73;79;94\n30/11/18;16:00;831;864;96,18;56;89\n30/11/18;16:30;782;864;90,51;57;98\n30/11/18;17:00;740;864;85,65;68;98\n30/11/18;17:30;722;864;83,56;68;81\n30/11/18;18:00;714;864;82,64;74;96\n30/11/18;18:30;688;864;79,63;68;82\n30/11/18;19:00;675;864;78,13;60;101\n30/11/18;19:30;645;864;74,65;67;66\n30/11/18;20:00;662;864;76,62;93;32\n30/11/18;20:30;730;864;84,49;56;29\n30/11/18;21:00;734;864;84,95;28;29\n30/11/18;21:30;733;864;84,84;25;35\n30/11/18;22:00;717;864;82,99;11;35\n30/11/18;22:30;675;864;78,13;8;38\n30/11/18;23:00;660;864;76,39;9;50\n30/11/18;23:30;599;864;69,33;5;46\n01/12/18;00:00;585;864;67,71;8;44\n01/12/18;00:30;533;864;61,69;4;27\n01/12/18;01:00;521;864;60,30;3;18\n01/12/18;01:30;506;864;58,56;1;9\n01/12/18;02:00;505;864;58,45;0;9\n01/12/18;02:30;495;864;57,29;0;2\n01/12/18;03:00;494;864;57,18;0;3\n01/12/18;03:30;491;864;56,83;0;1\n01/12/18;04:00;489;864;56,60;0;3\n01/12/18;04:30;488;864;56,48;1;1\n01/12/18;05:00;487;864;56,37;0;1\n01/12/18;05:30;487;864;56,37;0;0\n01/12/18;06:00;487;864;56,37;3;1\n01/12/18;06:30;490;864;56,71;2;2\n01/12/18;07:00;491;864;56,83;3;2\n01/12/18;07:30;487;864;56,37;4;8\n01/12/18;08:00;486;864;56,25;11;10\n01/12/18;08:30;502;864;58,10;30;7\n01/12/18;09:00;520;864;60,19;59;11\n01/12/18;09:30;625;864;72,34;116;23\n01/12/18;10:00;674;864;78,01;119;18\n01/12/18;10:30;808;864;93,52;112;44\n01/12/18;11:00;852;864;98,61;96;52\n01/12/18;11:30;868;864;100,46;89;81\n01/12/18;12:00;867;864;100,35;81;82\n01/12/18;12:30;867;864;100,35;66;66\n01/12/18;13:00;868;864;100,46;63;59\n01/12/18;13:30;872;864;100,93;44;48\n01/12/18;14:00;866;864;100,23;37;35\n01/12/18;14:30;868;864;100,46;69;68\n01/12/18;15:00;871;864;100,81;60;57\n01/12/18;15:30;868;864;100,46;69;69\n01/12/18;16:00;872;864;100,93;81;78\n01/12/18;16:30;873;864;101,04;75;80\n01/12/18;17:00;873;864;101,04;92;101\n01/12/18;17:30;865;864;100,12;107;96\n01/12/18;18:00;871;864;100,81;71;85\n01/12/18;18:30;810;864;93,75;52;102\n01/12/18;19:00;791;864;91,55;65;124\n01/12/18;19:30;737;864;85,30;78;89\n01/12/18;20:00;738;864;85,42;57;33\n01/12/18;20:30;787;864;91,09;76;36\n01/12/18;21:00;805;864;93,17;53;37\n01/12/18;21:30;829;864;95,95;40;37\n01/12/18;22:00;813;864;94,10;23;61\n01/12/18;22:30;760;864;87,96;18;50\n01/12/18;23:00;737;864;85,30;10;50\n01/12/18;23:30;662;864;76,62;7;66\n02/12/18;00:00;637;864;73,73;4;64\n02/12/18;00:30;558;864;64,58;2;38\n02/12/18;01:00;541;864;62,62;1;42\n02/12/18;01:30;507;864;58,68;2;12\n02/12/18;02:00;503;864;58,22;3;8\n02/12/18;02:30;493;864;57,06;0;5\n02/12/18;03:00;490;864;56,71;1;6\n02/12/18;03:30;488;864;56,48;0;2\n02/12/18;04:00;486;864;56,25;0;1\n02/12/18;04:30;481;864;55,67;0;4\n02/12/18;05:00;481;864;55,67;0;0\n02/12/18;05:30;483;864;55,90;2;0\n02/12/18;06:00;482;864;55,79;0;1\n02/12/18;06:30;480;864;55,56;0;3\n02/12/18;07:00;477;864;55,21;0;4\n02/12/18;07:30;471;864;54,51;0;5\n02/12/18;08:00;469;864;54,28;1;9\n02/12/18;08:30;458;864;53,01;2;5\n02/12/18;09:00;457;864;52,89;1;10\n02/12/18;09:30;446;864;51,62;13;13\n02/12/18;10:00;454;864;52,55;42;12\n02/12/18;10:30;517;864;59,84;67;22\n02/12/18;11:00;532;864;61,57;49;31\n02/12/18;11:30;557;864;64,47;53;39\n02/12/18;12:00;567;864;65,63;66;32\n02/12/18;12:30;607;864;70,25;66;39\n02/12/18;13:00;616;864;71,30;48;34\n02/12/18;13:30;629;864;72,80;52;43\n02/12/18;14:00;646;864;74,77;40;30\n02/12/18;14:30;648;864;75,00;68;64\n02/12/18;15:00;651;864;75,35;62;68\n02/12/18;15:30;642;864;74,31;59;62\n02/12/18;16:00;642;864;74,31;63;70\n02/12/18;16:30;623;864;72,11;49;62\n02/12/18;17:00;621;864;71,88;44;83\n02/12/18;17:30;520;864;60,19;22;93\n02/12/18;18:00;492;864;56,94;27;51\n02/12/18;18:30;471;864;54,51;28;35\n02/12/18;19:00;473;864;54,75;24;24\n02/12/18;19:30;481;864;55,67;22;12\n02/12/18;20:00;485;864;56,13;10;8\n02/12/18;20:30;486;864;56,25;8;9\n02/12/18;21:00;490;864;56,71;10;9\n02/12/18;21:30;473;864;54,75;4;20\n02/12/18;22:00;464;864;53,70;2;18\n02/12/18;22:30;452;864;52,31;1;5\n02/12/18;23:00;451;864;52,20;3;8\n02/12/18;23:30;444;864;51,39;3;9\n03/12/18;00:00;440;864;50,93;3;2\n03/12/18;00:30;442;864;51,16;1;1\n03/12/18;01:00;441;864;51,04;0;0\n03/12/18;01:30;442;864;51,16;1;0\n03/12/18;02:00;442;864;51,16;0;0\n03/12/18;02:30;442;864;51,16;0;0\n03/12/18;03:00;442;864;51,16;0;0\n03/12/18;03:30;442;864;51,16;0;0\n03/12/18;04:00;442;864;51,16;0;0\n03/12/18;04:30;442;864;51,16;0;0\n03/12/18;05:00;442;864;51,16;1;2\n03/12/18;05:30;443;864;51,27;5;1\n03/12/18;06:00;446;864;51,62;2;2\n03/12/18;06:30;446;864;51,62;11;7\n03/12/18;07:00;448;864;51,85;23;11\n03/12/18;07:30;470;864;54,40;30;11\n03/12/18;08:00;485;864;56,13;45;23\n03/12/18;08:30;557;864;64,47;89;21\n03/12/18;09:00;595;864;68,87;108;19\n03/12/18;09:30;696;864;80,56;98;20\n03/12/18;10:00;782;864;90,51;92;26\n03/12/18;10:30;835;864;96,64;79;30\n03/12/18;11:00;855;864;98,96;49;37\n03/12/18;11:30;854;864;98,84;63;62\n03/12/18;12:00;859;864;99,42;59;60\n03/12/18;12:30;857;864;99,19;32;35\n03/12/18;13:00;857;864;99,19;44;46\n03/12/18;13:30;879;864;101,74;66;44\n03/12/18;14:00;874;864;101,16;59;61\n03/12/18;14:30;868;864;100,46;50;52\n03/12/18;15:00;867;864;100,35;61;61\n03/12/18;15:30;854;864;98,84;59;72\n03/12/18;16:00;853;864;98,73;69;76\n03/12/18;16:30;835;864;96,64;55;78\n03/12/18;17:00;816;864;94,44;58;90\n03/12/18;17:30;752;864;87,04;51;107\n03/12/18;18:00;727;864;84,14;54;97\n03/12/18;18:30;657;864;76,04;40;95\n03/12/18;19:00;629;864;72,80;43;90\n03/12/18;19:30;573;864;66,32;38;56\n03/12/18;20:00;570;864;65,97;26;24\n03/12/18;20:30;571;864;66,09;18;20\n03/12/18;21:00;566;864;65,51;9;12\n03/12/18;21:30;563;864;65,16;5;15\n03/12/18;22:00;558;864;64,58;4;27\n03/12/18;22:30;535;864;61,92;2;18\n03/12/18;23:00;518;864;59,95;3;14\n03/12/18;23:30;493;864;57,06;0;21\n04/12/18;00:00;486;864;56,25;0;9\n04/12/18;00:30;477;864;55,21;0;2\n04/12/18;01:00;476;864;55,09;0;0\n04/12/18;01:30;476;864;55,09;0;0\n04/12/18;02:00;476;864;55,09;0;0\n04/12/18;02:30;476;864;55,09;0;1\n04/12/18;03:00;475;864;54,98;0;0\n04/12/18;03:30;475;864;54,98;0;0\n04/12/18;04:00;475;864;54,98;0;0\n04/12/18;04:30;475;864;54,98;0;0\n04/12/18;05:00;475;864;54,98;0;0\n04/12/18;05:30;474;864;54,86;6;2\n04/12/18;06:00;479;864;55,44;5;1\n04/12/18;06:30;491;864;56,83;18;7\n04/12/18;07:00;493;864;57,06;25;14\n04/12/18;07:30;511;864;59,14;39;22\n04/12/18;08:00;523;864;60,53;51;26\n04/12/18;08:30;573;864;66,32;74;19\n04/12/18;09:00;615;864;71,18;103;26\n04/12/18;09:30;738;864;85,42;109;23\n04/12/18;10:00;776;864;89,81;122;22\n04/12/18;10:30;871;864;100,81;93;55\n04/12/18;11:00;906;864;104,86;68;66\n04/12/18;11:30;906;864;104,86;49;50\n04/12/18;12:00;899;864;104,05;66;66\n04/12/18;12:30;905;864;104,75;44;44\n04/12/18;13:00;905;864;104,75;37;38\n04/12/18;13:30;906;864;104,86;57;56\n04/12/18;14:00;903;864;104,51;102;65\n04/12/18;14:30;814;864;94,21;49;70\n04/12/18;15:00;921;864;106,60;77;60\n04/12/18;15:30;956;864;110,65;78;65\n04/12/18;16:00;952;864;110,19;66;74\n04/12/18;16:30;935;864;108,22;58;78\n04/12/18;17:00;921;864;106,60;60;70\n04/12/18;17:30;903;864;104,51;57;99\n04/12/18;18:00;861;864;99,65;62;105\n04/12/18;18:30;791;864;91,55;58;91\n04/12/18;19:00;789;864;91,32;58;116\n04/12/18;19:30;720;864;83,33;59;59\n04/12/18;20:00;734;864;84,95;46;40\n04/12/18;20:30;735;864;85,07;22;33\n04/12/18;21:00;713;864;82,52;5;34\n04/12/18;21:30;694;864;80,32;0;36\n04/12/18;22:00;658;864;76,16;5;37\n04/12/18;22:30;617;864;71,41;8;30\n04/12/18;23:00;606;864;70,14;3;26\n04/12/18;23:30;574;864;66,44;3;17\n05/12/18;00:00;570;864;65,97;1;10\n05/12/18;00:30;560;864;64,81;3;9\n05/12/18;01:00;556;864;64,35;1;2\n05/12/18;01:30;555;864;64,24;0;0\n05/12/18;02:00;555;864;64,24;0;2\n05/12/18;02:30;553;864;64,00;0;0\n05/12/18;03:00;553;864;64,00;0;0\n05/12/18;03:30;553;864;64,00;0;0\n05/12/18;04:00;553;864;64,00;0;0\n05/12/18;04:30;553;864;64,00;1;0\n05/12/18;05:00;554;864;64,12;0;0\n05/12/18;05:30;555;864;64,24;5;0\n05/12/18;06:00;559;864;64,70;5;1\n05/12/18;06:30;565;864;65,39;9;9\n05/12/18;07:00;563;864;65,16;27;13\n05/12/18;07:30;588;864;68,06;33;15\n05/12/18;08:00;594;864;68,75;42;24\n05/12/18;08:30;661;864;76,50;84;23\n05/12/18;09:00;676;864;78,24;121;20\n05/12/18;09:30;802;864;92,82;103;30\n05/12/18;10:00;848;864;98,15;117;39\n05/12/18;10:30;951;864;110,07;83;44\n05/12/18;11:00;964;864;111,57;70;72\n05/12/18;11:30;964;864;111,57;54;54\n05/12/18;12:00;961;864;111,23;61;65\n05/12/18;12:30;963;864;111,46;52;45\n05/12/18;13:00;964;864;111,57;41;42\n05/12/18;13:30;964;864;111,57;63;63\n05/12/18;14:00;961;864;111,23;46;50\n05/12/18;14:30;959;864;111,00;57;58\n05/12/18;15:00;956;864;110,65;70;69\n05/12/18;15:30;965;864;111,69;69;66\n05/12/18;16:00;960;864;111,11;85;81\n05/12/18;16:30;935;864;108,22;68;103\n05/12/18;17:00;919;864;106,37;70;112\n05/12/18;17:30;876;864;101,39;74;87\n05/12/18;18:00;837;864;96,88;72;112\n05/12/18;18:30;805;864;93,17;68;95\n05/12/18;19:00;801;864;92,71;85;98\n05/12/18;19:30;779;864;90,16;59;73\n05/12/18;20:00;795;864;92,01;52;26\n05/12/18;20:30;801;864;92,71;30;32\n05/12/18;21:00;775;864;89,70;18;45\n05/12/18;21:30;745;864;86,23;5;38\n05/12/18;22:00;721;864;83,45;6;39\n05/12/18;22:30;654;864;75,69;3;58\n05/12/18;23:00;641;864;74,19;3;40\n05/12/18;23:30;590;864;68,29;5;35\n06/12/18;00:00;579;864;67,01;0;12\n06/12/18;00:30;573;864;66,32;1;2\n06/12/18;01:00;570;864;65,97;0;4\n06/12/18;01:30;567;864;65,63;0;2\n06/12/18;02:00;567;864;65,63;0;0\n06/12/18;02:30;567;864;65,63;0;0\n06/12/18;03:00;567;864;65,63;0;0\n06/12/18;03:30;567;864;65,63;0;0\n06/12/18;04:00;566;864;65,51;0;2\n06/12/18;04:30;565;864;65,39;0;0\n06/12/18;05:00;564;864;65,28;0;3\n06/12/18;05:30;565;864;65,39;3;0\n06/12/18;06:00;566;864;65,51;6;2\n06/12/18;06:30;570;864;65,97;15;7\n06/12/18;07:00;581;864;67,25;19;13\n06/12/18;07:30;600;864;69,44;36;15\n06/12/18;08:00;613;864;70,95;59;32\n06/12/18;08:30;699;864;80,90;87;21\n06/12/18;09:00;699;864;80,90;92;22\n06/12/18;09:30;866;864;100,23;127;23\n06/12/18;10:00;921;864;106,60;106;27\n06/12/18;10:30;963;864;111,46;61;54\n06/12/18;11:00;960;864;111,11;49;48\n06/12/18;11:30;958;864;110,88;54;62\n06/12/18;12:00;954;864;110,42;27;44\n06/12/18;12:30;971;864;112,38;72;48\n06/12/18;13:00;969;864;112,15;37;37\n06/12/18;13:30;972;864;112,50;53;55\n06/12/18;14:00;975;864;112,85;66;59\n06/12/18;14:30;977;864;113,08;69;68\n06/12/18;15:00;977;864;113,08;56;64\n06/12/18;15:30;976;864;112,96;68;60\n06/12/18;16:00;974;864;112,73;68;69\n06/12/18;16:30;957;864;110,76;57;72\n06/12/18;17:00;939;864;108,68;45;76\n06/12/18;17:30;927;864;107,29;69;66\n06/12/18;18:00;916;864;106,02;10;63\n06/12/18;18:30;821;864;95,02;1;60\n06/12/18;19:00;804;864;93,06;0;58\n06/12/18;19:30;710;864;82,18;0;47\n06/12/18;20:00;697;864;80,67;0;26\n06/12/18;20:30;662;864;76,62;0;21\n06/12/18;21:00;657;864;76,04;0;14\n06/12/18;21:30;636;864;73,61;0;13\n06/12/18;22:00;634;864;73,38;0;21\n06/12/18;22:30;603;864;69,79;0;11\n06/12/18;23:00;592;864;68,52;0;26\n06/12/18;23:30;559;864;64,70;4;21\n07/12/18;00:00;556;864;64,35;3;10\n07/12/18;00:30;550;864;63,66;3;6\n07/12/18;01:00;547;864;63,31;0;4\n07/12/18;01:30;545;864;63,08;0;2\n07/12/18;02:00;541;864;62,62;1;53\n07/12/18;02:30;470;864;54,40;0;28\n07/12/18;03:00;470;864;54,40;0;2\n07/12/18;03:30;333;864;38,54;0;0\n07/12/18;04:00;333;864;38,54;1;0\n07/12/18;04:30;333;864;38,54;0;2\n07/12/18;05:00;332;864;38,43;2;2\n07/12/18;05:30;332;864;38,43;2;1\n07/12/18;06:00;334;864;38,66;2;1\n07/12/18;06:30;339;864;39,24;9;3\n07/12/18;07:00;348;864;40,28;28;8\n07/12/18;07:30;384;864;44,44;36;11\n07/12/18;08:00;408;864;47,22;55;10\n07/12/18;08:30;503;864;58,22;83;10\n07/12/18;09:00;512;864;59,26;99;10\n07/12/18;09:30;682;864;78,94;108;12\n07/12/18;10:00;696;864;80,56;110;35\n07/12/18;10:30;766;864;88,66;47;45\n07/12/18;11:00;767;864;88,77;36;38\n07/12/18;11:30;766;864;88,66;64;62\n07/12/18;12:00;760;864;87,96;49;49\n07/12/18;12:30;764;864;88,43;59;59\n07/12/18;13:00;765;864;88,54;50;51\n07/12/18;13:30;764;864;88,43;60;59\n07/12/18;14:00;766;864;88,66;65;59\n07/12/18;14:30;771;864;89,24;68;67\n07/12/18;15:00;770;864;89,12;62;64\n07/12/18;15:30;765;864;88,54;65;71\n07/12/18;16:00;745;864;86,23;52;76\n07/12/18;16:30;699;864;80,90;51;93\n07/12/18;17:00;683;864;79,05;48;89\n07/12/18;17:30;638;864;73,84;42;60\n07/12/18;18:00;631;864;73,03;46;58\n07/12/18;18:30;619;864;71,64;40;44\n07/12/18;19:00;603;864;69,79;0;43\n07/12/18;19:30;526;864;60,88;0;49\n07/12/18;20:00;520;864;60,19;0;20\n07/12/18;20:30;488;864;56,48;0;19\n07/12/18;21:00;478;864;55,32;0;36\n07/12/18;21:30;454;864;52,55;0;19\n07/12/18;22:00;445;864;51,50;0;25\n07/12/18;22:30;414;864;47,92;0;15\n07/12/18;23:00;404;864;46,76;0;26\n07/12/18;23:30;369;864;42,71;0;20\n08/12/18;00:00;365;864;42,25;0;17\n08/12/18;00:30;346;864;40,05;0;5\n08/12/18;01:00;344;864;39,81;8;11\n08/12/18;01:30;340;864;39,35;1;5\n08/12/18;02:00;339;864;39,24;1;2\n08/12/18;02:30;337;864;39,00;0;1\n08/12/18;03:00;337;864;39,00;0;0\n08/12/18;03:30;331;864;38,31;0;0\n08/12/18;04:00;331;864;38,31;1;1\n08/12/18;04:30;331;864;38,31;0;0\n08/12/18;05:00;331;864;38,31;0;0\n08/12/18;05:30;332;864;38,43;1;0\n08/12/18;06:00;332;864;38,43;0;0\n08/12/18;06:30;334;864;38,66;2;0\n08/12/18;07:00;334;864;38,66;4;3\n08/12/18;07:30;343;864;39,70;11;2\n08/12/18;08:00;343;864;39,70;5;3\n08/12/18;08:30;365;864;42,25;30;11\n08/12/18;09:00;381;864;44,10;55;7\n08/12/18;09:30;475;864;54,98;76;8\n08/12/18;10:00;496;864;57,41;93;25\n08/12/18;10:30;596;864;68,98;85;33\n08/12/18;11:00;622;864;71,99;83;50\n08/12/18;11:30;655;864;75,81;87;60\n08/12/18;12:00;665;864;76,97;64;53\n08/12/18;12:30;656;864;75,93;53;67\n08/12/18;13:00;655;864;75,81;49;61\n08/12/18;13:30;660;864;76,39;60;43\n08/12/18;14:00;660;864;76,39;54;39\n08/12/18;14:30;683;864;79,05;55;47\n08/12/18;15:00;702;864;81,25;69;46\n08/12/18;15:30;692;864;80,09;44;54\n08/12/18;16:00;705;864;81,60;59;65\n08/12/18;16:30;662;864;76,62;43;73\n08/12/18;17:00;662;864;76,62;65;50\n08/12/18;17:30;686;864;79,40;66;53\n08/12/18;18:00;690;864;79,86;64;48\n08/12/18;18:30;711;864;82,29;31;23\n08/12/18;19:00;687;864;79,51;0;47\n08/12/18;19:30;635;864;73,50;0;25\n08/12/18;20:00;629;864;72,80;0;10\n08/12/18;20:30;601;864;69,56;0;23\n08/12/18;21:00;594;864;68,75;0;20\n08/12/18;21:30;553;864;64,00;0;27\n08/12/18;22:00;552;864;63,89;0;35\n08/12/18;22:30;488;864;56,48;0;31\n08/12/18;23:00;479;864;55,44;0;30\n08/12/18;23:30;431;864;49,88;0;28\n09/12/18;00:00;411;864;47,57;0;34\n09/12/18;00:30;377;864;43,63;2;20\n09/12/18;01:00;370;864;42,82;2;6\n09/12/18;01:30;363;864;42,01;0;8\n09/12/18;02:00;362;864;41,90;1;4\n09/12/18;02:30;357;864;41,32;1;4\n09/12/18;03:00;357;864;41,32;0;0\n09/12/18;03:30;356;864;41,20;0;3\n09/12/18;04:00;354;864;40,97;0;0\n09/12/18;04:30;353;864;40,86;0;1\n09/12/18;05:00;353;864;40,86;0;0\n09/12/18;05:30;353;864;40,86;2;1\n09/12/18;06:00;354;864;40,97;0;1\n09/12/18;06:30;353;864;40,86;0;0\n09/12/18;07:00;353;864;40,86;1;2\n09/12/18;07:30;349;864;40,39;0;3\n09/12/18;08:00;347;864;40,16;0;2\n09/12/18;08:30;345;864;39,93;3;5\n09/12/18;09:00;342;864;39,58;8;7\n09/12/18;09:30;358;864;41,44;24;10\n09/12/18;10:00;364;864;42,13;69;15\n09/12/18;10:30;469;864;54,28;72;15\n09/12/18;11:00;492;864;56,94;77;33\n09/12/18;11:30;572;864;66,20;102;39\n09/12/18;12:00;589;864;68,17;79;47\n09/12/18;12:30;635;864;73,50;92;62\n09/12/18;13:00;656;864;75,93;76;49\n09/12/18;13:30;681;864;78,82;71;52\n09/12/18;14:00;699;864;80,90;84;53\n09/12/18;14:30;753;864;87,15;98;56\n09/12/18;15:00;763;864;88,31;91;92\n09/12/18;15:30;727;864;84,14;75;101\n09/12/18;16:00;731;864;84,61;94;93\n09/12/18;16:30;720;864;83,33;93;101\n09/12/18;17:00;703;864;81,37;80;87\n09/12/18;17:30;701;864;81,13;78;88\n09/12/18;18:00;662;864;76,62;0;74\n09/12/18;18:30;584;864;67,59;0;43\n09/12/18;19:00;555;864;64,24;0;54\n09/12/18;19:30;485;864;56,13;0;44\n09/12/18;20:00;476;864;55,09;0;28\n09/12/18;20:30;424;864;49,07;0;36\n09/12/18;21:00;414;864;47,92;0;15\n09/12/18;21:30;383;864;44,33;0;25\n09/12/18;22:00;363;864;42,01;0;18\n09/12/18;22:30;350;864;40,51;0;13\n09/12/18;23:00;349;864;40,39;0;17\n09/12/18;23:30;334;864;38,66;8;7\n10/12/18;00:00;334;864;38,66;4;4\n10/12/18;00:30;334;864;38,66;1;1\n10/12/18;01:00;333;864;38,54;0;1\n10/12/18;01:30;333;864;38,54;0;0\n10/12/18;02:00;333;864;38,54;0;0\n10/12/18;02:30;332;864;38,43;0;1\n10/12/18;03:00;332;864;38,43;0;0\n10/12/18;03:30;332;864;38,43;0;0\n10/12/18;04:00;332;864;38,43;0;0\n10/12/18;04:30;331;864;38,31;0;1\n10/12/18;05:00;331;864;38,31;1;1\n10/12/18;05:30;331;864;38,31;2;1\n10/12/18;06:00;332;864;38,43;1;2\n10/12/18;06:30;331;864;38,31;9;7\n10/12/18;07:00;335;864;38,77;20;12\n10/12/18;07:30;350;864;40,51;39;9\n10/12/18;08:00;410;864;47,45;58;19\n10/12/18;08:30;471;864;54,51;71;7\n10/12/18;09:00;523;864;60,53;103;17\n10/12/18;09:30;640;864;74,07;100;14\n10/12/18;10:00;675;864;78,13;75;26\n10/12/18;10:30;695;864;80,44;41;39\n10/12/18;11:00;694;864;80,32;42;42\n10/12/18;11:30;695;864;80,44;34;32\n10/12/18;12:00;710;864;82,18;96;47\n10/12/18;12:30;770;864;89,12;68;44\n10/12/18;13:00;770;864;89,12;54;40\n10/12/18;13:30;788;864;91,20;65;62\n10/12/18;14:00;789;864;91,32;53;52\n10/12/18;14:30;786;864;90,97;68;71\n10/12/18;15:00;786;864;90,97;62;68\n10/12/18;15:30;785;864;90,86;82;78\n10/12/18;16:00;770;864;89,12;68;86\n10/12/18;16:30;750;864;86,81;80;92\n10/12/18;17:00;739;864;85,53;61;89\n10/12/18;17:30;687;864;79,51;71;103\n10/12/18;18:00;673;864;77,89;49;122\n10/12/18;18:30;546;864;63,19;40;109\n10/12/18;19:00;502;864;58,10;31;110\n10/12/18;19:30;439;864;50,81;29;60\n10/12/18;20:00;428;864;49,54;18;33\n10/12/18;20:30;417;864;48,26;14;18\n10/12/18;21:00;414;864;47,92;4;7\n10/12/18;21:30;397;864;45,95;2;20\n10/12/18;22:00;389;864;45,02;4;21\n10/12/18;22:30;368;864;42,59;5;16\n10/12/18;23:00;365;864;42,25;2;7\n10/12/18;23:30;359;864;41,55;2;7\n11/12/18;00:00;353;864;40,86;0;6\n11/12/18;00:30;352;864;40,74;0;0\n11/12/18;01:00;352;864;40,74;0;0\n11/12/18;01:30;352;864;40,74;0;0\n11/12/18;02:00;353;864;40,86;1;0\n11/12/18;02:30;353;864;40,86;0;0\n11/12/18;03:00;353;864;40,86;0;0\n11/12/18;03:30;353;864;40,86;0;0\n11/12/18;04:00;353;864;40,86;0;0\n11/12/18;04:30;352;864;40,74;1;1\n11/12/18;05:00;354;864;40,97;1;1\n11/12/18;05:30;354;864;40,97;1;0\n11/12/18;06:00;354;864;40,97;3;0\n11/12/18;06:30;368;864;42,59;15;4\n11/12/18;07:00;374;864;43,29;21;7\n11/12/18;07:30;386;864;44,68;24;14\n11/12/18;08:00;467;864;54,05;65;22\n11/12/18;08:30;520;864;60,19;100;12\n11/12/18;09:00;549;864;63,54;101;28\n11/12/18;09:30;698;864;80,79;127;21\n11/12/18;10:00;710;864;82,18;95;26\n11/12/18;10:30;767;864;88,77;46;51\n11/12/18;11:00;766;864;88,66;72;51\n11/12/18;11:30;780;864;90,28;60;60\n11/12/18;12:00;779;864;90,16;55;54\n11/12/18;12:30;778;864;90,05;35;38\n11/12/18;13:00;778;864;90,05;50;51\n11/12/18;13:30;778;864;90,05;63;62\n11/12/18;14:00;778;864;90,05;53;54\n11/12/18;14:30;778;864;90,05;61;59\n11/12/18;15:00;776;864;89,81;57;61\n11/12/18;15:30;775;864;89,70;60;59\n11/12/18;16:00;771;864;89,24;69;81\n11/12/18;16:30;747;864;86,46;60;74\n11/12/18;17:00;727;864;84,14;72;93\n11/12/18;17:30;681;864;78,82;65;109\n11/12/18;18:00;668;864;77,31;62;100\n11/12/18;18:30;592;864;68,52;66;117\n11/12/18;19:00;587;864;67,94;62;129\n11/12/18;19:30;531;864;61,46;71;63\n11/12/18;20:00;542;864;62,73;40;30\n11/12/18;20:30;540;864;62,50;21;26\n11/12/18;21:00;540;864;62,50;14;28\n11/12/18;21:30;494;864;57,18;3;34\n11/12/18;22:00;491;864;56,83;4;27\n11/12/18;22:30;440;864;50,93;6;39\n11/12/18;23:00;436;864;50,46;5;43\n11/12/18;23:30;382;864;44,21;0;18\n12/12/18;00:00;377;864;43,63;0;9\n12/12/18;00:30;369;864;42,71;0;4\n12/12/18;01:00;367;864;42,48;1;4\n12/12/18;01:30;361;864;41,78;0;4\n12/12/18;02:00;361;864;41,78;0;1\n12/12/18;02:30;361;864;41,78;1;0\n12/12/18;03:00;361;864;41,78;0;0\n12/12/18;03:30;361;864;41,78;0;0\n12/12/18;04:00;361;864;41,78;0;0\n12/12/18;04:30;360;864;41,67;0;1\n12/12/18;05:00;360;864;41,67;0;0\n12/12/18;05:30;365;864;42,25;7;1\n12/12/18;06:00;366;864;42,36;4;2\n12/12/18;06:30;370;864;42,82;9;7\n12/12/18;07:00;373;864;43,17;18;11\n12/12/18;07:30;396;864;45,83;36;17\n12/12/18;08:00;408;864;47,22;51;31\n12/12/18;08:30;422;864;48,84;94;20\n12/12/18;09:00;531;864;61,46;98;13\n12/12/18;09:30;663;864;76,74;103;18\n12/12/18;10:00;681;864;78,82;129;47\n12/12/18;10:30;774;864;89,58;86;59\n12/12/18;11:00;777;864;89,93;64;52\n12/12/18;11:30;789;864;91,32;75;73\n12/12/18;12:00;785;864;90,86;72;70\n12/12/18;12:30;788;864;91,20;60;59\n12/12/18;13:00;790;864;91,44;54;51\n12/12/18;13:30;790;864;91,44;64;65\n12/12/18;14:00;788;864;91,20;70;72\n12/12/18;14:30;788;864;91,20;84;84\n12/12/18;15:00;787;864;91,09;67;64\n12/12/18;15:30;791;864;91,55;61;61\n12/12/18;16:00;789;864;91,32;83;93\n12/12/18;16:30;765;864;88,54;90;95\n12/12/18;17:00;764;864;88,43;74;99\n12/12/18;17:30;713;864;82,52;69;94\n12/12/18;18:00;709;864;82,06;77;100\n12/12/18;18:30;684;864;79,17;74;106\n12/12/18;19:00;619;864;71,64;58;131\n12/12/18;19:30;576;864;66,67;71;73\n12/12/18;20:00;579;864;67,01;55;49\n12/12/18;20:30;592;864;68,52;37;33\n12/12/18;21:00;586;864;67,82;11;30\n12/12/18;21:30;554;864;64,12;12;30\n12/12/18;22:00;538;864;62,27;4;31\n12/12/18;22:30;489;864;56,60;4;41\n12/12/18;23:00;456;864;52,78;4;57\n12/12/18;23:30;409;864;47,34;3;29\n13/12/18;00:00;398;864;46,06;1;18\n13/12/18;00:30;383;864;44,33;0;9\n13/12/18;01:00;383;864;44,33;0;2\n13/12/18;01:30;379;864;43,87;0;2\n13/12/18;02:00;379;864;43,87;0;2\n13/12/18;02:30;377;864;43,63;0;0\n13/12/18;03:00;377;864;43,63;0;0\n13/12/18;03:30;377;864;43,63;0;0\n13/12/18;04:00;378;864;43,75;1;0\n13/12/18;04:30;377;864;43,63;0;0\n13/12/18;05:00;377;864;43,63;0;0\n13/12/18;05:30;379;864;43,87;2;0\n13/12/18;06:00;377;864;43,63;7;2\n13/12/18;06:30;380;864;43,98;7;6\n13/12/18;07:00;393;864;45,49;28;16\n13/12/18;07:30;406;864;46,99;29;22\n13/12/18;08:00;419;864;48,50;71;19\n13/12/18;08:30;520;864;60,19;88;21\n13/12/18;09:00;547;864;63,31;118;16\n13/12/18;09:30;696;864;80,56;102;24\n13/12/18;10:00;740;864;85,65;107;35\n13/12/18;10:30;786;864;90,97;56;44\n13/12/18;11:00;790;864;91,44;58;55\n13/12/18;11:30;789;864;91,32;53;52\n13/12/18;12:00;788;864;91,20;64;63\n13/12/18;12:30;789;864;91,32;41;42\n13/12/18;13:00;789;864;91,32;53;54\n13/12/18;13:30;788;864;91,20;56;55\n13/12/18;14:00;790;864;91,44;54;53\n13/12/18;14:30;790;864;91,44;69;70\n13/12/18;15:00;788;864;91,20;75;76\n13/12/18;15:30;785;864;90,86;70;71\n13/12/18;16:00;781;864;90,39;76;87\n13/12/18;16:30;765;864;88,54;78;89\n13/12/18;17:00;742;864;85,88;68;88\n13/12/18;17:30;717;864;82,99;63;89\n13/12/18;18:00;717;864;82,99;80;108\n13/12/18;18:30;632;864;73,15;60;117\n13/12/18;19:00;597;864;69,10;77;112\n13/12/18;19:30;604;864;69,91;83;68\n13/12/18;20:00;654;864;75,69;96;51\n13/12/18;20:30;657;864;76,04;28;29\n13/12/18;21:00;655;864;75,81;31;31\n13/12/18;21:30;637;864;73,73;11;29\n13/12/18;22:00;613;864;70,95;6;50\n13/12/18;22:30;529;864;61,23;4;67\n13/12/18;23:00;505;864;58,45;4;55\n13/12/18;23:30;434;864;50,23;3;46\n14/12/18;00:00;423;864;48,96;3;31\n14/12/18;00:30;393;864;45,49;3;15\n14/12/18;01:00;388;864;44,91;3;9\n14/12/18;01:30;379;864;43,87;0;7\n14/12/18;02:00;378;864;43,75;1;4\n14/12/18;02:30;376;864;43,52;1;1\n14/12/18;03:00;376;864;43,52;0;1\n14/12/18;03:30;375;864;43,40;0;0\n14/12/18;04:00;374;864;43,29;0;1\n14/12/18;04:30;374;864;43,29;0;0\n14/12/18;05:00;374;864;43,29;0;1\n14/12/18;05:30;374;864;43,29;2;1\n14/12/18;06:00;375;864;43,40;3;1\n14/12/18;06:30;386;864;44,68;16;5\n14/12/18;07:00;384;864;44,44;14;14\n14/12/18;07:30;401;864;46,41;35;19\n14/12/18;08:00;415;864;48,03;63;26\n14/12/18;08:30;458;864;53,01;67;19\n14/12/18;09:00;520;864;60,19;94;15\n14/12/18;09:30;674;864;78,01;133;28\n14/12/18;10:00;721;864;83,45;119;36\n14/12/18;10:30;783;864;90,63;64;37\n14/12/18;11:00;783;864;90,63;54;53\n14/12/18;11:30;781;864;90,39;74;71\n14/12/18;12:00;783;864;90,63;69;68\n14/12/18;12:30;783;864;90,63;50;52\n14/12/18;13:00;782;864;90,51;45;47\n14/12/18;13:30;783;864;90,63;64;65\n14/12/18;14:00;783;864;90,63;69;70\n14/12/18;14:30;786;864;90,97;83;78\n14/12/18;15:00;779;864;90,16;69;75\n14/12/18;15:30;781;864;90,39;87;91\n14/12/18;16:00;776;864;89,81;84;91\n14/12/18;16:30;754;864;87,27;78;89\n14/12/18;17:00;758;864;87,73;90;105\n14/12/18;17:30;708;864;81,94;94;130\n14/12/18;18:00;698;864;80,79;86;99\n14/12/18;18:30;639;864;73,96;58;115\n14/12/18;19:00;608;864;70,37;58;135\n14/12/18;19:30;565;864;65,39;67;55\n14/12/18;20:00;577;864;66,78;72;48\n14/12/18;20:30;600;864;69,44;40;25\n14/12/18;21:00;604;864;69,91;24;24\n14/12/18;21:30;588;864;68,06;14;27\n14/12/18;22:00;581;864;67,25;12;34\n14/12/18;22:30;542;864;62,73;11;37\n14/12/18;23:00;527;864;61,00;12;53\n14/12/18;23:30;460;864;53,24;7;47\n15/12/18;00:00;450;864;52,08;4;30\n15/12/18;00:30;406;864;46,99;5;33\n15/12/18;01:00;402;864;46,53;1;13\n15/12/18;01:30;382;864;44,21;0;11\n15/12/18;02:00;376;864;43,52;1;9\n15/12/18;02:30;367;864;42,48;0;7\n15/12/18;03:00;367;864;42,48;0;2\n15/12/18;03:30;365;864;42,25;0;0\n15/12/18;04:00;365;864;42,25;0;1\n15/12/18;04:30;363;864;42,01;1;2\n15/12/18;05:00;363;864;42,01;0;0\n15/12/18;05:30;364;864;42,13;2;1\n15/12/18;06:00;364;864;42,13;0;2\n15/12/18;06:30;364;864;42,13;2;0\n15/12/18;07:00;364;864;42,13;6;3\n15/12/18;07:30;368;864;42,59;4;3\n15/12/18;08:00;370;864;42,82;5;4\n15/12/18;08:30;384;864;44,44;23;8\n15/12/18;09:00;391;864;45,25;56;10\n15/12/18;09:30;523;864;60,53;114;15\n15/12/18;10:00;583;864;67,48;127;16\n15/12/18;10:30;694;864;80,32;116;59\n15/12/18;11:00;732;864;84,72;123;63\n15/12/18;11:30;783;864;90,63;100;71\n15/12/18;12:00;787;864;91,09;72;71\n15/12/18;12:30;779;864;90,16;79;79\n15/12/18;13:00;786;864;90,97;54;55\n15/12/18;13:30;784;864;90,74;47;47\n15/12/18;14:00;780;864;90,28;59;60\n15/12/18;14:30;779;864;90,16;75;77\n15/12/18;15:00;772;864;89,35;89;87\n15/12/18;15:30;776;864;89,81;68;70\n15/12/18;16:00;774;864;89,58;83;81\n15/12/18;16:30;765;864;88,54;99;109\n15/12/18;17:00;777;864;89,93;106;102\n15/12/18;17:30;743;864;86,00;94;124\n15/12/18;18:00;723;864;83,68;81;109\n15/12/18;18:30;661;864;76,50;58;115\n15/12/18;19:00;631;864;73,03;59;127\n15/12/18;19:30;569;864;65,86;62;82\n15/12/18;20:00;574;864;66,44;44;37\n15/12/18;20:30;585;864;67,71;46;34\n15/12/18;21:00;570;864;65,97;19;41\n15/12/18;21:30;545;864;63,08;13;34\n15/12/18;22:00;542;864;62,73;12;30\n15/12/18;22:30;507;864;58,68;11;30\n15/12/18;23:00;491;864;56,83;8;38\n15/12/18;23:30;439;864;50,81;5;43\n16/12/18;00:00;428;864;49,54;4;33\n16/12/18;00:30;400;864;46,30;2;12\n16/12/18;01:00;394;864;45,60;2;13\n16/12/18;01:30;372;864;43,06;1;15\n16/12/18;02:00;369;864;42,71;1;6\n16/12/18;02:30;367;864;42,48;0;0\n16/12/18;03:00;366;864;42,36;0;1\n16/12/18;03:30;365;864;42,25;0;1\n16/12/18;04:00;362;864;41,90;0;3\n16/12/18;04:30;359;864;41,55;0;3\n16/12/18;05:00;359;864;41,55;0;1\n16/12/18;05:30;357;864;41,32;0;1\n16/12/18;06:00;357;864;41,32;0;0\n16/12/18;06:30;356;864;41,20;0;1\n16/12/18;07:00;356;864;41,20;0;0\n16/12/18;07:30;354;864;40,97;2;4\n16/12/18;08:00;350;864;40,51;1;5\n16/12/18;08:30;346;864;40,05;2;6\n16/12/18;09:00;352;864;40,74;15;1\n16/12/18;09:30;400;864;46,30;60;14\n16/12/18;10:00;501;864;57,99;112;16\n16/12/18;10:30;575;864;66,55;116;40\n16/12/18;11:00;655;864;75,81;120;37\n16/12/18;11:30;703;864;81,37;110;63\n16/12/18;12:00;724;864;83,80;107;74\n16/12/18;12:30;756;864;87,50;87;69\n16/12/18;13:00;761;864;88,08;81;63\n16/12/18;13:30;793;864;91,78;77;58\n16/12/18;14:00;791;864;91,55;57;68\n16/12/18;14:30;784;864;90,74;90;86\n16/12/18;15:00;781;864;90,39;87;86\n16/12/18;15:30;785;864;90,86;96;99\n16/12/18;16:00;774;864;89,58;101;111\n16/12/18;16:30;776;864;89,81;99;96\n16/12/18;17:00;727;864;84,14;75;139\n16/12/18;17:30;648;864;75,00;57;123\n16/12/18;18:00;587;864;67,94;33;150\n16/12/18;18:30;443;864;51,27;18;105\n16/12/18;19:00;405;864;46,88;24;74\n16/12/18;19:30;363;864;42,01;15;44\n16/12/18;20:00;355;864;41,09;17;24\n16/12/18;20:30;347;864;40,16;6;15\n16/12/18;21:00;347;864;40,16;8;10\n16/12/18;21:30;338;864;39,12;2;9\n16/12/18;22:00;336;864;38,89;4;12\n16/12/18;22:30;325;864;37,62;4;9\n16/12/18;23:00;324;864;37,50;2;8\n16/12/18;23:30;320;864;37,04;2;1\n17/12/18;00:00;319;864;36,92;3;3\n17/12/18;00:30;317;864;36,69;0;4\n17/12/18;01:00;316;864;36,57;0;2\n17/12/18;01:30;302;864;34,95;0;1\n17/12/18;02:00;302;864;34,95;0;0\n17/12/18;02:30;302;864;34,95;0;0\n17/12/18;03:00;302;864;34,95;0;0\n17/12/18;03:30;302;864;34,95;0;0\n17/12/18;04:00;302;864;34,95;0;0\n17/12/18;04:30;302;864;34,95;0;0\n17/12/18;05:00;302;864;34,95;0;0\n17/12/18;05:30;305;864;35,30;5;1\n17/12/18;06:00;308;864;35,65;2;3\n17/12/18;06:30;307;864;35,53;12;9\n17/12/18;07:00;314;864;36,34;23;6\n17/12/18;07:30;339;864;39,24;39;22\n17/12/18;08:00;346;864;40,05;62;28\n17/12/18;08:30;401;864;46,41;84;18\n17/12/18;09:00;459;864;53,13;100;12\n17/12/18;09:30;588;864;68,06;112;19\n17/12/18;10:00;644;864;74,54;107;25\n17/12/18;10:30;747;864;86,46;79;26\n17/12/18;11:00;762;864;88,19;57;51\n17/12/18;11:30;761;864;88,08;73;74\n17/12/18;12:00;764;864;88,43;70;68\n17/12/18;12:30;764;864;88,43;39;37\n17/12/18;13:00;764;864;88,43;38;42\n17/12/18;13:30;762;864;88,19;63;62\n17/12/18;14:00;761;864;88,08;61;58\n17/12/18;14:30;762;864;88,19;55;58\n17/12/18;15:00;763;864;88,31;78;81\n17/12/18;15:30;764;864;88,43;74;69\n17/12/18;16:00;758;864;87,73;77;76\n17/12/18;16:30;752;864;87,04;84;109\n17/12/18;17:00;728;864;84,26;64;113\n17/12/18;17:30;656;864;75,93;62;104\n17/12/18;18:00;642;864;74,31;76;104\n17/12/18;18:30;580;864;67,13;54;103\n17/12/18;19:00;561;864;64,93;49;123\n17/12/18;19:30;479;864;55,44;51;63\n17/12/18;20:00;485;864;56,13;23;33\n17/12/18;20:30;468;864;54,17;11;25\n17/12/18;21:00;457;864;52,89;13;28\n17/12/18;21:30;440;864;50,93;2;24\n17/12/18;22:00;418;864;48,38;4;27\n17/12/18;22:30;379;864;43,87;2;29\n17/12/18;23:00;369;864;42,71;2;20\n17/12/18;23:30;344;864;39,81;2;14\n18/12/18;00:00;340;864;39,35;1;5\n18/12/18;00:30;339;864;39,24;0;0\n18/12/18;01:00;339;864;39,24;0;1\n18/12/18;01:30;337;864;39,00;0;3\n18/12/18;02:00;336;864;38,89;0;0\n18/12/18;02:30;336;864;38,89;0;0\n18/12/18;03:00;336;864;38,89;0;0\n18/12/18;03:30;336;864;38,89;0;0\n18/12/18;04:00;336;864;38,89;0;1\n18/12/18;04:30;335;864;38,77;0;0\n18/12/18;05:00;335;864;38,77;0;0\n18/12/18;05:30;337;864;39,00;4;1\n18/12/18;06:00;341;864;39,47;5;2\n18/12/18;06:30;343;864;39,70;12;7\n18/12/18;07:00;359;864;41,55;19;8\n18/12/18;07:30;367;864;42,48;35;14\n18/12/18;08:00;397;864;45,95;60;26\n18/12/18;08:30;453;864;52,43;83;18\n18/12/18;09:00;543;864;62,85;122;24\n18/12/18;09:30;659;864;76,27;121;22\n18/12/18;10:00;693;864;80,21;124;32\n18/12/18;10:30;764;864;88,43;42;41\n18/12/18;11:00;764;864;88,43;52;52\n18/12/18;11:30;763;864;88,31;74;76\n18/12/18;12:00;762;864;88,19;72;76\n18/12/18;12:30;766;864;88,66;52;44\n18/12/18;13:00;767;864;88,77;48;48\n18/12/18;13:30;766;864;88,66;55;57\n18/12/18;14:00;766;864;88,66;68;70\n18/12/18;14:30;763;864;88,31;66;66\n18/12/18;15:00;763;864;88,31;87;88\n18/12/18;15:30;765;864;88,54;63;61\n18/12/18;16:00;761;864;88,08;99;103\n18/12/18;16:30;762;864;88,19;73;80\n18/12/18;17:00;746;864;86,34;75;95\n18/12/18;17:30;727;864;84,14;104;101\n18/12/18;18:00;725;864;83,91;94;126\n18/12/18;18:30;691;864;79,98;64;111\n18/12/18;19:00;652;864;75,46;104;122\n18/12/18;19:30;639;864;73,96;105;100\n18/12/18;20:00;666;864;77,08;67;42\n18/12/18;20:30;666;864;77,08;29;36\n18/12/18;21:00;652;864;75,46;7;32\n18/12/18;21:30;609;864;70,49;7;33\n18/12/18;22:00;593;864;68,63;2;59\n18/12/18;22:30;535;864;61,92;6;68\n18/12/18;23:00;472;864;54,63;1;54\n18/12/18;23:30;411;864;47,57;4;36\n19/12/18;00:00;400;864;46,30;1;12\n19/12/18;00:30;377;864;43,63;1;14\n19/12/18;01:00;377;864;43,63;0;4\n19/12/18;01:30;371;864;42,94;0;2\n19/12/18;02:00;371;864;42,94;0;2\n19/12/18;02:30;368;864;42,59;0;4\n19/12/18;03:00;364;864;42,13;0;2\n19/12/18;03:30;363;864;42,01;0;0\n19/12/18;04:00;363;864;42,01;0;0\n19/12/18;04:30;362;864;41,90;1;1\n19/12/18;05:00;361;864;41,78;1;0\n19/12/18;05:30;366;864;42,36;7;0\n19/12/18;06:00;370;864;42,82;6;3\n19/12/18;06:30;371;864;42,94;10;8\n19/12/18;07:00;383;864;44,33;21;15\n19/12/18;07:30;381;864;44,10;30;20\n19/12/18;08:00;391;864;45,25;63;25\n19/12/18;08:30;453;864;52,43;78;25\n19/12/18;09:00;501;864;57,99;104;24\n19/12/18;09:30;623;864;72,11;114;22\n19/12/18;10:00;674;864;78,01;66;32\n19/12/18;10:30;692;864;80,09;54;56\n19/12/18;11:00;690;864;79,86;56;55\n19/12/18;11:30;688;864;79,63;45;48\n19/12/18;12:00;688;864;79,63;61;60\n19/12/18;12:30;690;864;79,86;37;36\n19/12/18;13:00;690;864;79,86;36;35\n19/12/18;13:30;691;864;79,98;47;47\n19/12/18;14:00;690;864;79,86;47;49\n19/12/18;14:30;691;864;79,98;47;46\n19/12/18;15:00;690;864;79,86;60;63\n19/12/18;15:30;687;864;79,51;81;67\n19/12/18;16:00;713;864;82,52;115;75\n19/12/18;16:30;746;864;86,34;87;85\n19/12/18;17:00;744;864;86,11;81;79\n19/12/18;17:30;726;864;84,03;76;99\n19/12/18;18:00;709;864;82,06;91;131\n19/12/18;18:30;639;864;73,96;62;129\n19/12/18;19:00;612;864;70,83;66;138\n19/12/18;19:30;525;864;60,76;81;76\n19/12/18;20:00;551;864;63,77;69;39\n19/12/18;20:30;583;864;67,48;38;25\n19/12/18;21:00;580;864;67,13;14;19\n19/12/18;21:30;559;864;64,70;9;36\n19/12/18;22:00;542;864;62,73;4;42\n19/12/18;22:30;486;864;56,25;4;43\n19/12/18;23:00;461;864;53,36;0;45\n19/12/18;23:30;396;864;45,83;4;51\n20/12/18;00:00;382;864;44,21;2;16\n20/12/18;00:30;358;864;41,44;2;10\n20/12/18;01:00;358;864;41,44;0;12\n20/12/18;01:30;346;864;40,05;0;1\n20/12/18;02:00;346;864;40,05;0;0\n20/12/18;02:30;344;864;39,81;0;2\n20/12/18;03:00;344;864;39,81;0;1\n20/12/18;03:30;343;864;39,70;0;0\n20/12/18;04:00;343;864;39,70;0;0\n20/12/18;04:30;349;864;40,39;0;0\n20/12/18;05:00;349;864;40,39;1;0\n20/12/18;05:30;351;864;40,63;4;0\n20/12/18;06:00;355;864;41,09;4;3\n20/12/18;06:30;360;864;41,67;13;5\n20/12/18;07:00;365;864;42,25;18;4\n20/12/18;07:30;376;864;43,52;25;23\n20/12/18;08:00;389;864;45,02;58;27\n20/12/18;08:30;456;864;52,78;78;13\n20/12/18;09:00;493;864;57,06;107;19\n20/12/18;09:30;639;864;73,96;129;25\n20/12/18;10:00;692;864;80,09;121;33\n20/12/18;10:30;755;864;87,38;49;50\n20/12/18;11:00;754;864;87,27;52;50\n20/12/18;11:30;756;864;87,50;50;44\n20/12/18;12:00;764;864;88,43;65;63\n20/12/18;12:30;774;864;89,58;55;45\n20/12/18;13:00;777;864;89,93;36;37\n20/12/18;13:30;776;864;89,81;51;50\n20/12/18;14:00;775;864;89,70;77;70\n20/12/18;14:30;773;864;89,47;58;61\n20/12/18;15:00;776;864;89,81;51;51\n20/12/18;15:30;777;864;89,93;93;96\n20/12/18;16:00;779;864;90,16;79;74\n20/12/18;16:30;775;864;89,70;83;91\n20/12/18;17:00;778;864;90,05;98;92\n20/12/18;17:30;768;864;88,89;80;103\n20/12/18;18:00;746;864;86,34;75;108\n20/12/18;18:30;692;864;80,09;65;116\n20/12/18;19:00;649;864;75,12;80;149\n20/12/18;19:30;592;864;68,52;98;89\n20/12/18;20:00;613;864;70,95;88;65\n20/12/18;20:30;642;864;74,31;68;38\n20/12/18;21:00;664;864;76,85;34;28\n20/12/18;21:30;657;864;76,04;7;31\n20/12/18;22:00;630;864;72,92;8;37\n20/12/18;22:30;585;864;67,71;9;54\n20/12/18;23:00;560;864;64,81;3;51\n20/12/18;23:30;483;864;55,90;5;55\n21/12/18;00:00;456;864;52,78;4;43\n21/12/18;00:30;412;864;47,69;1;20\n21/12/18;01:00;406;864;46,99;0;15\n21/12/18;01:30;387;864;44,79;0;10\n21/12/18;02:00;382;864;44,21;0;3\n21/12/18;02:30;380;864;43,98;0;4\n21/12/18;03:00;376;864;43,52;0;5\n21/12/18;03:30;370;864;42,82;0;2\n21/12/18;04:00;370;864;42,82;0;3\n21/12/18;04:30;368;864;42,59;1;0\n21/12/18;05:00;369;864;42,71;2;5\n21/12/18;05:30;367;864;42,48;4;0\n21/12/18;06:00;369;864;42,71;3;2\n21/12/18;06:30;374;864;43,29;13;6\n21/12/18;07:00;379;864;43,87;16;11\n21/12/18;07:30;380;864;43,98;32;20\n21/12/18;08:00;398;864;46,06;57;21\n21/12/18;08:30;485;864;56,13;96;20\n21/12/18;09:00;527;864;61,00;103;29\n21/12/18;09:30;665;864;76,97;123;21\n21/12/18;10:00;704;864;81,48;117;40\n21/12/18;10:30;758;864;87,73;85;77\n21/12/18;11:00;765;864;88,54;73;72\n21/12/18;11:30;762;864;88,19;93;96\n21/12/18;12:00;767;864;88,77;85;74\n21/12/18;12:30;783;864;90,63;68;60\n21/12/18;13:00;785;864;90,86;59;62\n21/12/18;13:30;783;864;90,63;62;60\n21/12/18;14:00;782;864;90,51;75;76\n21/12/18;14:30;782;864;90,51;65;66\n21/12/18;15:00;781;864;90,39;70;77\n21/12/18;15:30;769;864;89,00;98;92\n21/12/18;16:00;779;864;90,16;104;108\n21/12/18;16:30;769;864;89,00;93;99\n21/12/18;17:00;766;864;88,66;98;131\n21/12/18;17:30;712;864;82,41;86;111\n21/12/18;18:00;695;864;80,44;80;124\n21/12/18;18:30;612;864;70,83;52;119\n21/12/18;19:00;592;864;68,52;41;134\n21/12/18;19:30;482;864;55,79;37;76\n21/12/18;20:00;469;864;54,28;69;38\n21/12/18;20:30;516;864;59,72;66;29\n21/12/18;21:00;532;864;61,57;27;32\n21/12/18;21:30;537;864;62,15;27;19\n21/12/18;22:00;537;864;62,15;12;36\n21/12/18;22:30;492;864;56,94;5;37\n21/12/18;23:00;470;864;54,40;8;26\n21/12/18;23:30;459;864;53,13;8;25\n22/12/18;00:00;446;864;51,62;5;29\n22/12/18;00:30;413;864;47,80;1;25\n22/12/18;01:00;398;864;46,06;1;13\n22/12/18;01:30;384;864;44,44;3;14\n22/12/18;02:00;375;864;43,40;0;8\n22/12/18;02:30;368;864;42,59;0;1\n22/12/18;03:00;368;864;42,59;0;6\n22/12/18;03:30;362;864;41,90;0;0\n22/12/18;04:00;362;864;41,90;0;1\n22/12/18;04:30;360;864;41,67;0;1\n22/12/18;05:00;360;864;41,67;1;0\n22/12/18;05:30;358;864;41,44;0;4\n22/12/18;06:00;357;864;41,32;1;2\n22/12/18;06:30;358;864;41,44;3;0\n22/12/18;07:00;359;864;41,55;1;2\n22/12/18;07:30;362;864;41,90;13;3\n22/12/18;08:00;370;864;42,82;11;7\n22/12/18;08:30;383;864;44,33;34;8\n22/12/18;09:00;401;864;46,41;79;12\n22/12/18;09:30;540;864;62,50;123;20\n22/12/18;10:00;575;864;66,55;126;39\n22/12/18;10:30;704;864;81,48;125;60\n22/12/18;11:00;726;864;84,03;117;84\n22/12/18;11:30;776;864;89,81;112;89\n22/12/18;12:00;773;864;89,47;109;114\n22/12/18;12:30;780;864;90,28;100;86\n22/12/18;13:00;787;864;91,09;76;74\n22/12/18;13:30;775;864;89,70;79;88\n22/12/18;14:00;788;864;91,20;76;70\n22/12/18;14:30;786;864;90,97;87;86\n22/12/18;15:00;785;864;90,86;65;64\n22/12/18;15:30;785;864;90,86;91;95\n22/12/18;16:00;787;864;91,09;96;92\n22/12/18;16:30;780;864;90,28;74;79\n22/12/18;17:00;781;864;90,39;97;107\n22/12/18;17:30;780;864;90,28;98;105\n22/12/18;18:00;736;864;85,19;66;110\n22/12/18;18:30;684;864;79,17;58;136\n22/12/18;19:00;636;864;73,61;40;131\n22/12/18;19:30;505;864;58,45;45;93\n22/12/18;20:00;502;864;58,10;62;36\n22/12/18;20:30;539;864;62,38;39;24\n22/12/18;21:00;542;864;62,73;26;18\n22/12/18;21:30;540;864;62,50;22;43\n22/12/18;22:00;528;864;61,11;8;34\n22/12/18;22:30;485;864;56,13;2;43\n22/12/18;23:00;460;864;53,24;2;32\n22/12/18;23:30;407;864;47,11;0;39\n23/12/18;00:00;390;864;45,14;5;22\n23/12/18;00:30;359;864;41,55;2;27\n23/12/18;01:00;350;864;40,51;3;6\n23/12/18;01:30;349;864;40,39;2;7\n23/12/18;02:00;342;864;39,58;0;5\n23/12/18;02:30;338;864;39,12;0;0\n23/12/18;03:00;339;864;39,24;3;2\n23/12/18;03:30;339;864;39,24;0;0\n23/12/18;04:00;339;864;39,24;1;1\n23/12/18;04:30;338;864;39,12;0;1\n23/12/18;05:00;338;864;39,12;0;0\n23/12/18;05:30;337;864;39,00;0;1\n23/12/18;06:00;336;864;38,89;1;1\n23/12/18;06:30;335;864;38,77;0;2\n23/12/18;07:00;334;864;38,66;1;2\n23/12/18;07:30;331;864;38,31;0;4\n23/12/18;08:00;326;864;37,73;3;6\n23/12/18;08:30;325;864;37,62;9;7\n23/12/18;09:00;328;864;37,96;18;7\n23/12/18;09:30;375;864;43,40;76;8\n23/12/18;10:00;414;864;47,92;107;20\n23/12/18;10:30;523;864;60,53;109;43\n23/12/18;11:00;567;864;65,63;112;54\n23/12/18;11:30;619;864;71,64;97;78\n23/12/18;12:00;637;864;73,73;111;87\n23/12/18;12:30;671;864;77,66;93;66\n23/12/18;13:00;684;864;79,17;93;63\n23/12/18;13:30;745;864;86,23;102;58\n23/12/18;14:00;764;864;88,43;95;76\n23/12/18;14:30;784;864;90,74;94;82\n23/12/18;15:00;791;864;91,55;84;83\n23/12/18;15:30;787;864;91,09;93;94\n23/12/18;16:00;792;864;91,67;100;100\n23/12/18;16:30;786;864;90,97;101;115\n23/12/18;17:00;771;864;89,24;103;118\n23/12/18;17:30;731;864;84,61;89;139\n23/12/18;18:00;698;864;80,79;35;142\n23/12/18;18:30;537;864;62,15;35;133\n23/12/18;19:00;489;864;56,60;21;106\n23/12/18;19:30;404;864;46,76;20;37\n23/12/18;20:00;395;864;45,72;15;25\n23/12/18;20:30;393;864;45,49;17;15\n23/12/18;21:00;386;864;44,68;6;28\n23/12/18;21:30;354;864;40,97;7;23\n23/12/18;22:00;348;864;40,28;3;21\n23/12/18;22:30;328;864;37,96;3;7\n23/12/18;23:00;326;864;37,73;2;7\n23/12/18;23:30;313;864;36,23;3;15\n24/12/18;00:00;312;864;36,11;4;2\n24/12/18;00:30;308;864;35,65;1;7\n24/12/18;01:00;308;864;35,65;1;1\n24/12/18;01:30;308;864;35,65;0;0\n24/12/18;02:00;308;864;35,65;1;1\n24/12/18;02:30;308;864;35,65;0;0\n24/12/18;03:00;308;864;35,65;0;0\n24/12/18;03:30;308;864;35,65;0;0\n24/12/18;04:00;308;864;35,65;0;1\n24/12/18;04:30;307;864;35,53;1;0\n24/12/18;05:00;308;864;35,65;0;0\n24/12/18;05:30;308;864;35,65;1;0\n24/12/18;06:00;309;864;35,76;2;3\n24/12/18;06:30;310;864;35,88;3;0\n24/12/18;07:00;312;864;36,11;5;1\n24/12/18;07:30;315;864;36,46;11;3\n24/12/18;08:00;324;864;37,50;29;5\n24/12/18;08:30;363;864;42,01;31;6\n24/12/18;09:00;375;864;43,40;61;9\n24/12/18;09:30;461;864;53,36;93;11\n24/12/18;10:00;554;864;64,12;120;31\n24/12/18;10:30;622;864;71,99;114;70\n24/12/18;11:00;641;864;74,19;113;75\n24/12/18;11:30;687;864;79,51;121;92\n24/12/18;12:00;705;864;81,60;112;104\n24/12/18;12:30;712;864;82,41;101;96\n24/12/18;13:00;719;864;83,22;93;78\n24/12/18;13:30;751;864;86,92;95;71\n24/12/18;14:00;753;864;87,15;105;93\n24/12/18;14:30;767;864;88,77;114;111\n24/12/18;15:00;759;864;87,85;110;131\n24/12/18;15:30;729;864;84,38;111;138\n24/12/18;16:00;630;864;72,92;100;147\n24/12/18;16:30;630;864;72,92;78;149\n24/12/18;17:00;594;864;68,75;45;142\n24/12/18;17:30;426;864;49,31;22;142\n24/12/18;18:00;375;864;43,40;16;94\n24/12/18;18:30;284;864;32,87;11;38\n24/12/18;19:00;266;864;30,79;4;15\n24/12/18;19:30;260;864;30,09;6;10\n24/12/18;20:00;260;864;30,09;4;6\n24/12/18;20:30;261;864;30,21;5;3\n24/12/18;21:00;260;864;30,09;5;0\n24/12/18;21:30;262;864;30,32;0;4\n24/12/18;22:00;261;864;30,21;2;3\n24/12/18;22:30;260;864;30,09;4;4\n24/12/18;23:00;260;864;30,09;4;8\n24/12/18;23:30;257;864;29,75;3;1\n25/12/18;00:00;258;864;29,86;5;2\n25/12/18;00:30;259;864;29,98;4;4\n25/12/18;01:00;261;864;30,21;4;1\n25/12/18;01:30;261;864;30,21;3;5\n25/12/18;02:00;263;864;30,44;3;4\n25/12/18;02:30;261;864;30,21;2;1\n25/12/18;03:00;262;864;30,32;0;0\n25/12/18;03:30;262;864;30,32;0;0\n25/12/18;04:00;262;864;30,32;0;0\n25/12/18;04:30;262;864;30,32;1;0\n25/12/18;05:00;263;864;30,44;0;0\n25/12/18;05:30;263;864;30,44;1;0\n25/12/18;06:00;264;864;30,56;0;0\n25/12/18;06:30;264;864;30,56;1;1\n25/12/18;07:00;264;864;30,56;2;2\n25/12/18;07:30;264;864;30,56;1;0\n25/12/18;08:00;265;864;30,67;0;1\n25/12/18;08:30;264;864;30,56;0;1\n25/12/18;09:00;263;864;30,44;1;5\n25/12/18;09:30;259;864;29,98;0;6\n25/12/18;10:00;253;864;29,28;0;12\n25/12/18;10:30;235;864;27,20;3;10\n25/12/18;11:00;233;864;26,97;6;5\n25/12/18;11:30;235;864;27,20;8;11\n25/12/18;12:00;232;864;26,85;5;9\n25/12/18;12:30;226;864;26,16;8;12\n25/12/18;13:00;226;864;26,16;6;3\n25/12/18;13:30;228;864;26,39;4;2\n25/12/18;14:00;229;864;26,50;7;4\n25/12/18;14:30;230;864;26,62;4;9\n25/12/18;15:00;227;864;26,27;7;5\n25/12/18;15:30;227;864;26,27;10;15\n25/12/18;16:00;222;864;25,69;16;10\n25/12/18;16:30;225;864;26,04;8;16\n25/12/18;17:00;223;864;25,81;11;11\n25/12/18;17:30;219;864;25,35;11;12\n25/12/18;18:00;219;864;25,35;6;4\n25/12/18;18:30;223;864;25,81;17;4\n25/12/18;19:00;233;864;26,97;13;3\n25/12/18;19:30;249;864;28,82;12;5\n25/12/18;20:00;259;864;29,98;11;1\n25/12/18;20:30;263;864;30,44;7;4\n25/12/18;21:00;261;864;30,21;0;4\n25/12/18;21:30;262;864;30,32;7;7\n25/12/18;22:00;260;864;30,09;1;1\n25/12/18;22:30;263;864;30,44;8;1\n25/12/18;23:00;267;864;30,90;5;3\n25/12/18;23:30;269;864;31,13;1;0\n26/12/18;00:00;270;864;31,25;3;1\n26/12/18;00:30;274;864;31,71;3;0\n26/12/18;01:00;275;864;31,83;0;2\n26/12/18;01:30;274;864;31,71;1;0\n26/12/18;02:00;274;864;31,71;0;0\n26/12/18;02:30;274;864;31,71;0;0\n26/12/18;03:00;274;864;31,71;0;0\n26/12/18;03:30;274;864;31,71;0;0\n26/12/18;04:00;274;864;31,71;1;0\n26/12/18;04:30;274;864;31,71;0;1\n26/12/18;05:00;274;864;31,71;0;0\n26/12/18;05:30;274;864;31,71;0;0\n26/12/18;06:00;274;864;31,71;2;1\n26/12/18;06:30;278;864;32,18;3;2\n26/12/18;07:00;277;864;32,06;8;5\n26/12/18;07:30;279;864;32,29;8;4\n26/12/18;08:00;286;864;33,10;15;4\n26/12/18;08:30;305;864;35,30;31;6\n26/12/18;09:00;324;864;37,50;46;8\n26/12/18;09:30;384;864;44,44;72;8\n26/12/18;10:00;429;864;49,65;83;21\n26/12/18;10:30;521;864;60,30;106;37\n26/12/18;11:00;560;864;64,81;107;46\n26/12/18;11:30;615;864;71,18;102;72\n26/12/18;12:00;653;864;75,58;103;76\n26/12/18;12:30;705;864;81,60;113;55\n26/12/18;13:00;733;864;84,84;101;51\n26/12/18;13:30;780;864;90,28;83;75\n26/12/18;14:00;783;864;90,63;72;75\n26/12/18;14:30;783;864;90,63;89;97\n26/12/18;15:00;778;864;90,05;99;88\n26/12/18;15:30;776;864;89,81;108;108\n26/12/18;16:00;782;864;90,51;92;98\n26/12/18;16:30;771;864;89,24;106;112\n26/12/18;17:00;768;864;88,89;113;127\n26/12/18;17:30;752;864;87,04;96;114\n26/12/18;18:00;737;864;85,30;90;151\n26/12/18;18:30;604;864;69,91;49;141\n26/12/18;19:00;582;864;67,36;34;125\n26/12/18;19:30;458;864;53,01;38;79\n26/12/18;20:00;453;864;52,43;27;27\n26/12/18;20:30;453;864;52,43;30;23\n26/12/18;21:00;457;864;52,89;7;27\n26/12/18;21:30;428;864;49,54;10;22\n26/12/18;22:00;423;864;48,96;1;29\n26/12/18;22:30;390;864;45,14;7;23\n26/12/18;23:00;381;864;44,10;3;23\n26/12/18;23:30;352;864;40,74;1;15\n27/12/18;00:00;347;864;40,16;0;7\n27/12/18;00:30;334;864;38,66;0;7\n27/12/18;01:00;331;864;38,31;0;8\n27/12/18;01:30;323;864;37,38;0;2\n27/12/18;02:00;323;864;37,38;0;0\n27/12/18;02:30;323;864;37,38;0;0\n27/12/18;03:00;323;864;37,38;0;0\n27/12/18;03:30;323;864;37,38;0;0\n27/12/18;04:00;323;864;37,38;0;0\n27/12/18;04:30;323;864;37,38;0;0\n27/12/18;05:00;323;864;37,38;1;0\n27/12/18;05:30;324;864;37,50;0;0\n27/12/18;06:00;323;864;37,38;3;4\n27/12/18;06:30;322;864;37,27;6;3\n27/12/18;07:00;326;864;37,73;7;3\n27/12/18;07:30;333;864;38,54;18;4\n27/12/18;08:00;345;864;39,93;22;11\n27/12/18;08:30;378;864;43,75;38;7\n27/12/18;09:00;388;864;44,91;55;10\n27/12/18;09:30;464;864;53,70;80;21\n27/12/18;10:00;494;864;57,18;109;28\n27/12/18;10:30;610;864;70,60;108;47\n27/12/18;11:00;639;864;73,96;114;66\n27/12/18;11:30;708;864;81,94;114;74\n27/12/18;12:00;724;864;83,80;113;66\n27/12/18;12:30;782;864;90,51;81;64\n27/12/18;13:00;784;864;90,74;56;57\n27/12/18;13:30;786;864;90,97;72;67\n27/12/18;14:00;791;864;91,55;67;73\n27/12/18;14:30;788;864;91,20;80;72\n27/12/18;15:00;791;864;91,55;79;81\n27/12/18;15:30;786;864;90,97;83;83\n27/12/18;16:00;789;864;91,32;104;106\n27/12/18;16:30;790;864;91,44;101;105\n27/12/18;17:00;782;864;90,51;110;113\n27/12/18;17:30;756;864;87,50;80;116\n27/12/18;18:00;741;864;85,76;86;135\n27/12/18;18:30;648;864;75,00;67;130\n27/12/18;19:00;626;864;72,45;41;126\n27/12/18;19:30;523;864;60,53;40;66\n27/12/18;20:00;513;864;59,38;43;40\n27/12/18;20:30;517;864;59,84;29;29\n27/12/18;21:00;517;864;59,84;15;32\n27/12/18;21:30;493;864;57,06;10;25\n27/12/18;22:00;487;864;56,37;6;42\n27/12/18;22:30;438;864;50,69;2;30\n27/12/18;23:00;423;864;48,96;4;34\n27/12/18;23:30;382;864;44,21;3;22\n28/12/18;00:00;373;864;43,17;2;15\n28/12/18;00:30;352;864;40,74;1;15\n28/12/18;01:00;348;864;40,28;0;3\n28/12/18;01:30;344;864;39,81;0;1\n28/12/18;02:00;344;864;39,81;0;1\n28/12/18;02:30;343;864;39,70;0;0\n28/12/18;03:00;343;864;39,70;0;0\n28/12/18;03:30;343;864;39,70;0;0\n28/12/18;04:00;343;864;39,70;0;1\n28/12/18;04:30;341;864;39,47;0;1\n28/12/18;05:00;341;864;39,47;0;0\n28/12/18;05:30;342;864;39,58;3;2\n28/12/18;06:00;342;864;39,58;1;2\n28/12/18;06:30;341;864;39,47;4;2\n28/12/18;07:00;343;864;39,70;7;3\n28/12/18;07:30;349;864;40,39;9;5\n28/12/18;08:00;352;864;40,74;16;7\n28/12/18;08:30;381;864;44,10;38;7\n28/12/18;09:00;395;864;45,72;53;11\n28/12/18;09:30;457;864;52,89;74;15\n28/12/18;10:00;501;864;57,99;97;20\n28/12/18;10:30;620;864;71,76;117;40\n28/12/18;11:00;649;864;75,12;109;57\n28/12/18;11:30;721;864;83,45;111;81\n28/12/18;12:00;732;864;84,72;122;69\n28/12/18;12:30;779;864;90,16;55;57\n28/12/18;13:00;777;864;89,93;63;60\n28/12/18;13:30;780;864;90,28;64;62\n28/12/18;14:00;784;864;90,74;76;75\n28/12/18;14:30;783;864;90,63;92;89\n28/12/18;15:00;786;864;90,97;70;69\n28/12/18;15:30;775;864;89,70;92;94\n28/12/18;16:00;783;864;90,63;101;101\n28/12/18;16:30;771;864;89,24;103;118\n28/12/18;17:00;762;864;88,19;99;109\n28/12/18;17:30;737;864;85,30;83;109\n28/12/18;18:00;730;864;84,49;70;121\n28/12/18;18:30;641;864;74,19;48;127\n28/12/18;19:00;596;864;68,98;34;126\n28/12/18;19:30;490;864;56,71;45;63\n28/12/18;20:00;490;864;56,71;58;19\n28/12/18;20:30;538;864;62,27;31;20\n28/12/18;21:00;538;864;62,27;17;26\n28/12/18;21:30;524;864;60,65;16;26\n28/12/18;22:00;516;864;59,72;6;41\n28/12/18;22:30;470;864;54,40;3;30\n28/12/18;23:00;455;864;52,66;3;28\n28/12/18;23:30;414;864;47,92;2;29\n29/12/18;00:00;405;864;46,88;1;24\n29/12/18;00:30;373;864;43,17;1;11\n29/12/18;01:00;373;864;43,17;0;18\n29/12/18;01:30;355;864;41,09;1;1\n29/12/18;02:00;355;864;41,09;0;5\n29/12/18;02:30;350;864;40,51;2;1\n29/12/18;03:00;350;864;40,51;0;1\n29/12/18;03:30;350;864;40,51;0;0\n29/12/18;04:00;349;864;40,39;1;1\n29/12/18;04:30;329;864;38,08;1;1\n29/12/18;05:00;329;864;38,08;0;1\n29/12/18;05:30;329;864;38,08;1;0\n29/12/18;06:00;330;864;38,19;2;3\n29/12/18;06:30;329;864;38,08;1;1\n29/12/18;07:00;329;864;38,08;4;0\n29/12/18;07:30;335;864;38,77;3;1\n29/12/18;08:00;336;864;38,89;6;4\n29/12/18;08:30;338;864;39,12;15;6\n29/12/18;09:00;353;864;40,86;34;9\n29/12/18;09:30;393;864;45,49;65;14\n29/12/18;10:00;429;864;49,65;101;19\n29/12/18;10:30;542;864;62,73;103;32\n29/12/18;11:00;576;864;66,67;102;51\n29/12/18;11:30;641;864;74,19;111;85\n29/12/18;12:00;651;864;75,35;111;87\n29/12/18;12:30;678;864;78,47;86;66\n29/12/18;13:00;697;864;80,67;89;61\n29/12/18;13:30;739;864;85,53;74;48\n29/12/18;14:00;741;864;85,76;76;74\n29/12/18;14:30;748;864;86,57;80;78\n29/12/18;15:00;748;864;86,57;94;94\n29/12/18;15:30;748;864;86,57;95;92\n29/12/18;16:00;750;864;86,81;67;65\n29/12/18;16:30;738;864;85,42;103;115\n29/12/18;17:00;738;864;85,42;100;114\n29/12/18;17:30;733;864;84,84;108;104\n29/12/18;18:00;721;864;83,45;72;117\n29/12/18;18:30;656;864;75,93;60;118\n29/12/18;19:00;610;864;70,60;43;154\n29/12/18;19:30;475;864;54,98;34;73\n29/12/18;20:00;476;864;55,09;44;38\n29/12/18;20:30;489;864;56,60;37;34\n29/12/18;21:00;487;864;56,37;23;36\n29/12/18;21:30;459;864;53,13;17;43\n29/12/18;22:00;442;864;51,16;3;29\n29/12/18;22:30;399;864;46,18;4;37\n29/12/18;23:00;384;864;44,44;4;22\n29/12/18;23:30;352;864;40,74;1;26\n30/12/18;00:00;340;864;39,35;5;29\n30/12/18;00:30;316;864;36,57;1;6\n30/12/18;01:00;309;864;35,76;0;5\n30/12/18;01:30;303;864;35,07;0;6\n30/12/18;02:00;303;864;35,07;0;4\n30/12/18;02:30;298;864;34,49;0;1\n30/12/18;03:00;298;864;34,49;0;3\n30/12/18;03:30;294;864;34,03;0;1\n30/12/18;04:00;293;864;33,91;0;1\n30/12/18;04:30;293;864;33,91;0;1\n30/12/18;05:00;292;864;33,80;1;1\n30/12/18;05:30;292;864;33,80;0;0\n30/12/18;06:00;292;864;33,80;0;1\n30/12/18;06:30;291;864;33,68;0;1\n30/12/18;07:00;290;864;33,56;1;1\n30/12/18;07:30;289;864;33,45;0;1\n30/12/18;08:00;289;864;33,45;0;2\n30/12/18;08:30;288;864;33,33;6;3\n30/12/18;09:00;288;864;33,33;5;7\n30/12/18;09:30;282;864;32,64;9;9\n30/12/18;10:00;288;864;33,33;12;11\n30/12/18;10:30;281;864;32,52;15;18\n30/12/18;11:00;285;864;32,99;24;22\n30/12/18;11:30;296;864;34,26;28;13\n30/12/18;12:00;299;864;34,61;35;27\n30/12/18;12:30;318;864;36,81;40;20\n30/12/18;13:00;330;864;38,19;50;8\n30/12/18;13:30;382;864;44,21;39;13\n30/12/18;14:00;396;864;45,83;36;30\n30/12/18;14:30;413;864;47,80;51;29\n30/12/18;15:00;425;864;49,19;70;43\n30/12/18;15:30;459;864;53,13;58;47\n30/12/18;16:00;464;864;53,70;53;54\n30/12/18;16:30;462;864;53,47;63;47\n30/12/18;17:00;477;864;55,21;44;72\n30/12/18;17:30;423;864;48,96;22;55\n30/12/18;18:00;414;864;47,92;23;66\n30/12/18;18:30;363;864;42,01;19;36\n30/12/18;19:00;354;864;40,97;21;35\n30/12/18;19:30;343;864;39,70;19;20\n30/12/18;20:00;340;864;39,35;18;11\n30/12/18;20:30;340;864;39,35;10;14\n30/12/18;21:00;340;864;39,35;6;9\n30/12/18;21:30;330;864;38,19;1;13\n30/12/18;22:00;325;864;37,62;3;20\n30/12/18;22:30;302;864;34,95;5;12\n30/12/18;23:00;303;864;35,07;3;5\n30/12/18;23:30;295;864;34,14;0;12\n31/12/18;00:00;288;864;33,33;0;3\n31/12/18;00:30;285;864;32,99;1;2\n31/12/18;01:00;284;864;32,87;1;0\n31/12/18;01:30;284;864;32,87;0;1\n31/12/18;02:00;283;864;32,75;0;1\n31/12/18;02:30;283;864;32,75;0;0\n31/12/18;03:00;283;864;32,75;0;0\n31/12/18;03:30;283;864;32,75;0;0\n31/12/18;04:00;283;864;32,75;0;0\n31/12/18;04:30;283;864;32,75;0;0\n31/12/18;05:00;283;864;32,75;1;1\n31/12/18;05:30;283;864;32,75;0;0\n31/12/18;06:00;283;864;32,75;2;0\n31/12/18;06:30;285;864;32,99;1;0\n31/12/18;07:00;286;864;33,10;5;4\n31/12/18;07:30;287;864;33,22;9;0\n31/12/18;08:00;298;864;34,49;11;3\n31/12/18;08:30;313;864;36,23;21;7\n31/12/18;09:00;321;864;37,15;30;7\n31/12/18;09:30;354;864;40,97;52;11\n31/12/18;10:00;385;864;44,56;79;18\n31/12/18;10:30;492;864;56,94;101;32\n31/12/18;11:00;516;864;59,72;86;38\n31/12/18;11:30;586;864;67,82;88;57\n31/12/18;12:00;589;864;68,17;107;75\n31/12/18;12:30;653;864;75,58;103;59\n31/12/18;13:00;668;864;77,31;80;50\n31/12/18;13:30;697;864;80,67;83;73\n31/12/18;14:00;703;864;81,37;86;80\n31/12/18;14:30;723;864;83,68;102;83\n31/12/18;15:00;730;864;84,49;107;105\n31/12/18;15:30;714;864;82,64;94;121\n31/12/18;16:00;692;864;80,09;107;128\n31/12/18;16:30;619;864;71,64;61;131\n31/12/18;17:00;589;864;68,17;53;124\n31/12/18;17:30;466;864;53,94;40;122\n31/12/18;18:00;421;864;48,73;28;88\n31/12/18;18:30;387;864;44,79;22;41\n31/12/18;19:00;384;864;44,44;36;26\n31/12/18;19:30;400;864;46,30;30;19\n31/12/18;20:00;408;864;47,22;50;17\n31/12/18;20:30;454;864;52,55;35;15\n31/12/18;21:00;464;864;53,70;24;13\n31/12/18;21:30;461;864;53,36;14;18\n31/12/18;22:00;460;864;53,24;14;21\n31/12/18;22:30;453;864;52,43;10;16\n31/12/18;23:00;442;864;51,16;8;17\n31/12/18;23:30;438;864;50,69;11;13\n01/01/19;00:00;434;864;50,23;7;33\n01/01/19;00:30;391;864;45,25;4;26\n01/01/19;01:00;384;864;44,44;3;23\n01/01/19;01:30;355;864;41,09;2;19\n01/01/19;02:00;348;864;40,28;3;10\n01/01/19;02:30;340;864;39,35;4;10\n01/01/19;03:00;339;864;39,24;1;8\n01/01/19;03:30;332;864;38,43;1;1\n01/01/19;04:00;331;864;38,31;3;6\n01/01/19;04:30;326;864;37,73;0;3\n01/01/19;05:00;326;864;37,73;0;0\n01/01/19;05:30;326;864;37,73;0;0\n01/01/19;06:00;326;864;37,73;0;0\n01/01/19;06:30;327;864;37,85;1;0\n01/01/19;07:00;326;864;37,73;0;3\n01/01/19;07:30;323;864;37,38;0;1\n01/01/19;08:00;323;864;37,38;0;1\n01/01/19;08:30;315;864;36,46;0;7\n01/01/19;09:00;311;864;36,00;0;8\n01/01/19;09:30;298;864;34,49;1;10\n01/01/19;10:00;296;864;34,26;1;7\n01/01/19;10:30;285;864;32,99;4;14\n01/01/19;11:00;281;864;32,52;4;8\n01/01/19;11:30;272;864;31,48;12;22\n01/01/19;12:00;266;864;30,79;16;11\n01/01/19;12:30;281;864;32,52;17;8\n01/01/19;13:00;283;864;32,75;12;9\n01/01/19;13:30;290;864;33,56;9;3\n01/01/19;14:00;290;864;33,56;9;14\n01/01/19;14:30;285;864;32,99;9;11\n01/01/19;15:00;283;864;32,75;11;15\n01/01/19;15:30;271;864;31,37;10;18\n01/01/19;16:00;276;864;31,94;18;12\n01/01/19;16:30;274;864;31,71;12;16\n01/01/19;17:00;282;864;32,64;21;13\n01/01/19;17:30;282;864;32,64;14;14\n01/01/19;18:00;284;864;32,87;20;11\n01/01/19;18:30;293;864;33,91;13;9\n01/01/19;19:00;295;864;34,14;6;3\n01/01/19;19:30;303;864;35,07;13;9\n01/01/19;20:00;298;864;34,49;8;12\n01/01/19;20:30;304;864;35,19;10;3\n01/01/19;21:00;305;864;35,30;4;8\n01/01/19;21:30;301;864;34,84;4;4\n01/01/19;22:00;299;864;34,61;1;6\n01/01/19;22:30;294;864;34,03;1;3\n01/01/19;23:00;294;864;34,03;1;1\n01/01/19;23:30;294;864;34,03;0;0\n02/01/19;00:00;293;864;33,91;0;1\n02/01/19;00:30;293;864;33,91;1;1\n02/01/19;01:00;293;864;33,91;0;0\n02/01/19;01:30;293;864;33,91;0;0\n02/01/19;02:00;294;864;34,03;1;0\n02/01/19;02:30;294;864;34,03;0;0\n02/01/19;03:00;294;864;34,03;0;0\n02/01/19;03:30;294;864;34,03;0;0\n02/01/19;04:00;293;864;33,91;0;0\n02/01/19;04:30;293;864;33,91;0;0\n02/01/19;05:00;293;864;33,91;0;0\n02/01/19;05:30;294;864;34,03;3;2\n02/01/19;06:00;295;864;34,14;1;1\n02/01/19;06:30;295;864;34,14;6;3\n02/01/19;07:00;299;864;34,61;12;5\n02/01/19;07:30;317;864;36,69;17;3\n02/01/19;08:00;320;864;37,04;32;16\n02/01/19;08:30;382;864;44,21;61;7\n02/01/19;09:00;389;864;45,02;53;13\n02/01/19;09:30;473;864;54,75;56;6\n02/01/19;10:00;497;864;57,52;79;29\n02/01/19;10:30;560;864;64,81;77;40\n02/01/19;11:00;578;864;66,90;73;51\n02/01/19;11:30;646;864;74,77;102;40\n02/01/19;12:00;655;864;75,81;94;57\n02/01/19;12:30;719;864;83,22;100;66\n02/01/19;13:00;730;864;84,49;82;57\n02/01/19;13:30;751;864;86,92;64;55\n02/01/19;14:00;757;864;87,62;71;67\n02/01/19;14:30;763;864;88,31;76;69\n02/01/19;15:00;760;864;87,96;84;82\n02/01/19;15:30;761;864;88,08;98;97\n02/01/19;16:00;761;864;88,08;87;102\n02/01/19;16:30;721;864;83,45;76;105\n02/01/19;17:00;705;864;81,60;77;111\n02/01/19;17:30;628;864;72,69;63;120\n02/01/19;18:00;620;864;71,76;45;134\n02/01/19;18:30;469;864;54,28;28;106\n02/01/19;19:00;425;864;49,19;33;84\n02/01/19;19:30;391;864;45,25;33;48\n02/01/19;20:00;394;864;45,60;24;24\n02/01/19;20:30;403;864;46,64;18;6\n02/01/19;21:00;402;864;46,53;7;20\n02/01/19;21:30;375;864;43,40;3;16\n02/01/19;22:00;370;864;42,82;8;26\n02/01/19;22:30;342;864;39,58;2;17\n02/01/19;23:00;332;864;38,43;3;18\n02/01/19;23:30;311;864;36,00;0;20\n03/01/19;00:00;305;864;35,30;3;8\n03/01/19;00:30;299;864;34,61;2;4\n03/01/19;01:00;299;864;34,61;0;2\n03/01/19;01:30;296;864;34,26;0;2\n03/01/19;02:00;296;864;34,26;0;0\n03/01/19;02:30;296;864;34,26;0;0\n03/01/19;03:00;296;864;34,26;0;0\n03/01/19;03:30;296;864;34,26;0;0\n03/01/19;04:00;296;864;34,26;0;0\n03/01/19;04:30;296;864;34,26;0;0\n03/01/19;05:00;296;864;34,26;0;0\n03/01/19;05:30;298;864;34,49;3;1\n03/01/19;06:00;298;864;34,49;1;3\n03/01/19;06:30;293;864;33,91;2;4\n03/01/19;07:00;300;864;34,72;23;9\n03/01/19;07:30;321;864;37,15;22;6\n03/01/19;08:00;342;864;39,58;44;15\n03/01/19;08:30;420;864;48,61;81;8\n03/01/19;09:00;464;864;53,70;79;7\n03/01/19;09:30;556;864;64,35;86;21\n03/01/19;10:00;601;864;69,56;91;22\n03/01/19;10:30;685;864;79,28;103;47\n03/01/19;11:00;705;864;81,60;88;45\n03/01/19;11:30;763;864;88,31;99;65\n03/01/19;12:00;763;864;88,31;88;87\n03/01/19;12:30;762;864;88,19;45;48\n03/01/19;13:00;764;864;88,43;55;52\n03/01/19;13:30;764;864;88,43;48;49\n03/01/19;14:00;763;864;88,31;58;59\n03/01/19;14:30;761;864;88,08;69;69\n03/01/19;15:00;763;864;88,31;63;67\n03/01/19;15:30;761;864;88,08;87;83\n03/01/19;16:00;760;864;87,96;66;86\n03/01/19;16:30;744;864;86,11;83;84\n03/01/19;17:00;714;864;82,64;73;106\n03/01/19;17:30;667;864;77,20;67;111\n03/01/19;18:00;659;864;76,27;55;94\n03/01/19;18:30;536;864;62,04;40;133\n03/01/19;19:00;503;864;58,22;54;114\n03/01/19;19:30;484;864;56,02;59;44\n03/01/19;20:00;488;864;56,48;51;37\n03/01/19;20:30;498;864;57,64;23;26\n03/01/19;21:00;493;864;57,06;8;20\n03/01/19;21:30;464;864;53,70;6;31\n03/01/19;22:00;454;864;52,55;4;36\n03/01/19;22:30;399;864;46,18;4;35\n03/01/19;23:00;384;864;44,44;0;25\n03/01/19;23:30;359;864;41,55;2;16\n04/01/19;00:00;350;864;40,51;2;17\n04/01/19;00:30;337;864;39,00;1;9\n04/01/19;01:00;334;864;38,66;0;2\n04/01/19;01:30;332;864;38,43;0;1\n04/01/19;02:00;331;864;38,31;0;1\n04/01/19;02:30;332;864;38,43;1;0\n04/01/19;03:00;332;864;38,43;0;0\n04/01/19;03:30;332;864;38,43;0;0\n04/01/19;04:00;332;864;38,43;0;0\n04/01/19;04:30;332;864;38,43;0;0\n04/01/19;05:00;331;864;38,31;0;1\n04/01/19;05:30;332;864;38,43;2;1\n04/01/19;06:00;332;864;38,43;4;4\n04/01/19;06:30;332;864;38,43;6;5\n04/01/19;07:00;337;864;39,00;20;8\n04/01/19;07:30;360;864;41,67;22;5\n04/01/19;08:00;371;864;42,94;62;25\n04/01/19;08:30;468;864;54,17;90;12\n04/01/19;09:00;496;864;57,41;66;15\n04/01/19;09:30;574;864;66,44;78;23\n04/01/19;10:00;608;864;70,37;93;28\n04/01/19;10:30;708;864;81,94;110;43\n04/01/19;11:00;713;864;82,52;96;56\n04/01/19;11:30;762;864;88,19;77;69\n04/01/19;12:00;764;864;88,43;82;80\n04/01/19;12:30;764;864;88,43;50;49\n04/01/19;13:00;765;864;88,54;62;65\n04/01/19;13:30;765;864;88,54;69;66\n04/01/19;14:00;764;864;88,43;72;72\n04/01/19;14:30;764;864;88,43;85;83\n04/01/19;15:00;765;864;88,54;79;80\n04/01/19;15:30;756;864;87,50;79;87\n04/01/19;16:00;749;864;86,69;89;89\n04/01/19;16:30;747;864;86,46;94;103\n04/01/19;17:00;723;864;83,68;76;120\n04/01/19;17:30;656;864;75,93;71;117\n04/01/19;18:00;651;864;75,35;81;111\n04/01/19;18:30;585;864;67,71;54;100\n04/01/19;19:00;538;864;62,27;36;131\n04/01/19;19:30;477;864;55,21;43;55\n04/01/19;20:00;487;864;56,37;57;32\n04/01/19;20:30;516;864;59,72;42;24\n04/01/19;21:00;515;864;59,61;13;30\n04/01/19;21:30;504;864;58,33;23;21\n04/01/19;22:00;496;864;57,41;8;32\n04/01/19;22:30;458;864;53,01;6;31\n04/01/19;23:00;438;864;50,69;5;46\n04/01/19;23:30;393;864;45,49;3;33\n05/01/19;00:00;384;864;44,44;4;21\n05/01/19;00:30;356;864;41,20;5;26\n05/01/19;01:00;355;864;41,09;2;5\n05/01/19;01:30;350;864;40,51;0;3\n05/01/19;02:00;350;864;40,51;0;3\n05/01/19;02:30;347;864;40,16;0;0\n05/01/19;03:00;345;864;39,93;0;2\n05/01/19;03:30;345;864;39,93;0;0\n05/01/19;04:00;344;864;39,81;0;1\n05/01/19;04:30;343;864;39,70;0;1\n05/01/19;05:00;343;864;39,70;0;1\n05/01/19;05:30;342;864;39,58;0;0\n05/01/19;06:00;342;864;39,58;0;3\n05/01/19;06:30;322;864;37,27;1;3\n05/01/19;07:00;326;864;37,73;8;2\n05/01/19;07:30;330;864;38,19;4;1\n05/01/19;08:00;332;864;38,43;8;4\n05/01/19;08:30;350;864;40,51;21;6\n05/01/19;09:00;361;864;41,78;38;7\n05/01/19;09:30;428;864;49,54;70;12\n05/01/19;10:00;441;864;51,04;109;29\n05/01/19;10:30;598;864;69,21;114;31\n05/01/19;11:00;624;864;72,22;125;56\n05/01/19;11:30;703;864;81,37;113;78\n05/01/19;12:00;712;864;82,41;115;93\n05/01/19;12:30;743;864;86,00;94;73\n05/01/19;13:00;742;864;85,88;84;76\n05/01/19;13:30;756;864;87,50;70;67\n05/01/19;14:00;766;864;88,66;83;72\n05/01/19;14:30;767;864;88,77;76;78\n05/01/19;15:00;767;864;88,77;83;82\n05/01/19;15:30;763;864;88,31;95;95\n05/01/19;16:00;767;864;88,77;103;107\n05/01/19;16:30;761;864;88,08;105;104\n05/01/19;17:00;758;864;87,73;90;106\n05/01/19;17:30;723;864;83,68;102;129\n05/01/19;18:00;709;864;82,06;89;122\n05/01/19;18:30;598;864;69,21;49;141\n05/01/19;19:00;561;864;64,93;47;120\n05/01/19;19:30;502;864;58,10;51;70\n05/01/19;20:00;515;864;59,61;55;38\n05/01/19;20:30;539;864;62,38;48;22\n05/01/19;21:00;535;864;61,92;24;44\n05/01/19;21:30;502;864;58,10;10;33\n05/01/19;22:00;488;864;56,48;15;34\n05/01/19;22:30;450;864;52,08;7;38\n05/01/19;23:00;433;864;50,12;4;43\n05/01/19;23:30;402;864;46,53;6;30\n06/01/19;00:00;376;864;43,52;3;34\n06/01/19;00:30;331;864;38,31;2;26\n06/01/19;01:00;327;864;37,85;1;12\n06/01/19;01:30;314;864;36,34;3;6\n06/01/19;02:00;316;864;36,57;3;1\n06/01/19;02:30;315;864;36,46;1;2\n06/01/19;03:00;316;864;36,57;0;0\n06/01/19;03:30;315;864;36,46;0;1\n06/01/19;04:00;290;864;33,56;1;1\n06/01/19;04:30;290;864;33,56;0;0\n06/01/19;05:00;290;864;33,56;0;0\n06/01/19;05:30;290;864;33,56;0;1\n06/01/19;06:00;289;864;33,45;0;2\n06/01/19;06:30;287;864;33,22;0;0\n06/01/19;07:00;287;864;33,22;0;0\n06/01/19;07:30;286;864;33,10;1;1\n06/01/19;08:00;287;864;33,22;1;5\n06/01/19;08:30;277;864;32,06;0;7\n06/01/19;09:00;275;864;31,83;2;2\n06/01/19;09:30;277;864;32,06;3;3\n06/01/19;10:00;274;864;31,71;8;19\n06/01/19;10:30;265;864;30,67;9;5\n06/01/19;11:00;268;864;31,02;15;17\n06/01/19;11:30;271;864;31,37;9;5\n06/01/19;12:00;272;864;31,48;30;15\n06/01/19;12:30;304;864;35,19;31;10\n06/01/19;13:00;306;864;35,42;23;16\n06/01/19;13:30;316;864;36,57;16;12\n06/01/19;14:00;319;864;36,92;10;18\n06/01/19;14:30;303;864;35,07;15;26\n06/01/19;15:00;295;864;34,14;19;21\n06/01/19;15:30;292;864;33,80;21;25\n06/01/19;16:00;291;864;33,68;17;25\n06/01/19;16:30;281;864;32,52;11;20\n06/01/19;17:00;277;864;32,06;10;20\n06/01/19;17:30;256;864;29,63;11;20\n06/01/19;18:00;254;864;29,40;15;9\n06/01/19;18:30;263;864;30,44;12;8\n06/01/19;19:00;267;864;30,90;18;7\n06/01/19;19:30;279;864;32,29;11;10\n06/01/19;20:00;281;864;32,52;15;9\n06/01/19;20:30;286;864;33,10;7;5\n06/01/19;21:00;285;864;32,99;2;8\n06/01/19;21:30;282;864;32,64;5;4\n06/01/19;22:00;281;864;32,52;0;5\n06/01/19;22:30;277;864;32,06;3;5\n06/01/19;23:00;275;864;31,83;1;1\n06/01/19;23:30;277;864;32,06;3;1\n07/01/19;00:00;278;864;32,18;2;1\n07/01/19;00:30;278;864;32,18;0;0\n07/01/19;01:00;278;864;32,18;0;0\n07/01/19;01:30;278;864;32,18;0;0\n07/01/19;02:00;298;864;34,49;0;0\n07/01/19;02:30;298;864;34,49;0;1\n07/01/19;03:00;297;864;34,38;0;0\n07/01/19;03:30;297;864;34,38;0;0\n07/01/19;04:00;297;864;34,38;0;0\n07/01/19;04:30;297;864;34,38;1;0\n07/01/19;05:00;298;864;34,49;1;1\n07/01/19;05:30;300;864;34,72;5;0\n07/01/19;06:00;303;864;35,07;2;2\n07/01/19;06:30;305;864;35,30;10;2\n07/01/19;07:00;309;864;35,76;18;9\n07/01/19;07:30;323;864;37,38;29;11\n07/01/19;08:00;342;864;39,58;58;17\n07/01/19;08:30;371;864;42,94;90;7\n07/01/19;09:00;482;864;55,79;90;14\n07/01/19;09:30;561;864;64,93;51;12\n07/01/19;10:00;607;864;70,25;67;24\n07/01/19;10:30;636;864;73,61;51;24\n07/01/19;11:00;653;864;75,58;46;27\n07/01/19;11:30;674;864;78,01;60;45\n07/01/19;12:00;688;864;79,63;79;55\n07/01/19;12:30;714;864;82,64;57;43\n07/01/19;13:00;718;864;83,10;44;58\n07/01/19;13:30;711;864;82,29;66;56\n07/01/19;14:00;714;864;82,64;77;61\n07/01/19;14:30;749;864;86,69;74;55\n07/01/19;15:00;750;864;86,81;57;78\n07/01/19;15:30;724;864;83,80;64;80\n07/01/19;16:00;709;864;82,06;46;75\n07/01/19;16:30;664;864;76,85;50;74\n07/01/19;17:00;652;864;75,46;45;84\n07/01/19;17:30;606;864;70,14;49;83\n07/01/19;18:00;575;864;66,55;34;88\n07/01/19;18:30;505;864;58,45;38;83\n07/01/19;19:00;481;864;55,67;22;89\n07/01/19;19:30;413;864;47,80;31;46\n07/01/19;20:00;402;864;46,53;16;30\n07/01/19;20:30;384;864;44,44;11;17\n07/01/19;21:00;379;864;43,87;6;12\n07/01/19;21:30;374;864;43,29;4;14\n07/01/19;22:00;365;864;42,25;3;11\n07/01/19;22:30;357;864;41,32;3;8\n07/01/19;23:00;350;864;40,51;1;6\n07/01/19;23:30;343;864;39,70;0;5\n08/01/19;00:00;342;864;39,58;0;5\n08/01/19;00:30;336;864;38,89;0;1\n08/01/19;01:00;336;864;38,89;0;0\n08/01/19;01:30;336;864;38,89;0;0\n08/01/19;02:00;336;864;38,89;0;1\n08/01/19;02:30;332;864;38,43;0;2\n08/01/19;03:00;332;864;38,43;0;0\n08/01/19;03:30;332;864;38,43;0;0\n08/01/19;04:00;332;864;38,43;0;0\n08/01/19;04:30;332;864;38,43;1;0\n08/01/19;05:00;333;864;38,54;0;0\n08/01/19;05:30;335;864;38,77;7;0\n08/01/19;06:00;340;864;39,35;3;2\n08/01/19;06:30;338;864;39,12;3;4\n08/01/19;07:00;342;864;39,58;20;12\n08/01/19;07:30;351;864;40,63;22;13\n08/01/19;08:00;362;864;41,90;45;24\n08/01/19;08:30;418;864;48,38;94;19\n08/01/19;09:00;462;864;53,47;103;12\n08/01/19;09:30;581;864;67,25;78;16\n08/01/19;10:00;615;864;71,18;86;18\n08/01/19;10:30;691;864;79,98;82;54\n08/01/19;11:00;719;864;83,22;88;52\n08/01/19;11:30;738;864;85,42;75;72\n08/01/19;12:00;742;864;85,88;55;54\n08/01/19;12:30;741;864;85,76;36;36\n08/01/19;13:00;740;864;85,65;33;34\n08/01/19;13:30;741;864;85,76;48;47\n08/01/19;14:00;740;864;85,65;56;58\n08/01/19;14:30;739;864;85,53;63;64\n08/01/19;15:00;742;864;85,88;56;59\n08/01/19;15:30;733;864;84,84;56;74\n08/01/19;16:00;698;864;80,79;61;77\n08/01/19;16:30;685;864;79,28;46;79\n08/01/19;17:00;660;864;76,39;43;88\n08/01/19;17:30;603;864;69,79;44;77\n08/01/19;18:00;588;864;68,06;51;71\n08/01/19;18:30;584;864;67,59;52;99\n08/01/19;19:00;516;864;59,72;46;102\n08/01/19;19:30;460;864;53,24;60;58\n08/01/19;20:00;473;864;54,75;26;30\n08/01/19;20:30;458;864;53,01;18;25\n08/01/19;21:00;454;864;52,55;7;27\n08/01/19;21:30;433;864;50,12;7;16\n08/01/19;22:00;427;864;49,42;3;30\n08/01/19;22:30;387;864;44,79;5;25\n08/01/19;23:00;372;864;43,06;3;22\n08/01/19;23:30;355;864;41,09;3;15\n09/01/19;00:00;349;864;40,39;1;13\n09/01/19;00:30;336;864;38,89;0;3\n09/01/19;01:00;335;864;38,77;1;5\n09/01/19;01:30;329;864;38,08;0;2\n09/01/19;02:00;329;864;38,08;0;0\n09/01/19;02:30;329;864;38,08;0;0\n09/01/19;03:00;329;864;38,08;0;0\n09/01/19;03:30;329;864;38,08;0;0\n09/01/19;04:00;330;864;38,19;0;1\n09/01/19;04:30;329;864;38,08;0;0\n09/01/19;05:00;329;864;38,08;1;0\n09/01/19;05:30;333;864;38,54;9;0\n09/01/19;06:00;339;864;39,24;2;2\n09/01/19;06:30;339;864;39,24;10;5\n09/01/19;07:00;352;864;40,74;23;20\n09/01/19;07:30;361;864;41,78;31;7\n09/01/19;08:00;373;864;43,17;56;22\n09/01/19;08:30;409;864;47,34;101;14\n09/01/19;09:00;510;864;59,03;114;17\n09/01/19;09:30;636;864;73,61;107;16\n09/01/19;10:00;689;864;79,75;103;37\n09/01/19;10:30;743;864;86,00;55;53\n09/01/19;11:00;744;864;86,11;55;55\n09/01/19;11:30;737;864;85,30;55;54\n09/01/19;12:00;744;864;86,11;61;62\n09/01/19;12:30;742;864;85,88;56;53\n09/01/19;13:00;744;864;86,11;48;52\n09/01/19;13:30;742;864;85,88;46;44\n09/01/19;14:00;742;864;85,88;59;62\n09/01/19;14:30;739;864;85,53;51;52\n09/01/19;15:00;739;864;85,53;50;50\n09/01/19;15:30;742;864;85,88;61;67\n09/01/19;16:00;740;864;85,65;63;66\n09/01/19;16:30;739;864;85,53;66;80\n09/01/19;17:00;724;864;83,80;71;75\n09/01/19;17:30;709;864;82,06;65;71\n09/01/19;18:00;707;864;81,83;61;108\n09/01/19;18:30;614;864;71,06;50;108\n09/01/19;19:00;594;864;68,75;43;135\n09/01/19;19:30;494;864;57,18;50;61\n09/01/19;20:00;497;864;57,52;46;37\n09/01/19;20:30;499;864;57,75;16;29\n09/01/19;21:00;494;864;57,18;6;16\n09/01/19;21:30;480;864;55,56;7;22\n09/01/19;22:00;471;864;54,51;6;27\n09/01/19;22:30;426;864;49,31;2;33\n09/01/19;23:00;415;864;48,03;1;27\n09/01/19;23:30;382;864;44,21;2;17\n10/01/19;00:00;375;864;43,40;1;4\n10/01/19;00:30;370;864;42,82;0;4\n10/01/19;01:00;368;864;42,59;1;7\n10/01/19;01:30;362;864;41,90;0;2\n10/01/19;02:00;362;864;41,90;0;0\n10/01/19;02:30;362;864;41,90;0;1\n10/01/19;03:00;361;864;41,78;0;0\n10/01/19;03:30;361;864;41,78;0;1\n10/01/19;04:00;361;864;41,78;0;1\n10/01/19;04:30;360;864;41,67;0;1\n10/01/19;05:00;359;864;41,55;0;0\n10/01/19;05:30;360;864;41,67;7;0\n10/01/19;06:00;366;864;42,36;3;1\n10/01/19;06:30;369;864;42,71;9;5\n10/01/19;07:00;372;864;43,06;17;5\n10/01/19;07:30;391;864;45,25;29;12\n10/01/19;08:00;403;864;46,64;53;24\n10/01/19;08:30;468;864;54,17;85;22\n10/01/19;09:00;512;864;59,26;121;19\n10/01/19;09:30;639;864;73,96;107;30\n10/01/19;10:00;686;864;79,40;103;25\n10/01/19;10:30;751;864;86,92;40;37\n10/01/19;11:00;752;864;87,04;40;40\n10/01/19;11:30;750;864;86,81;54;54\n10/01/19;12:00;750;864;86,81;52;50\n10/01/19;12:30;753;864;87,15;41;41\n10/01/19;13:00;752;864;87,04;37;41\n10/01/19;13:30;753;864;87,15;60;58\n10/01/19;14:00;751;864;86,92;56;47\n10/01/19;14:30;753;864;87,15;39;39\n10/01/19;15:00;749;864;86,69;66;66\n10/01/19;15:30;749;864;86,69;65;65\n10/01/19;16:00;743;864;86,00;65;82\n10/01/19;16:30;728;864;84,26;73;70\n10/01/19;17:00;737;864;85,30;62;73\n10/01/19;17:30;708;864;81,94;73;101\n10/01/19;18:00;692;864;80,09;64;105\n10/01/19;18:30;633;864;73,26;78;108\n10/01/19;19:00;614;864;71,06;59;126\n10/01/19;19:30;532;864;61,57;63;79\n10/01/19;20:00;548;864;63,43;63;34\n10/01/19;20:30;578;864;66,90;31;22\n10/01/19;21:00;573;864;66,32;9;29\n10/01/19;21:30;549;864;63,54;8;33\n10/01/19;22:00;535;864;61,92;4;42\n10/01/19;22:30;461;864;53,36;2;53\n10/01/19;23:00;445;864;51,50;4;27\n10/01/19;23:30;398;864;46,06;3;35\n11/01/19;00:00;389;864;45,02;1;15\n11/01/19;00:30;374;864;43,29;1;8\n11/01/19;01:00;370;864;42,82;0;1\n11/01/19;01:30;364;864;42,13;0;5\n11/01/19;02:00;364;864;42,13;0;2\n11/01/19;02:30;362;864;41,90;0;1\n11/01/19;03:00;361;864;41,78;2;2\n11/01/19;03:30;361;864;41,78;0;1\n11/01/19;04:00;360;864;41,67;0;0\n11/01/19;04:30;360;864;41,67;0;0\n11/01/19;05:00;360;864;41,67;1;2\n11/01/19;05:30;360;864;41,67;4;1\n11/01/19;06:00;363;864;42,01;5;3\n11/01/19;06:30;362;864;41,90;7;8\n11/01/19;07:00;364;864;42,13;14;9\n11/01/19;07:30;388;864;44,91;45;24\n11/01/19;08:00;391;864;45,25;43;27\n11/01/19;08:30;450;864;52,08;92;20\n11/01/19;09:00;485;864;56,13;104;19\n11/01/19;09:30;612;864;70,83;111;21\n11/01/19;10:00;669;864;77,43;110;21\n11/01/19;10:30;755;864;87,38;73;59\n11/01/19;11:00;756;864;87,50;54;60\n11/01/19;11:30;749;864;86,69;74;67\n11/01/19;12:00;752;864;87,04;65;69\n11/01/19;12:30;749;864;86,69;43;43\n11/01/19;13:00;748;864;86,57;48;47\n11/01/19;13:30;749;864;86,69;58;59\n11/01/19;14:00;747;864;86,46;61;62\n11/01/19;14:30;747;864;86,46;77;72\n11/01/19;15:00;749;864;86,69;69;71\n11/01/19;15:30;749;864;86,69;64;66\n11/01/19;16:00;741;864;85,76;82;94\n11/01/19;16:30;735;864;85,07;73;79\n11/01/19;17:00;716;864;82,87;73;94\n11/01/19;17:30;677;864;78,36;70;113\n11/01/19;18:00;663;864;76,74;65;106\n11/01/19;18:30;580;864;67,13;55;118\n11/01/19;19:00;552;864;63,89;53;115\n11/01/19;19:30;476;864;55,09;57;74\n11/01/19;20:00;477;864;55,21;56;28\n11/01/19;20:30;524;864;60,65;60;22\n11/01/19;21:00;535;864;61,92;24;33\n11/01/19;21:30;528;864;61,11;23;29\n11/01/19;22:00;524;864;60,65;7;45\n11/01/19;22:30;475;864;54,98;5;39\n11/01/19;23:00;451;864;52,20;9;39\n11/01/19;23:30;401;864;46,41;4;33\n12/01/19;00:00;393;864;45,49;1;26\n12/01/19;00:30;360;864;41,67;3;24\n12/01/19;01:00;348;864;40,28;2;9\n12/01/19;01:30;337;864;39,00;0;10\n12/01/19;02:00;332;864;38,43;1;6\n12/01/19;02:30;327;864;37,85;2;2\n12/01/19;03:00;324;864;37,50;0;4\n12/01/19;03:30;323;864;37,38;0;0\n12/01/19;04:00;322;864;37,27;0;2\n12/01/19;04:30;320;864;37,04;1;2\n12/01/19;05:00;319;864;36,92;1;2\n12/01/19;05:30;320;864;37,04;1;0\n12/01/19;06:00;320;864;37,04;1;3\n12/01/19;06:30;319;864;36,92;1;0\n12/01/19;07:00;320;864;37,04;5;1\n12/01/19;07:30;325;864;37,62;5;1\n12/01/19;08:00;328;864;37,96;12;7\n12/01/19;08:30;338;864;39,12;21;6\n12/01/19;09:00;351;864;40,63;63;11\n12/01/19;09:30;453;864;52,43;102;12\n12/01/19;10:00;504;864;58,33;117;21\n12/01/19;10:30;638;864;73,84;114;37\n12/01/19;11:00;665;864;76,97;120;59\n12/01/19;11:30;739;864;85,53;101;83\n12/01/19;12:00;744;864;86,11;113;90\n12/01/19;12:30;759;864;87,85;69;66\n12/01/19;13:00;763;864;88,31;71;72\n12/01/19;13:30;762;864;88,19;64;62\n12/01/19;14:00;764;864;88,43;58;60\n12/01/19;14:30;759;864;87,85;65;74\n12/01/19;15:00;754;864;87,27;81;71\n12/01/19;15:30;743;864;86,00;71;96\n12/01/19;16:00;743;864;86,00;103;89\n12/01/19;16:30;747;864;86,46;93;90\n12/01/19;17:00;752;864;87,04;63;93\n12/01/19;17:30;692;864;80,09;47;79\n12/01/19;18:00;678;864;78,47;78;148\n12/01/19;18:30;601;864;69,56;64;91\n12/01/19;19:00;590;864;68,29;52;113\n12/01/19;19:30;512;864;59,26;64;69\n12/01/19;20:00;528;864;61,11;70;35\n12/01/19;20:30;575;864;66,55;54;29\n12/01/19;21:00;585;864;67,71;35;29\n12/01/19;21:30;596;864;68,98;34;33\n12/01/19;22:00;591;864;68,40;15;53\n12/01/19;22:30;532;864;61,57;8;46\n12/01/19;23:00;508;864;58,80;4;47\n12/01/19;23:30;446;864;51,62;5;48\n13/01/19;00:00;423;864;48,96;3;38\n13/01/19;00:30;372;864;43,06;2;31\n13/01/19;01:00;364;864;42,13;2;22\n13/01/19;01:30;339;864;39,24;1;11\n13/01/19;02:00;336;864;38,89;1;10\n13/01/19;02:30;325;864;37,62;1;5\n13/01/19;03:00;323;864;37,38;0;1\n13/01/19;03:30;322;864;37,27;0;2\n13/01/19;04:00;321;864;37,15;0;2\n13/01/19;04:30;316;864;36,57;0;3\n13/01/19;05:00;316;864;36,57;0;0\n13/01/19;05:30;315;864;36,46;1;1\n13/01/19;06:00;316;864;36,57;0;1\n13/01/19;06:30;315;864;36,46;0;0\n13/01/19;07:00;315;864;36,46;0;0\n13/01/19;07:30;314;864;36,34;0;1\n13/01/19;08:00;313;864;36,23;0;2\n13/01/19;08:30;310;864;35,88;3;5\n13/01/19;09:00;311;864;36,00;1;4\n13/01/19;09:30;304;864;35,19;6;7\n13/01/19;10:00;305;864;35,30;22;14\n13/01/19;10:30;337;864;39,00;56;15\n13/01/19;11:00;360;864;41,67;56;18\n13/01/19;11:30;409;864;47,34;64;46\n13/01/19;12:00;409;864;47,34;49;45\n13/01/19;12:30;429;864;49,65;48;33\n13/01/19;13:00;435;864;50,35;51;28\n13/01/19;13:30;460;864;53,24;39;31\n13/01/19;14:00;461;864;53,36;42;32\n13/01/19;14:30;475;864;54,98;56;44\n13/01/19;15:00;486;864;56,25;59;56\n13/01/19;15:30;485;864;56,13;64;66\n13/01/19;16:00;483;864;55,90;69;72\n13/01/19;16:30;484;864;56,02;65;62\n13/01/19;17:00;478;864;55,32;45;71\n13/01/19;17:30;427;864;49,42;30;81\n13/01/19;18:00;405;864;46,88;19;65\n13/01/19;18:30;344;864;39,81;19;57\n13/01/19;19:00;317;864;36,69;10;27\n13/01/19;19:30;311;864;36,00;22;11\n13/01/19;20:00;318;864;36,81;21;15\n13/01/19;20:30;321;864;37,15;7;7\n13/01/19;21:00;323;864;37,38;5;5\n13/01/19;21:30;319;864;36,92;4;8\n13/01/19;22:00;319;864;36,92;3;9\n13/01/19;22:30;307;864;35,53;0;7\n13/01/19;23:00;302;864;34,95;3;7\n13/01/19;23:30;302;864;34,95;1;0\n14/01/19;00:00;302;864;34,95;1;1\n14/01/19;00:30;300;864;34,72;0;3\n14/01/19;01:00;299;864;34,61;0;0\n14/01/19;01:30;299;864;34,61;0;0\n14/01/19;02:00;299;864;34,61;0;1\n14/01/19;02:30;298;864;34,49;0;0\n14/01/19;03:00;298;864;34,49;0;0\n14/01/19;03:30;298;864;34,49;0;0\n14/01/19;04:00;298;864;34,49;0;0\n14/01/19;04:30;298;864;34,49;0;0\n14/01/19;05:00;298;864;34,49;0;0\n14/01/19;05:30;298;864;34,49;6;0\n14/01/19;06:00;305;864;35,30;2;5\n14/01/19;06:30;298;864;34,49;8;5\n14/01/19;07:00;305;864;35,30;10;5\n14/01/19;07:30;311;864;36,00;29;14\n14/01/19;08:00;326;864;37,73;46;15\n14/01/19;08:30;382;864;44,21;76;23\n14/01/19;09:00;419;864;48,50;99;10\n14/01/19;09:30;532;864;61,57;80;17\n14/01/19;10:00;571;864;66,09;84;24\n14/01/19;10:30;654;864;75,69;85;33\n14/01/19;11:00;676;864;78,24;74;43\n14/01/19;11:30;720;864;83,33;79;62\n14/01/19;12:00;726;864;84,03;96;62\n14/01/19;12:30;757;864;87,62;57;52\n14/01/19;13:00;752;864;87,04;48;57\n14/01/19;13:30;753;864;87,15;80;72\n14/01/19;14:00;755;864;87,38;73;74\n14/01/19;14:30;755;864;87,38;66;65\n14/01/19;15:00;757;864;87,62;67;79\n14/01/19;15:30;747;864;86,46;75;91\n14/01/19;16:00;725;864;83,91;77;88\n14/01/19;16:30;691;864;79,98;65;96\n14/01/19;17:00;680;864;78,70;58;88\n14/01/19;17:30;612;864;70,83;48;101\n14/01/19;18:00;590;864;68,29;44;87\n14/01/19;18:30;502;864;58,10;34;87\n14/01/19;19:00;490;864;56,71;32;102\n14/01/19;19:30;392;864;45,37;30;73\n14/01/19;20:00;387;864;44,79;27;23\n14/01/19;20:30;388;864;44,91;12;20\n14/01/19;21:00;385;864;44,56;7;17\n14/01/19;21:30;370;864;42,82;1;11\n14/01/19;22:00;364;864;42,13;5;18\n14/01/19;22:30;341;864;39,47;1;18\n14/01/19;23:00;334;864;38,66;0;6\n14/01/19;23:30;330;864;38,19;2;3\n15/01/19;00:00;329;864;38,08;0;0\n15/01/19;00:30;330;864;38,19;1;0\n15/01/19;01:00;330;864;38,19;0;0\n15/01/19;01:30;330;864;38,19;0;0\n15/01/19;02:00;330;864;38,19;0;0\n15/01/19;02:30;330;864;38,19;0;0\n15/01/19;03:00;330;864;38,19;0;0\n15/01/19;03:30;330;864;38,19;0;0\n15/01/19;04:00;330;864;38,19;0;0\n15/01/19;04:30;329;864;38,08;0;0\n15/01/19;05:00;329;864;38,08;2;1\n15/01/19;05:30;330;864;38,19;4;1\n15/01/19;06:00;334;864;38,66;2;1\n15/01/19;06:30;338;864;39,12;11;8\n15/01/19;07:00;341;864;39,47;28;17\n15/01/19;07:30;352;864;40,74;26;18\n15/01/19;08:00;359;864;41,55;62;29\n15/01/19;08:30;434;864;50,23;90;10\n15/01/19;09:00;491;864;56,83;119;14\n15/01/19;09:30;564;864;65,28;107;24\n15/01/19;10:00;693;864;80,21;110;30\n15/01/19;10:30;743;864;86,00;52;46\n15/01/19;11:00;744;864;86,11;50;49\n15/01/19;11:30;746;864;86,34;52;50\n15/01/19;12:00;743;864;86,00;57;59\n15/01/19;12:30;745;864;86,23;53;46\n15/01/19;13:00;747;864;86,46;37;38\n15/01/19;13:30;749;864;86,69;58;57\n15/01/19;14:00;756;864;87,50;73;64\n15/01/19;14:30;756;864;87,50;54;58\n15/01/19;15:00;755;864;87,38;69;69\n15/01/19;15:30;752;864;87,04;67;70\n15/01/19;16:00;747;864;86,46;58;85\n15/01/19;16:30;714;864;82,64;68;81\n15/01/19;17:00;710;864;82,18;59;93\n15/01/19;17:30;658;864;76,16;70;91\n15/01/19;18:00;639;864;73,96;66;93\n15/01/19;18:30;575;864;66,55;54;116\n15/01/19;19:00;523;864;60,53;48;128\n15/01/19;19:30;483;864;55,90;75;75\n15/01/19;20:00;504;864;58,33;50;26\n15/01/19;20:30;502;864;58,10;22;32\n15/01/19;21:00;495;864;57,29;10;25\n15/01/19;21:30;468;864;54,17;9;28\n15/01/19;22:00;454;864;52,55;0;34\n15/01/19;22:30;400;864;46,30;2;38\n15/01/19;23:00;378;864;43,75;4;35\n15/01/19;23:30;341;864;39,47;1;26\n16/01/19;00:00;332;864;38,43;0;8\n16/01/19;00:30;329;864;38,08;0;2\n16/01/19;01:00;327;864;37,85;0;2\n16/01/19;01:30;326;864;37,73;0;0\n16/01/19;02:00;326;864;37,73;0;0\n16/01/19;02:30;326;864;37,73;0;0\n16/01/19;03:00;326;864;37,73;0;0\n16/01/19;03:30;326;864;37,73;0;0\n16/01/19;04:00;326;864;37,73;0;0\n16/01/19;04:30;328;864;37,96;2;0\n16/01/19;05:00;328;864;37,96;0;0\n16/01/19;05:30;334;864;38,66;6;0\n16/01/19;06:00;334;864;38,66;1;1\n16/01/19;06:30;333;864;38,54;10;11\n16/01/19;07:00;333;864;38,54;18;13\n16/01/19;07:30;346;864;40,05;27;18\n16/01/19;08:00;345;864;39,93;45;19\n16/01/19;08:30;427;864;49,42;80;18\n16/01/19;09:00;464;864;53,70;95;16\n16/01/19;09:30;565;864;65,39;81;22\n16/01/19;10:00;646;864;74,77;111;26\n16/01/19;10:30;702;864;81,25;89;32\n16/01/19;11:00;731;864;84,61;81;55\n16/01/19;11:30;751;864;86,92;82;67\n16/01/19;12:00;755;864;87,38;72;75\n16/01/19;12:30;756;864;87,50;57;53\n16/01/19;13:00;757;864;87,62;54;53\n16/01/19;13:30;756;864;87,50;71;70\n16/01/19;14:00;757;864;87,62;75;81\n16/01/19;14:30;757;864;87,62;71;64\n16/01/19;15:00;760;864;87,96;80;82\n16/01/19;15:30;760;864;87,96;64;60\n16/01/19;16:00;752;864;87,04;74;96\n16/01/19;16:30;720;864;83,33;82;96\n16/01/19;17:00;691;864;79,98;62;112\n16/01/19;17:30;660;864;76,39;61;84\n16/01/19;18:00;620;864;71,76;62;104\n16/01/19;18:30;588;864;68,06;53;94\n16/01/19;19:00;501;864;57,99;52;123\n16/01/19;19:30;496;864;57,41;70;70\n16/01/19;20:00;509;864;58,91;45;30\n16/01/19;20:30;511;864;59,14;19;20\n16/01/19;21:00;504;864;58,33;7;23\n16/01/19;21:30;477;864;55,21;9;25\n16/01/19;22:00;449;864;51,97;8;36\n16/01/19;22:30;412;864;47,69;5;43\n16/01/19;23:00;411;864;47,57;5;29\n16/01/19;23:30;372;864;43,06;0;17\n17/01/19;00:00;365;864;42,25;3;7\n17/01/19;00:30;351;864;40,63;2;13\n17/01/19;01:00;351;864;40,63;0;1\n17/01/19;01:30;350;864;40,51;0;1\n17/01/19;02:00;349;864;40,39;0;0\n17/01/19;02:30;349;864;40,39;0;0\n17/01/19;03:00;349;864;40,39;0;0\n17/01/19;03:30;349;864;40,39;0;0\n17/01/19;04:00;349;864;40,39;1;0\n17/01/19;04:30;352;864;40,74;2;0\n17/01/19;05:00;352;864;40,74;0;1\n17/01/19;05:30;353;864;40,86;4;1\n17/01/19;06:00;355;864;41,09;5;4\n17/01/19;06:30;360;864;41,67;7;3\n17/01/19;07:00;362;864;41,90;21;16\n17/01/19;07:30;370;864;42,82;28;19\n17/01/19;08:00;374;864;43,29;54;26\n17/01/19;08:30;463;864;53,59;95;21\n17/01/19;09:00;479;864;55,44;122;12\n17/01/19;09:30;649;864;75,12;107;29\n17/01/19;10:00;701;864;81,13;116;24\n17/01/19;10:30;751;864;86,92;53;57\n17/01/19;11:00;754;864;87,27;42;42\n17/01/19;11:30;753;864;87,15;54;57\n17/01/19;12:00;752;864;87,04;58;52\n17/01/19;12:30;750;864;86,81;38;38\n17/01/19;13:00;752;864;87,04;38;40\n17/01/19;13:30;749;864;86,69;58;59\n17/01/19;14:00;750;864;86,81;61;61\n17/01/19;14:30;749;864;86,69;55;57\n17/01/19;15:00;747;864;86,46;61;59\n17/01/19;15:30;736;864;85,19;68;80\n17/01/19;16:00;745;864;86,23;77;77\n17/01/19;16:30;723;864;83,68;79;89\n17/01/19;17:00;723;864;83,68;61;78\n17/01/19;17:30;674;864;78,01;56;97\n17/01/19;18:00;662;864;76,62;64;94\n17/01/19;18:30;608;864;70,37;80;113\n17/01/19;19:00;582;864;67,36;62;114\n17/01/19;19:30;553;864;64,00;67;66\n17/01/19;20:00;566;864;65,51;55;36\n17/01/19;20:30;567;864;65,63;26;32\n17/01/19;21:00;558;864;64,58;17;32\n17/01/19;21:30;537;864;62,15;9;31\n17/01/19;22:00;524;864;60,65;6;34\n17/01/19;22:30;465;864;53,82;4;46\n17/01/19;23:00;447;864;51,74;4;39\n17/01/19;23:30;398;864;46,06;1;25\n18/01/19;00:00;384;864;44,44;2;19\n18/01/19;00:30;363;864;42,01;0;17\n18/01/19;01:00;361;864;41,78;0;8\n18/01/19;01:30;353;864;40,86;0;2\n18/01/19;02:00;353;864;40,86;0;0\n18/01/19;02:30;352;864;40,74;0;1\n18/01/19;03:00;354;864;40,97;0;0\n18/01/19;03:30;354;864;40,97;0;0\n18/01/19;04:00;354;864;40,97;1;0\n18/01/19;04:30;355;864;41,09;0;0\n18/01/19;05:00;355;864;41,09;0;0\n18/01/19;05:30;356;864;41,20;3;1\n18/01/19;06:00;357;864;41,32;2;2\n18/01/19;06:30;363;864;42,01;13;4\n18/01/19;07:00;372;864;43,06;20;18\n18/01/19;07:30;385;864;44,56;33;16\n18/01/19;08:00;392;864;45,37;71;23\n18/01/19;08:30;510;864;59,03;103;13\n18/01/19;09:00;547;864;63,31;105;24\n18/01/19;09:30;672;864;77,78;97;17\n18/01/19;10:00;716;864;82,87;84;32\n18/01/19;10:30;746;864;86,34;65;53\n18/01/19;11:00;748;864;86,57;53;52\n18/01/19;11:30;746;864;86,34;57;57\n18/01/19;12:00;748;864;86,57;71;73\n18/01/19;12:30;749;864;86,69;42;38\n18/01/19;13:00;749;864;86,69;45;41\n18/01/19;13:30;751;864;86,92;52;53\n18/01/19;14:00;751;864;86,92;77;84\n18/01/19;14:30;750;864;86,81;60;55\n18/01/19;15:00;750;864;86,81;61;64\n18/01/19;15:30;743;864;86,00;83;86\n18/01/19;16:00;742;864;85,88;68;81\n18/01/19;16:30;718;864;83,10;74;83\n18/01/19;17:00;695;864;80,44;71;110\n18/01/19;17:30;660;864;76,39;67;94\n18/01/19;18:00;649;864;75,12;60;111\n18/01/19;18:30;556;864;64,35;52;109\n18/01/19;19:00;530;864;61,34;64;103\n18/01/19;19:30;514;864;59,49;67;58\n18/01/19;20:00;524;864;60,65;67;22\n18/01/19;20:30;581;864;67,25;48;25\n18/01/19;21:00;595;864;68,87;32;21\n18/01/19;21:30;589;864;68,17;21;29\n18/01/19;22:00;579;864;67,01;10;42\n18/01/19;22:30;579;864;67,01;6;40\n18/01/19;23:00;508;864;58,80;5;33\n18/01/19;23:30;466;864;53,94;6;35\n19/01/19;00:00;453;864;52,43;1;30\n19/01/19;00:30;405;864;46,88;3;36\n19/01/19;01:00;393;864;45,49;2;21\n19/01/19;01:30;372;864;43,06;0;10\n19/01/19;02:00;369;864;42,71;0;4\n19/01/19;02:30;368;864;42,59;1;1\n19/01/19;03:00;368;864;42,59;0;2\n19/01/19;03:30;364;864;42,13;0;2\n19/01/19;04:00;358;864;41,44;0;7\n19/01/19;04:30;355;864;41,09;0;0\n19/01/19;05:00;354;864;40,97;0;1\n19/01/19;05:30;355;864;41,09;1;0\n19/01/19;06:00;352;864;40,74;0;4\n19/01/19;06:30;349;864;40,39;1;3\n19/01/19;07:00;348;864;40,28;4;3\n19/01/19;07:30;356;864;41,20;8;3\n19/01/19;08:00;354;864;40,97;8;12\n19/01/19;08:30;363;864;42,01;23;7\n19/01/19;09:00;382;864;44,21;48;9\n19/01/19;09:30;478;864;55,32;95;13\n19/01/19;10:00;523;864;60,53;119;20\n19/01/19;10:30;652;864;75,46;121;43\n19/01/19;11:00;662;864;76,62;97;48\n19/01/19;11:30;744;864;86,11;104;67\n19/01/19;12:00;751;864;86,92;80;79\n19/01/19;12:30;748;864;86,57;73;76\n19/01/19;13:00;749;864;86,69;62;59\n19/01/19;13:30;749;864;86,69;62;62\n19/01/19;14:00;748;864;86,57;47;48\n19/01/19;14:30;705;864;81,60;46;77\n19/01/19;15:00;731;864;84,61;104;70\n19/01/19;15:30;746;864;86,34;66;69\n19/01/19;16:00;746;864;86,34;74;71\n19/01/19;16:30;743;864;86,00;70;78\n19/01/19;17:00;740;864;85,65;70;60\n19/01/19;17:30;745;864;86,23;48;51\n19/01/19;18:00;738;864;85,42;60;108\n19/01/19;18:30;635;864;73,50;59;108\n19/01/19;19:00;599;864;69,33;58;121\n19/01/19;19:30;562;864;65,05;67;66\n19/01/19;20:00;574;864;66,44;63;38\n19/01/19;20:30;640;864;74,07;76;26\n19/01/19;21:00;647;864;74,88;32;32\n19/01/19;21:30;641;864;74,19;24;29\n19/01/19;22:00;630;864;72,92;15;48\n19/01/19;22:30;571;864;66,09;13;47\n19/01/19;23:00;545;864;63,08;9;55\n19/01/19;23:30;469;864;54,28;3;57\n20/01/19;00:00;457;864;52,89;2;34\n20/01/19;00:30;418;864;48,38;5;28\n20/01/19;01:00;405;864;46,88;1;16\n20/01/19;01:30;380;864;43,98;1;21\n20/01/19;02:00;373;864;43,17;1;13\n20/01/19;02:30;360;864;41,67;2;8\n20/01/19;03:00;361;864;41,78;2;0\n20/01/19;03:30;361;864;41,78;0;1\n20/01/19;04:00;360;864;41,67;1;2\n20/01/19;04:30;357;864;41,32;0;3\n20/01/19;05:00;357;864;41,32;0;0\n20/01/19;05:30;356;864;41,20;1;2\n20/01/19;06:00;352;864;40,74;0;6\n20/01/19;06:30;347;864;40,16;1;4\n20/01/19;07:00;345;864;39,93;0;2\n20/01/19;07:30;343;864;39,70;1;2\n20/01/19;08:00;341;864;39,47;0;4\n20/01/19;08:30;335;864;38,77;2;6\n20/01/19;09:00;333;864;38,54;2;8\n20/01/19;09:30;325;864;37,62;4;8\n20/01/19;10:00;320;864;37,04;12;21\n20/01/19;10:30;327;864;37,85;23;11\n20/01/19;11:00;329;864;38,08;28;14\n20/01/19;11:30;355;864;41,09;35;20\n20/01/19;12:00;363;864;42,01;48;27\n20/01/19;12:30;396;864;45,83;50;28\n20/01/19;13:00;408;864;47,22;30;12\n20/01/19;13:30;427;864;49,42;34;23\n20/01/19;14:00;431;864;49,88;28;21\n20/01/19;14:30;431;864;49,88;36;43\n20/01/19;15:00;433;864;50,12;32;39\n20/01/19;15:30;418;864;48,38;46;47\n20/01/19;16:00;417;864;48,26;20;55\n20/01/19;16:30;366;864;42,36;20;48\n20/01/19;17:00;359;864;41,55;23;35\n20/01/19;17:30;345;864;39,93;16;36\n20/01/19;18:00;334;864;38,66;13;29\n20/01/19;18:30;324;864;37,50;17;19\n20/01/19;19:00;328;864;37,96;16;20\n20/01/19;19:30;324;864;37,50;8;4\n20/01/19;20:00;326;864;37,73;9;10\n20/01/19;20:30;325;864;37,62;10;8\n20/01/19;21:00;328;864;37,96;8;5\n20/01/19;21:30;322;864;37,27;1;9\n20/01/19;22:00;319;864;36,92;4;5\n20/01/19;22:30;314;864;36,34;2;6\n20/01/19;23:00;312;864;36,11;3;9\n20/01/19;23:30;306;864;35,42;2;2\n21/01/19;00:00;304;864;35,19;2;2\n21/01/19;00:30;304;864;35,19;0;1\n21/01/19;01:00;304;864;35,19;0;0\n21/01/19;01:30;302;864;34,95;0;2\n21/01/19;02:00;302;864;34,95;0;0\n21/01/19;02:30;303;864;35,07;1;0\n21/01/19;03:00;303;864;35,07;0;0\n21/01/19;03:30;303;864;35,07;0;0\n21/01/19;04:00;302;864;34,95;0;0\n21/01/19;04:30;301;864;34,84;0;1\n21/01/19;05:00;301;864;34,84;1;1\n21/01/19;05:30;303;864;35,07;5;2\n21/01/19;06:00;304;864;35,19;1;0\n21/01/19;06:30;307;864;35,53;7;3\n21/01/19;07:00;314;864;36,34;16;9\n21/01/19;07:30;334;864;38,66;31;12\n21/01/19;08:00;346;864;40,05;45;19\n21/01/19;08:30;412;864;47,69;64;11\n21/01/19;09:00;450;864;52,08;74;14\n21/01/19;09:30;496;864;57,41;61;19\n21/01/19;10:00;557;864;64,47;73;30\n21/01/19;10:30;588;864;68,06;65;35\n21/01/19;11:00;602;864;69,68;66;34\n21/01/19;11:30;653;864;75,58;69;50\n21/01/19;12:00;657;864;76,04;77;62\n21/01/19;12:30;673;864;77,89;48;46\n21/01/19;13:00;665;864;76,97;47;48\n21/01/19;13:30;678;864;78,47;56;43\n21/01/19;14:00;680;864;78,70;53;48\n21/01/19;14:30;681;864;78,82;78;86\n21/01/19;15:00;685;864;79,28;72;68\n21/01/19;15:30;690;864;79,86;75;86\n21/01/19;16:00;685;864;79,28;56;100\n21/01/19;16:30;623;864;72,11;48;68\n21/01/19;17:00;622;864;71,99;63;76\n21/01/19;17:30;590;864;68,29;44;83\n21/01/19;18:00;573;864;66,32;38;95\n21/01/19;18:30;496;864;57,41;43;95\n21/01/19;19:00;474;864;54,86;33;104\n21/01/19;19:30;421;864;48,73;23;53\n21/01/19;20:00;391;864;45,25;16;33\n21/01/19;20:30;369;864;42,71;8;23\n21/01/19;21:00;366;864;42,36;7;14\n21/01/19;21:30;360;864;41,67;7;12\n21/01/19;22:00;355;864;41,09;5;14\n21/01/19;22:30;345;864;39,93;4;9\n21/01/19;23:00;342;864;39,58;2;7\n21/01/19;23:30;337;864;39,00;2;1\n22/01/19;00:00;338;864;39,12;1;5\n22/01/19;00:30;334;864;38,66;1;3\n22/01/19;01:00;332;864;38,43;0;0\n22/01/19;01:30;332;864;38,43;0;0\n22/01/19;02:00;332;864;38,43;0;0\n22/01/19;02:30;332;864;38,43;0;0\n22/01/19;03:00;332;864;38,43;1;0\n22/01/19;03:30;333;864;38,54;0;0\n22/01/19;04:00;333;864;38,54;0;0\n22/01/19;04:30;333;864;38,54;0;0\n22/01/19;05:00;333;864;38,54;2;0\n22/01/19;05:30;338;864;39,12;5;0\n22/01/19;06:00;342;864;39,58;6;3\n22/01/19;06:30;344;864;39,81;10;7\n22/01/19;07:00;346;864;40,05;26;13\n22/01/19;07:30;364;864;42,13;30;20\n22/01/19;08:00;368;864;42,59;40;25\n22/01/19;08:30;449;864;51,97;93;10\n22/01/19;09:00;474;864;54,86;130;21\n22/01/19;09:30;607;864;70,25;77;19\n22/01/19;10:00;635;864;73,50;98;24\n22/01/19;10:30;722;864;83,56;65;47\n22/01/19;11:00;728;864;84,26;43;39\n22/01/19;11:30;724;864;83,80;52;53\n22/01/19;12:00;721;864;83,45;51;51\n22/01/19;12:30;727;864;84,14;33;30\n22/01/19;13:00;723;864;83,68;33;35\n22/01/19;13:30;725;864;83,91;61;63\n22/01/19;14:00;736;864;85,19;67;53\n22/01/19;14:30;735;864;85,07;42;42\n22/01/19;15:00;736;864;85,19;48;60\n22/01/19;15:30;724;864;83,80;68;78\n22/01/19;16:00;714;864;82,64;53;59\n22/01/19;16:30;693;864;80,21;50;77\n22/01/19;17:00;664;864;76,85;51;84\n22/01/19;17:30;628;864;72,69;59;76\n22/01/19;18:00;633;864;73,26;71;90\n22/01/19;18:30;612;864;70,83;52;105\n22/01/19;19:00;552;864;63,89;47;109\n22/01/19;19:30;484;864;56,02;63;70\n22/01/19;20:00;485;864;56,13;35;32\n22/01/19;20:30;492;864;56,94;20;28\n22/01/19;21:00;476;864;55,09;9;29\n22/01/19;21:30;452;864;52,31;8;26\n22/01/19;22:00;439;864;50,81;7;39\n22/01/19;22:30;387;864;44,79;8;33\n22/01/19;23:00;380;864;43,98;5;19\n22/01/19;23:30;370;864;42,82;10;10\n23/01/19;00:00;369;864;42,71;0;13\n23/01/19;00:30;357;864;41,32;0;1\n23/01/19;01:00;356;864;41,20;1;0\n23/01/19;01:30;357;864;41,32;0;1\n23/01/19;02:00;356;864;41,20;0;1\n23/01/19;02:30;353;864;40,86;0;2\n23/01/19;03:00;353;864;40,86;0;0\n23/01/19;03:30;354;864;40,97;1;0\n23/01/19;04:00;354;864;40,97;1;0\n23/01/19;04:30;356;864;41,20;1;0\n23/01/19;05:00;357;864;41,32;1;0\n23/01/19;05:30;360;864;41,67;7;1\n23/01/19;06:00;366;864;42,36;5;2\n23/01/19;06:30;369;864;42,71;7;5\n23/01/19;07:00;368;864;42,59;21;11\n23/01/19;07:30;392;864;45,37;29;14\n23/01/19;08:00;395;864;45,72;51;27\n23/01/19;08:30;448;864;51,85;60;12\n23/01/19;09:00;496;864;57,41;76;16\n23/01/19;09:30;552;864;63,89;69;22\n23/01/19;10:00;576;864;66,67;67;22\n23/01/19;10:30;646;864;74,77;61;29\n23/01/19;11:00;659;864;76,27;50;51\n23/01/19;11:30;664;864;76,85;70;48\n23/01/19;12:00;677;864;78,36;93;49\n23/01/19;12:30;734;864;84,95;59;41\n23/01/19;13:00;739;864;85,53;49;38\n23/01/19;13:30;745;864;86,23;57;68\n23/01/19;14:00;733;864;84,84;64;89\n23/01/19;14:30;720;864;83,33;87;68\n23/01/19;15:00;728;864;84,26;67;78\n23/01/19;15:30;709;864;82,06;54;61\n23/01/19;16:00;711;864;82,29;67;84\n23/01/19;16:30;680;864;78,70;53;86\n23/01/19;17:00;667;864;77,20;41;62\n23/01/19;17:30;624;864;72,22;51;77\n23/01/19;18:00;614;864;71,06;47;83\n23/01/19;18:30;553;864;64,00;44;84\n23/01/19;19:00;539;864;62,38;49;94\n23/01/19;19:30;500;864;57,87;33;51\n23/01/19;20:00;481;864;55,67;39;31\n23/01/19;20:30;493;864;57,06;24;25\n23/01/19;21:00;489;864;56,60;10;10\n23/01/19;21:30;481;864;55,67;5;20\n23/01/19;22:00;475;864;54,98;4;32\n23/01/19;22:30;436;864;50,46;7;21\n23/01/19;23:00;431;864;49,88;7;20\n23/01/19;23:30;408;864;47,22;1;15\n24/01/19;00:00;405;864;46,88;2;8\n24/01/19;00:30;399;864;46,18;0;1\n24/01/19;01:00;399;864;46,18;1;3\n24/01/19;01:30;396;864;45,83;1;1\n24/01/19;02:00;396;864;45,83;1;3\n24/01/19;02:30;395;864;45,72;1;0\n24/01/19;03:00;396;864;45,83;0;1\n24/01/19;03:30;395;864;45,72;1;0\n24/01/19;04:00;396;864;45,83;0;0\n24/01/19;04:30;396;864;45,83;2;0\n24/01/19;05:00;397;864;45,95;1;0\n24/01/19;05:30;399;864;46,18;7;1\n24/01/19;06:00;404;864;46,76;5;2\n24/01/19;06:30;409;864;47,34;11;5\n24/01/19;07:00;428;864;49,54;23;11\n24/01/19;07:30;443;864;51,27;42;20\n24/01/19;08:00;447;864;51,74;48;29\n24/01/19;08:30;515;864;59,61;85;15\n24/01/19;09:00;555;864;64,24;115;17\n24/01/19;09:30;682;864;78,94;109;27\n24/01/19;10:00;722;864;83,56;95;28\n24/01/19;10:30;786;864;90,97;59;47\n24/01/19;11:00;788;864;91,20;69;54\n24/01/19;11:30;819;864;94,79;72;56\n24/01/19;12:00;816;864;94,44;54;53\n24/01/19;12:30;822;864;95,14;43;43\n24/01/19;13:00;820;864;94,91;34;33\n24/01/19;13:30;823;864;95,25;66;66\n24/01/19;14:00;819;864;94,79;46;59\n24/01/19;14:30;780;864;90,28;68;63\n24/01/19;15:00;809;864;93,63;52;57\n24/01/19;15:30;810;864;93,75;75;70\n24/01/19;16:00;807;864;93,40;63;69\n24/01/19;16:30;776;864;89,81;61;99\n24/01/19;17:00;758;864;87,73;66;79\n24/01/19;17:30;732;864;84,72;59;87\n24/01/19;18:00;711;864;82,29;59;98\n24/01/19;18:30;650;864;75,23;52;91\n24/01/19;19:00;630;864;72,92;60;128\n24/01/19;19:30;572;864;66,20;68;53\n24/01/19;20:00;583;864;67,48;35;32\n24/01/19;20:30;599;864;69,33;38;26\n24/01/19;21:00;598;864;69,21;19;36\n24/01/19;21:30;579;864;67,01;14;24\n24/01/19;22:00;572;864;66,20;7;39\n24/01/19;22:30;514;864;59,49;3;42\n24/01/19;23:00;495;864;57,29;5;43\n24/01/19;23:30;453;864;52,43;2;22\n25/01/19;00:00;442;864;51,16;4;19\n25/01/19;00:30;422;864;48,84;0;7\n25/01/19;01:00;419;864;48,50;1;4\n25/01/19;01:30;413;864;47,80;0;5\n25/01/19;02:00;411;864;47,57;0;2\n25/01/19;02:30;410;864;47,45;0;0\n25/01/19;03:00;409;864;47,34;0;3\n25/01/19;03:30;407;864;47,11;1;0\n25/01/19;04:00;408;864;47,22;0;1\n25/01/19;04:30;408;864;47,22;1;0\n25/01/19;05:00;408;864;47,22;1;1\n25/01/19;05:30;408;864;47,22;3;0\n25/01/19;06:00;412;864;47,69;5;2\n25/01/19;06:30;416;864;48,15;10;8\n25/01/19;07:00;413;864;47,80;15;15\n25/01/19;07:30;416;864;48,15;35;13\n25/01/19;08:00;438;864;50,69;58;29\n25/01/19;08:30;494;864;57,18;88;28\n25/01/19;09:00;535;864;61,92;120;17\n25/01/19;09:30;678;864;78,47;101;15\n25/01/19;10:00;716;864;82,87;105;40\n25/01/19;10:30;792;864;91,67;88;58\n25/01/19;11:00;801;864;92,71;65;51\n25/01/19;11:30;814;864;94,21;70;72\n25/01/19;12:00;817;864;94,56;51;49\n25/01/19;12:30;814;864;94,21;54;56\n25/01/19;13:00;816;864;94,44;55;52\n25/01/19;13:30;815;864;94,33;66;70\n25/01/19;14:00;813;864;94,10;86;82\n25/01/19;14:30;816;864;94,44;94;94\n25/01/19;15:00;819;864;94,79;79;78\n25/01/19;15:30;817;864;94,56;87;92\n25/01/19;16:00;807;864;93,40;86;94\n25/01/19;16:30;806;864;93,29;90;90\n25/01/19;17:00;802;864;92,82;60;111\n25/01/19;17:30;734;864;84,95;91;125\n25/01/19;18:00;713;864;82,52;72;103\n25/01/19;18:30;662;864;76,62;54;87\n25/01/19;19:00;644;864;74,54;55;122\n25/01/19;19:30;598;864;69,21;77;60\n25/01/19;20:00;617;864;71,41;85;45\n25/01/19;20:30;693;864;80,21;103;24\n25/01/19;21:00;718;864;83,10;49;30\n25/01/19;21:30;729;864;84,38;22;46\n25/01/19;22:00;693;864;80,21;16;61\n25/01/19;22:30;647;864;74,88;13;53\n25/01/19;23:00;623;864;72,11;6;69\n25/01/19;23:30;534;864;61,81;4;59\n26/01/19;00:00;510;864;59,03;4;49\n26/01/19;00:30;452;864;52,31;3;27\n26/01/19;01:00;438;864;50,69;0;16\n26/01/19;01:30;413;864;47,80;0;19\n26/01/19;02:00;405;864;46,88;1;2\n26/01/19;02:30;402;864;46,53;0;3\n26/01/19;03:00;401;864;46,41;0;0\n26/01/19;03:30;400;864;46,30;0;1\n26/01/19;04:00;400;864;46,30;0;2\n26/01/19;04:30;398;864;46,06;2;0\n26/01/19;05:00;400;864;46,30;0;0\n26/01/19;05:30;400;864;46,30;0;2\n26/01/19;06:00;398;864;46,06;1;0\n26/01/19;06:30;398;864;46,06;2;1\n26/01/19;07:00;399;864;46,18;2;4\n26/01/19;07:30;397;864;45,95;7;7\n26/01/19;08:00;397;864;45,95;7;11\n26/01/19;08:30;396;864;45,83;16;9\n26/01/19;09:00;403;864;46,64;39;7\n26/01/19;09:30;462;864;53,47;93;18\n26/01/19;10:00;513;864;59,38;105;10\n26/01/19;10:30;635;864;73,50;113;47\n26/01/19;11:00;668;864;77,31;111;49\n26/01/19;11:30;752;864;87,04;120;72\n26/01/19;12:00;778;864;90,05;104;76\n26/01/19;12:30;810;864;93,75;83;69\n26/01/19;13:00;810;864;93,75;87;87\n26/01/19;13:30;810;864;93,75;71;66\n26/01/19;14:00;816;864;94,44;68;68\n26/01/19;14:30;818;864;94,68;59;56\n26/01/19;15:00;818;864;94,68;74;73\n26/01/19;15:30;818;864;94,68;74;74\n26/01/19;16:00;814;864;94,21;54;80\n26/01/19;16:30;789;864;91,32;72;70\n26/01/19;17:00;791;864;91,55;75;89\n26/01/19;17:30;757;864;87,62;55;99\n26/01/19;18:00;731;864;84,61;36;102\n26/01/19;18:30;665;864;76,97;87;80\n26/01/19;19:00;660;864;76,39;73;108\n26/01/19;19:30;645;864;74,65;87;57\n26/01/19;20:00;666;864;77,08;86;38\n26/01/19;20:30;752;864;87,04;110;30\n26/01/19;21:00;800;864;92,59;67;45\n26/01/19;21:30;810;864;93,75;42;55\n26/01/19;22:00;794;864;91,90;15;55\n26/01/19;22:30;727;864;84,14;7;59\n26/01/19;23:00;709;864;82,06;8;67\n26/01/19;23:30;598;864;69,21;7;88\n27/01/19;00:00;568;864;65,74;7;42\n27/01/19;00:30;507;864;58,68;7;53\n27/01/19;01:00;486;864;56,25;3;27\n27/01/19;01:30;449;864;51,97;0;24\n27/01/19;02:00;439;864;50,81;0;7\n27/01/19;02:30;427;864;49,42;1;8\n27/01/19;03:00;425;864;49,19;1;8\n27/01/19;03:30;416;864;48,15;0;3\n27/01/19;04:00;415;864;48,03;0;6\n27/01/19;04:30;410;864;47,45;1;0\n27/01/19;05:00;410;864;47,45;0;0\n27/01/19;05:30;410;864;47,45;1;1\n27/01/19;06:00;410;864;47,45;1;1\n27/01/19;06:30;409;864;47,34;0;1\n27/01/19;07:00;408;864;47,22;0;2\n27/01/19;07:30;404;864;46,76;0;9\n27/01/19;08:00;398;864;46,06;0;7\n27/01/19;08:30;386;864;44,68;2;8\n27/01/19;09:00;384;864;44,44;3;12\n27/01/19;09:30;371;864;42,94;1;10\n27/01/19;10:00;367;864;42,48;13;5\n27/01/19;10:30;379;864;43,87;21;18\n27/01/19;11:00;377;864;43,63;30;12\n27/01/19;11:30;404;864;46,76;38;20\n27/01/19;12:00;414;864;47,92;36;22\n27/01/19;12:30;432;864;50,00;34;21\n27/01/19;13:00;443;864;51,27;26;14\n27/01/19;13:30;458;864;53,01;24;21\n27/01/19;14:00;455;864;52,66;13;29\n27/01/19;14:30;424;864;49,07;9;31\n27/01/19;15:00;417;864;48,26;6;21\n27/01/19;15:30;382;864;44,21;1;35\n27/01/19;16:00;365;864;42,25;31;27\n27/01/19;16:30;375;864;43,40;22;18\n27/01/19;17:00;376;864;43,52;22;16\n27/01/19;17:30;382;864;44,21;28;32\n27/01/19;18:00;378;864;43,75;33;12\n27/01/19;18:30;404;864;46,76;27;19\n27/01/19;19:00;409;864;47,34;27;14\n27/01/19;19:30;429;864;49,65;40;9\n27/01/19;20:00;455;864;52,66;33;14\n27/01/19;20:30;482;864;55,79;27;7\n27/01/19;21:00;493;864;57,06;26;14\n27/01/19;21:30;500;864;57,87;7;17\n27/01/19;22:00;492;864;56,94;4;31\n27/01/19;22:30;464;864;53,70;2;10\n27/01/19;23:00;458;864;53,01;5;13\n27/01/19;23:30;441;864;51,04;0;15\n28/01/19;00:00;435;864;50,35;1;26\n28/01/19;00:30;405;864;46,88;1;10\n28/01/19;01:00;401;864;46,41;1;6\n28/01/19;01:30;397;864;45,95;0;0\n28/01/19;02:00;396;864;45,83;1;0\n28/01/19;02:30;396;864;45,83;0;0\n28/01/19;03:00;396;864;45,83;0;0\n28/01/19;03:30;396;864;45,83;0;0\n28/01/19;04:00;396;864;45,83;1;0\n28/01/19;04:30;375;864;43,40;0;0\n28/01/19;05:00;375;864;43,40;1;1\n28/01/19;05:30;375;864;43,40;4;1\n28/01/19;06:00;378;864;43,75;6;6\n28/01/19;06:30;373;864;43,17;9;12\n28/01/19;07:00;375;864;43,40;18;7\n28/01/19;07:30;385;864;44,56;24;21\n28/01/19;08:00;384;864;44,44;46;21\n28/01/19;08:30;444;864;51,39;72;19\n28/01/19;09:00;476;864;55,09;88;22\n28/01/19;09:30;579;864;67,01;97;27\n28/01/19;10:00;605;864;70,02;78;20\n28/01/19;10:30;689;864;79,75;84;31\n28/01/19;11:00;712;864;82,41;64;45\n28/01/19;11:30;749;864;86,69;72;57\n28/01/19;12:00;743;864;86,00;93;66\n28/01/19;12:30;777;864;89,93;43;40\n28/01/19;13:00;778;864;90,05;50;51\n28/01/19;13:30;779;864;90,16;62;59\n28/01/19;14:00;771;864;89,24;71;67\n28/01/19;14:30;774;864;89,58;66;67\n28/01/19;15:00;782;864;90,51;65;76\n28/01/19;15:30;752;864;87,04;70;92\n28/01/19;16:00;743;864;86,00;60;89\n28/01/19;16:30;693;864;80,21;47;88\n28/01/19;17:00;673;864;77,89;44;66\n28/01/19;17:30;625;864;72,34;49;83\n28/01/19;18:00;616;864;71,30;56;94\n28/01/19;18:30;566;864;65,51;42;89\n28/01/19;19:00;527;864;61,00;40;104\n28/01/19;19:30;466;864;53,94;61;53\n28/01/19;20:00;470;864;54,40;54;25\n28/01/19;20:30;514;864;59,49;43;24\n28/01/19;21:00;511;864;59,14;17;26\n28/01/19;21:30;499;864;57,75;10;23\n28/01/19;22:00;490;864;56,71;7;19\n28/01/19;22:30;467;864;54,05;6;24\n28/01/19;23:00;459;864;53,13;3;45\n28/01/19;23:30;402;864;46,53;2;14\n29/01/19;00:00;402;864;46,53;4;14\n29/01/19;00:30;389;864;45,02;0;9\n29/01/19;01:00;382;864;44,21;0;2\n29/01/19;01:30;378;864;43,75;0;4\n29/01/19;02:00;376;864;43,52;0;1\n29/01/19;02:30;375;864;43,40;0;0\n29/01/19;03:00;375;864;43,40;1;1\n29/01/19;03:30;375;864;43,40;0;0\n29/01/19;04:00;374;864;43,29;1;0\n29/01/19;04:30;375;864;43,40;0;0\n29/01/19;05:00;375;864;43,40;0;1\n29/01/19;05:30;374;864;43,29;6;0\n29/01/19;06:00;381;864;44,10;2;3\n29/01/19;06:30;379;864;43,87;12;9\n29/01/19;07:00;383;864;44,33;21;14\n29/01/19;07:30;398;864;46,06;40;23\n29/01/19;08:00;403;864;46,64;49;24\n29/01/19;08:30;471;864;54,51;103;15\n29/01/19;09:00;530;864;61,34;94;23\n29/01/19;09:30;640;864;74,07;81;22\n29/01/19;10:00;655;864;75,81;108;40\n29/01/19;10:30;754;864;87,27;72;41\n29/01/19;11:00;754;864;87,27;76;52\n29/01/19;11:30;773;864;89,47;52;54\n29/01/19;12:00;771;864;89,24;75;65\n29/01/19;12:30;778;864;90,05;55;55\n29/01/19;13:00;778;864;90,05;41;39\n29/01/19;13:30;780;864;90,28;44;45\n29/01/19;14:00;778;864;90,05;70;77\n29/01/19;14:30;779;864;90,16;68;59\n29/01/19;15:00;780;864;90,28;70;76\n29/01/19;15:30;760;864;87,96;68;74\n29/01/19;16:00;767;864;88,77;64;81\n29/01/19;16:30;734;864;84,95;67;79\n29/01/19;17:00;731;864;84,61;51;86\n29/01/19;17:30;668;864;77,31;51;93\n29/01/19;18:00;656;864;75,93;53;86\n29/01/19;18:30;599;864;69,33;58;100\n29/01/19;19:00;577;864;66,78;56;114\n29/01/19;19:30;516;864;59,72;48;64\n29/01/19;20:00;514;864;59,49;45;24\n29/01/19;20:30;539;864;62,38;28;21\n29/01/19;21:00;533;864;61,69;14;28\n29/01/19;21:30;508;864;58,80;11;35\n29/01/19;22:00;496;864;57,41;5;29\n29/01/19;22:30;460;864;53,24;6;34\n29/01/19;23:00;446;864;51,62;1;38\n29/01/19;23:30;403;864;46,64;2;17".split("\n"),Wn=Jn.shift().split(";"),Zn={};Jn.forEach(function(n){var t=n.split(";"),r={};Wn.forEach(function(n,e){var i=t[e].replace(",",".");r[n]=function(n){return~n.indexOf("/")||~n.indexOf(":")}(i)?i:parseFloat(i)});var e=t[0];Zn[e]||(Zn[e]=[]),Zn[e].push(r)});var Kn,Qn=Object.values(Zn).map(function(n){return n.map(function(n){return n["% occupation"]/100})}),$n=!1,nt={},tt={values:[],targets:[],coef:.001,tolerance:.1,init:function(n){void 0===n&&(n=this.targets.length),this.values=new Array(n).fill(0)},update:function(){this.values&&this.values.length||this.init(),$n=!1;for(var n=0;n<this.targets.length;n++){var t=this.targets[n]-this.values[n];Math.abs(t)>this.tolerance&&($n=!0,this.values[n]+=t*this.coef)}}};Xn.add(function(n){if(!$n)return;tt.update(),nt.landscape.background(nt.landscape.backgroundColor),tt.values.forEach(function(n,t){var r=t*nt.step;nt.landscape.ctx.drawImage(Kn,r,0,nt.step,nt.landscape.height,r,n,nt.step,nt.landscape.height)})});n.generate=function(n){void 0===n&&(n={});var t=n.units;void 0===t&&(t=[24]);var r=n.width;void 0===r&&(r=240);var e=n.height;void 0===e&&(e=240);var i=n.groundsLength;void 0===i&&(i=2);var o=n.percentOfStraightLines;void 0===o&&(o=.5);var a=n.percentOfGradients;void 0===a&&(a=.5);var s=n.percentOfSimplexGradients;void 0===s&&(s=.1);var g=n.swatch;void 0===g&&(g=["rgb(0, 0, 0)"]);var h=n.backgroundColor;void 0===h&&(h="rgb(255, 255, 255)");var l=n.symbols;void 0===l&&(l=["debug"]);var c=n.canvas;void 0===c&&(c=null);var u=n.random;void 0===u&&(u=Nn.random);var b=l.map(function(n){return hn(vn[n])}),d=new Array(i).fill(!0).map(function(n,i,l){var c=100*u(),d=An(t,u),p=An(g,u),f=An(b,u),v=c>100*a?an.fix(u()):c<100*s?an.simplex({seed:c}):an.linear(c),m=e*Math.pow(1-i/l.length,3*u()),_=new Mn(function(n){if(c<100*o)return m/e;var t=Mn.perlin({seed:c,octaves:3,resolution:64,lacunarity:2,gain:.5})(n/(2+c/100*3));return m/e/2+t});return new mn({unit:d,line:_,gradient:v,width:r,height:e,foregroundColor:p,backgroundColor:h,pattern:f})});return En.from(d,{canvas:c,backgroundColor:h})},n.prng=Nn,n.erode=function(n,t){void 0===t&&(t={});var r=t.step;void 0===r&&(r=24);var e=t.easing;void 0===e&&(e=.001);var i=t.snapToGrid;if(void 0===i&&(i=!0),!n.canvas)throw new Error("erode only works on SVGCanvas with canvas element for now");nt.landscape||(Kn=n.copy(),nt.landscape=n,nt.step=r),tt.coef=e,tt.targets=An(Qn).map(function(t){return i?Math.floor(t*n.height/r)*r-n.height/2:t*(n.height/r)*r-n.height/2}),$n=!0},n.swatches={1:["rgb(120,0,100)","rgb(160,15,150)","rgb(200,30,200)","rgb(255,50,255)","rgb(255,90,190)","rgb(255,120,140)","rgb(255,165,165)","rgb(255,215,235)"],2:["rgb(80,20,100)","rgb(110,30,130)","rgb(140,35,160)","rgb(170,40,190)","rgb(180,60,255)","rgb(190,100,255)","rgb(200,150,255)","rgb(210,200,255)"],3:["rgb(0,0,90)","rgb(0,0,160)","rgb(0,0,255)","rgb(0,120,255)","rgb(60,185,255)","rgb(0,200,255)","rgb(60,255,255)","rgb(220,255,255)"],4:["rgb(0,60,39)","rgb(0,90,59)","rgb(0,120,90)","rgb(0,151,120)","rgb(0,181,150)","rgb(52,231,200)","rgb(116,246,210)","rgb(179,254,225)"],5:["rgb(39,75,0)","rgb(27,95,15)","rgb(14,116,36)","rgb(0,170,43)","rgb(0,210,63)","rgb(0,252,29)","rgb(85,253,127)","rgb(178,253,157)"],6:["rgb(140,114,0)","rgb(180,139,0)","rgb(221,179,0)","rgb(255,218,0)","rgb(255,253,0)","rgb(255,249,88)","rgb(255,245,155)","rgb(255,254,218)"],7:["rgb(101,44,80)","rgb(141,58,57)","rgb(181,72,30)","rgb(201,88,0)","rgb(226,113,0)","rgb(255,137,0)","rgb(255,168,64)","rgb(255,199,147)"],8:["rgb(91,4,38)","rgb(151,11,57)","rgb(197,15,43)","rgb(222,18,27)","rgb(255,22,6)","rgb(255,53,49)","rgb(255,118,116)","rgb(255,189,189)"],9:["rgb(40,19,0)","rgb(71,39,17)","rgb(101,59,42)","rgb(136,115,99)","rgb(175,145,128)","rgb(210,179,158)","rgb(220,200,179)","rgb(236,220,199)"],10:["rgb(28,61,91)","rgb(59,100,131)","rgb(78,130,161)","rgb(98,161,181)","rgb(119,170,191)","rgb(150,180,201)","rgb(169,200,210)","rgb(199,220,230)"],11:["rgb(44,18,153)","rgb(85,28,202)","rgb(109,45,255)","rgb(130,82,255)","rgb(150,122,255)","rgb(160,171,255)","rgb(180,206,255)","rgb(194,235,255)"],12:["rgb(121,0,100)","rgb(161,12,151)","rgb(80,20,101)","rgb(110,30,131)","rgb(90,0,39)","rgb(151,0,58)"],13:["rgb(0,3,91)","rgb(0,9,162)","rgb(45,7,152)","rgb(85,26,203)","rgb(29,60,91)","rgb(59,100,131)"],14:["rgb(0,60,40)","rgb(0,90,60)","rgb(39,75,0)","rgb(28,95,15)","rgb(40,19,0)","rgb(70,39,17)"],15:["rgb(100,44,80)","rgb(141,58,58)","rgb(90,0,39)","rgb(151,0,58)","rgb(140,114,0)","rgb(181,139,0)"],16:["rgb(255,164,163)","rgb(255,215,235)","rgb(200,150,255)","rgb(210,200,255)","rgb(255,117,116)","rgb(255,189,189)"],17:["rgb(48,255,255)","rgb(219,255,255)","rgb(179,206,255)","rgb(194,236,255)","rgb(169,200,211)","rgb(200,220,231)"],18:["rgb(116,246,210)","rgb(178,255,225)","rgb(84,255,126)","rgb(179,255,157)","rgb(220,200,179)","rgb(235,220,199)"],19:["rgb(255,117,116)","rgb(255,189,189)","rgb(255,168,63)","rgb(255,199,146)","rgb(255,244,155)","rgb(255,255,219)"],20:["rgb(255,215,235)","rgb(210,200,255)","rgb(194,236,255)","rgb(219,255,255)","rgb(200,220,231)","rgb(178,255,225)"],21:["rgb(255,48,255)","rgb(181,62,255)","rgb(181,62,255)","rgb(0,21,255)","rgb(98,160,181)","rgb(51,231,200)"],22:["rgb(121,0,100)","rgb(80,20,101)","rgb(45,7,152)","rgb(0,3,91)","rgb(29,60,91)","rgb(0,60,40)"],23:["rgb(178,255,225)","rgb(179,255,157)","rgb(255,255,219)","rgb(255,199,146)","rgb(255,189,189)","rgb(235,220,199)"],24:["rgb(51,231,200)","rgb(0,255,28)","rgb(255,254,0)","rgb(255,137,0)","rgb(255,0,0)","rgb(100,59,43)"],25:["rgb(0,60,40)","rgb(39,75,0)","rgb(140,114,0)","rgb(100,44,80)","rgb(90,0,39)","rgb(40,19,0)"],26:["rgb(15,115,37)","rgb(0,170,43)","rgb(0,210,63)","rgb(255,117,138)","rgb(255,164,163)","rgb(255,215,235)"],27:["rgb(78,130,161)","rgb(98,160,181)","rgb(119,170,191)","rgb(190,101,255)","rgb(200,150,255)","rgb(210,200,255)"],28:["rgb(181,73,31)","rgb(201,87,0)","rgb(226,112,0)","rgb(0,221,255)","rgb(48,255,255)","rgb(219,255,255)"],29:["rgb(100,59,43)","rgb(135,114,99)","rgb(175,144,129)","rgb(8,239,34)","rgb(84,255,126)","rgb(179,255,157)"],30:["rgb(201,28,202)","rgb(255,48,255)","rgb(255,87,190)","rgb(159,171,255)","rgb(179,206,255)","rgb(194,236,255)"],31:["rgb(0,120,90)","rgb(0,150,120)","rgb(0,181,150)","rgb(255,53,50)","rgb(255,117,116)","rgb(255,189,189)"],32:["rgb(221,179,0)","rgb(255,219,0)","rgb(255,254,0)","rgb(51,231,200)","rgb(116,246,210)","rgb(178,255,225)"],33:["rgb(0,21,255)","rgb(0,122,255)","rgb(54,186,255)","rgb(210,179,158)","rgb(220,200,179)","rgb(235,220,199)"],34:["rgb(141,35,162)","rgb(171,40,192)","rgb(181,62,255)","rgb(255,137,0)","rgb(255,168,63)","rgb(255,199,146)"],35:["rgb(196,0,44)","rgb(222,0,28)","rgb(255,0,0)","rgb(149,180,201)","rgb(169,200,211)","rgb(200,220,231)"],36:["rgb(110,46,255)","rgb(130,82,255)","rgb(150,121,255)","rgb(255,249,88)","rgb(255,244,155)","rgb(255,255,219)"],37:["rgb(181,73,31)","rgb(223,20,42)","rgb(227,116,0)","rgb(254,65,61)","rgb(255,170,69)","rgb(255,191,189)"],38:["rgb(221,179,0)","rgb(202,91,12)","rgb(254,254,0)","rgb(255,139,0)","rgb(255,244,155)","rgb(255,200,149)"],39:["rgb(142,44,163)","rgb(130,89,255)","rgb(181,73,255)","rgb(157,172,255)","rgb(200,153,255)","rgb(193,236,255)"],40:["rgb(77,130,162)","rgb(0,149,119)","rgb(118,170,191)","rgb(44,229,198)","rgb(170,200,210)","rgb(178,254,224)"],41:["rgb(202,47,203)","rgb(172,50,193)","rgb(255,96,194)","rgb(191,107,255)","rgb(255,166,166)","rgb(210,201,255)"],42:["rgb(11,114,33)","rgb(254,218,0)","rgb(0,207,54)","rgb(255,248,87)","rgb(82,253,121)","rgb(255,253,218)"],43:["rgb(108,58,254)","rgb(0,125,254)","rgb(148,125,255)","rgb(0,220,255)","rgb(180,206,255)","rgb(219,255,255)"],44:["rgb(198,17,52)","rgb(254,68,255)","rgb(255,24,24)","rgb(255,122,141)","rgb(255,122,121)","rgb(255,216,235)"],45:["rgb(101,59,43)","rgb(98,160,181)","rgb(177,145,130)","rgb(149,180,201)","rgb(221,200,179)","rgb(200,220,229)"],46:["rgb(1,37,255)","rgb(1,168,36)","rgb(45,186,255)","rgb(1,252,1)","rgb(35,254,255)","rgb(178,252,153)"],47:["rgb(0,119,87)","rgb(136,114,100)","rgb(1,180,151)","rgb(211,180,159)","rgb(114,246,207)","rgb(236,219,199)"],48:["rgb(141,114,1)","rgb(71,40,19)","rgb(222,180,0)","rgb(136,114,100)","rgb(255,253,0)","rgb(211,180,159)"],49:["rgb(91,3,41)","rgb(28,94,7)","rgb(198,17,52)","rgb(1,168,36)","rgb(255,23,23)","rgb(0,251,0)"],50:["rgb(0,6,92)","rgb(57,101,130)","rgb(1,37,255)","rgb(96,161,181)","rgb(45,186,255)","rgb(149,180,200)"],51:["rgb(122,13,102)","rgb(1,19,163)","rgb(202,47,203)","rgb(0,125,254)","rgb(255,97,194)","rgb(0,220,255)"],52:["rgb(41,20,0)","rgb(142,61,60)","rgb(101,59,43)","rgb(202,91,12)","rgb(176,144,129)","rgb(255,139,0)"],53:["rgb(40,74,0)","rgb(84,37,203)","rgb(11,114,33)","rgb(130,89,255)","rgb(0,208,54)","rgb(157,172,255)"],54:["rgb(82,25,102)","rgb(152,11,63)","rgb(142,44,163)","rgb(223,20,42)","rgb(181,73,255)","rgb(254,65,61)"],55:["rgb(0,59,39)","rgb(181,140,0)","rgb(0,119,89)","rgb(254,218,0)","rgb(0,179,149)","rgb(255,248,87)"],56:["rgb(28,61,92)","rgb(111,37,132)","rgb(77,130,162)","rgb(172,50,193)","rgb(118,170,191)","rgb(191,107,255)"],57:["rgb(101,47,81)","rgb(0,89,57)","rgb(183,76,40)","rgb(0,149,119)","rgb(229,115,0)","rgb(44,229,198)"],58:["rgb(44,18,153)","rgb(163,31,153)","rgb(108,58,254)","rgb(254,68,255)","rgb(148,125,255)","rgb(255,122,141)"],59:["rgb(198,17,52)","rgb(223,20,42)","rgb(255,96,192)","rgb(255,122,141)","rgb(255,170,69)","rgb(255,199,148)"],60:["rgb(202,47,203)","rgb(254,68,255)","rgb(181,73,255)","rgb(191,107,255)","rgb(255,244,155)","rgb(254,254,218)"],61:["rgb(221,179,0)","rgb(254,218,0)","rgb(0,207,54)","rgb(1,252,1)","rgb(35,254,255)","rgb(219,255,255)"],62:["rgb(108,58,254)","rgb(128,90,255)","rgb(118,170,191)","rgb(149,180,201)","rgb(82,253,121)","rgb(178,252,153)"],63:["rgb(101,59,43)","rgb(137,115,101)","rgb(229,115,0)","rgb(255,139,0)","rgb(169,202,211)","rgb(200,220,231)"],64:["rgb(0,119,89)","rgb(0,149,119)","rgb(150,125,255)","rgb(157,172,255)","rgb(114,244,208)","rgb(178,254,224)"],65:["rgb(182,75,39)","rgb(202,91,12)","rgb(255,253,0)","rgb(255,248,87)","rgb(200,153,255)","rgb(210,201,254)"],66:["rgb(77,130,162)","rgb(98,160,181)","rgb(255,24,24)","rgb(254,65,61)","rgb(255,166,166)","rgb(255,216,235)"],67:["rgb(142,44,163)","rgb(172,50,193)","rgb(45,186,255)","rgb(0,220,255)","rgb(221,200,179)","rgb(236,219,199)"],68:["rgb(11,114,33)","rgb(1,168,36)","rgb(0,179,149)","rgb(44,229,198)","rgb(180,206,255)","rgb(193,236,255)"],69:["rgb(1,37,255)","rgb(0,125,254)","rgb(177,145,130)","rgb(211,180,159)","rgb(254,122,120)","rgb(255,191,191)"],70:["rgb(122,13,102)","rgb(163,31,153)","rgb(1,37,255)","rgb(0,125,254)","rgb(0,207,54)","rgb(1,252,1)","rgb(255,170,69)","rgb(255,200,149)"],71:["rgb(142,44,163)","rgb(172,50,193)","rgb(0,179,149)","rgb(44,229,198)","rgb(255,244,155)","rgb(254,254,218)","rgb(91,3,41)","rgb(152,11,63)"],72:["rgb(45,186,255)","rgb(0,220,255)","rgb(82,253,121)","rgb(178,252,153)","rgb(101,47,81)","rgb(142,61,60)","rgb(101,59,43)","rgb(136,114,100)"],73:["rgb(114,244,208)","rgb(178,254,224)","rgb(141,114,1)","rgb(181,140,0)","rgb(255,23,23)","rgb(254,65,61)","rgb(170,200,210)","rgb(200,220,231)"],74:["rgb(40,74,0)","rgb(28,94,7)","rgb(183,76,40)","rgb(202,91,12)","rgb(177,145,130)","rgb(211,180,159)","rgb(180,206,255)","rgb(194,235,255)"],75:["rgb(202,47,203)","rgb(254,68,255)","rgb(222,180,0)","rgb(254,218,0)","rgb(255,122,121)","rgb(255,191,191)","rgb(28,61,92)","rgb(59,100,132)"],76:["rgb(181,73,255)","rgb(191,107,255)","rgb(227,116,0)","rgb(255,139,0)","rgb(221,200,179)","rgb(236,219,199)","rgb(44,18,153)","rgb(84,37,203)"],77:["rgb(200,153,255)","rgb(210,201,255)","rgb(0,59,39)","rgb(0,89,59)","rgb(41,20,1)","rgb(71,40,19)","rgb(108,58,254)","rgb(130,89,255)"],78:["rgb(255,96,194)","rgb(255,122,141)","rgb(35,254,255)","rgb(219,255,255)","rgb(11,114,33)","rgb(1,168,36)","rgb(198,17,52)","rgb(222,19,41)"],79:["rgb(82,25,102)","rgb(111,37,132)","rgb(0,119,89)","rgb(0,149,117)","rgb(255,253,0)","rgb(77,130,162)","rgb(77,130,162)","rgb(98,160,181)"],80:["rgb(255,166,165)","rgb(255,216,235)","rgb(0,6,92)","rgb(1,19,163)","rgb(118,170,191)","rgb(148,180,201)","rgb(150,125,255)","rgb(157,172,255)"],81:["rgb(41,20,1)","rgb(71,40,19)","rgb(108,58,254)","rgb(130,89,255)","rgb(255,96,194)","rgb(255,122,141)"],82:["rgb(82,25,102)","rgb(111,37,132)","rgb(0,119,89)","rgb(43,121,107)","rgb(255,253,0)","rgb(255,248,87)"],83:["rgb(76,129,160)","rgb(98,160,181)","rgb(255,166,166)","rgb(255,216,235)","rgb(0,6,92)","rgb(1,19,163)"],84:["rgb(181,73,255)","rgb(191,107,255)","rgb(227,116,0)","rgb(255,140,1)","rgb(221,200,179)","rgb(235,220,199)"],85:["rgb(114,244,208)","rgb(179,254,224)","rgb(141,114,1)","rgb(181,140,0)","rgb(255,24,24)","rgb(254,65,61)"],86:["rgb(177,145,130)","rgb(211,180,159)","rgb(180,206,255)","rgb(193,236,255)","rgb(202,47,203)","rgb(254,68,255)"],87:["rgb(255,244,155)","rgb(254,254,218)","rgb(91,3,41)","rgb(152,11,63)","rgb(45,186,255)","rgb(0,220,255)"],88:["rgb(170,200,210)","rgb(200,220,231)","rgb(38,74,0)","rgb(28,94,7)","rgb(183,76,40)","rgb(202,91,12)"],89:["rgb(121,12,101)","rgb(163,31,153)","rgb(1,37,255)","rgb(0,125,254)","rgb(0,207,54)","rgb(1,252,0)"],90:["rgb(255,170,67)","rgb(255,200,149)","rgb(142,44,163)","rgb(172,50,193)","rgb(0,179,147)","rgb(44,229,198)"],91:["rgb(35,255,255)","rgb(219,255,255)","rgb(11,114,33)","rgb(1,168,36)","rgb(198,16,54)","rgb(223,20,42)"],92:["rgb(222,180,0)","rgb(254,218,0)","rgb(255,121,118)","rgb(255,191,191)","rgb(28,61,92)","rgb(57,101,130)"],93:["rgb(44,18,153)","rgb(84,37,203)","rgb(200,153,255)","rgb(210,201,255)","rgb(0,59,39)","rgb(0,89,59)"],94:["rgb(82,253,121)","rgb(178,252,153)","rgb(101,47,81)","rgb(93,93,93)","rgb(101,59,43)","rgb(137,115,101)"],95:["rgb(118,170,191)","rgb(93,93,93)","rgb(150,125,255)","rgb(157,172,255)","rgb(122,13,102)","rgb(163,31,153)"],96:["rgb(40,74,0)","rgb(27,95,10)","rgb(142,44,163)","rgb(172,50,193)","rgb(255,96,194)","rgb(255,122,141)"],97:["rgb(0,6,92)","rgb(0,21,163)","rgb(222,180,0)","rgb(254,218,0)","rgb(0,207,54)","rgb(1,252,1)"],98:["rgb(93,69,82)","rgb(152,11,63)","rgb(1,37,255)","rgb(0,125,254)","rgb(181,73,255)","rgb(191,107,255)"],99:["rgb(141,114,1)","rgb(181,140,0)","rgb(77,130,162)","rgb(98,160,181)","rgb(148,125,255)","rgb(157,172,255)"],100:["rgb(44,18,153)","rgb(84,37,203)","rgb(0,119,89)","rgb(0,149,119)","rgb(174,145,129)","rgb(212,180,159)"],101:["rgb(28,61,92)","rgb(59,100,132)","rgb(202,47,203)","rgb(254,68,255)","rgb(227,116,0)","rgb(255,139,0)"],102:["rgb(122,13,102)","rgb(163,31,153)","rgb(101,59,43)","rgb(137,115,101)","rgb(255,24,24)","rgb(254,65,61)"],103:["rgb(101,47,81)","rgb(142,61,60)","rgb(198,17,52)","rgb(223,20,42)","rgb(45,186,255)","rgb(0,220,255)"],104:["rgb(0,59,39)","rgb(0,89,59)","rgb(183,76,40)","rgb(202,90,14)","rgb(255,253,0)","rgb(255,248,87)"],105:["rgb(82,25,102)","rgb(111,37,132)","rgb(108,58,254)","rgb(130,89,255)","rgb(118,170,191)","rgb(149,180,201)"],106:["rgb(41,20,1)","rgb(71,40,19)","rgb(11,114,33)","rgb(11,114,33)","rgb(1,168,36)","rgb(44,229,198)"]}});
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(factory((global.ffp = {})));
+}(this, (function (exports) {
+
+var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+
+
+
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
+
+var stringify_1 = createCommonjsModule(function (module, exports) {
+exports = module.exports = stringify;
+exports.getSerialize = serializer;
+
+function stringify(obj, replacer, spaces, cycleReplacer) {
+  return JSON.stringify(obj, serializer(replacer, cycleReplacer), spaces)
+}
+
+function serializer(replacer, cycleReplacer) {
+  var stack = [], keys = [];
+
+  if (cycleReplacer == null) cycleReplacer = function(key, value) {
+    if (stack[0] === value) return "[Circular ~]"
+    return "[Circular ~." + keys.slice(0, stack.indexOf(value)).join(".") + "]"
+  };
+
+  return function(key, value) {
+    if (stack.length > 0) {
+      var thisPos = stack.indexOf(this);
+      ~thisPos ? stack.splice(thisPos + 1) : stack.push(this);
+      ~thisPos ? keys.splice(thisPos, Infinity, key) : keys.push(key);
+      if (~stack.indexOf(value)) value = cycleReplacer.call(this, key, value);
+    }
+    else stack.push(value);
+
+    return replacer == null ? value : replacer.call(this, key, value)
+  }
+}
+});
+
+var stringify_2 = stringify_1.getSerialize;
+
+var Mash = function () {
+	var n = 0xefc8249d;
+	var mash = function (data) {
+		if (data) {
+			data = data.toString();
+			for (var i = 0; i < data.length; i++) {
+				n += data.charCodeAt(i);
+				var h = 0.02519603282416938 * n;
+				n = h >>> 0;
+				h -= n;
+				h *= n;
+				n = h >>> 0;
+				h -= n;
+				n += h * 0x100000000; // 2^32
+			}
+			return (n >>> 0) * 2.3283064365386963e-10; // 2^-32
+		} else {
+			n = 0xefc8249d;
+		}
+	};
+	return mash;
+};
+
+var uheprng = function (seed) {
+	return (function () {
+		var o = 48; // set the 'order' number of ENTROPY-holding 32-bit values
+		var c = 1; // init the 'carry' used by the multiply-with-carry (MWC) algorithm
+		var p = o; // init the 'phase' (max-1) of the intermediate variable pointer
+		var s = new Array(o); // declare our intermediate variables array
+		var i; // general purpose local
+		var j; // general purpose local
+		var k = 0; // general purpose local
+
+		// when our "uheprng" is initially invoked our PRNG state is initialized from the
+		// browser's own local PRNG. This is okay since although its generator might not
+		// be wonderful, it's useful for establishing large startup entropy for our usage.
+		var mash = new Mash(); // get a pointer to our high-performance "Mash" hash
+
+		// fill the array with initial mash hash values
+		for (i = 0; i < o; i++) {
+			s[i] = mash(Math.random());
+		}
+
+		// this PRIVATE (internal access only) function is the heart of the multiply-with-carry
+		// (MWC) PRNG algorithm. When called it returns a pseudo-random number in the form of a
+		// 32-bit JavaScript fraction (0.0 to <1.0) it is a PRIVATE function used by the default
+		// [0-1] return function, and by the random 'string(n)' function which returns 'n'
+		// characters from 33 to 126.
+		var rawprng = function () {
+			if (++p >= o) {
+				p = 0;
+			}
+			var t = 1768863 * s[p] + c * 2.3283064365386963e-10; // 2^-32
+			return s[p] = t - (c = t | 0);
+		};
+
+		// this EXPORTED function is the default function returned by this library.
+		// The values returned are integers in the range from 0 to range-1. We first
+		// obtain two 32-bit fractions (from rawprng) to synthesize a single high
+		// resolution 53-bit prng (0 to <1), then we multiply this by the caller's
+		// "range" param and take the "floor" to return a equally probable integer.
+		var random = function (range) {
+			return Math.floor(range * (rawprng() + (rawprng() * 0x200000 | 0) * 1.1102230246251565e-16)); // 2^-53
+		};
+
+		// this EXPORTED function 'string(n)' returns a pseudo-random string of
+		// 'n' printable characters ranging from chr(33) to chr(126) inclusive.
+		random.string = function (count) {
+			var i;
+			var s = '';
+			for (i = 0; i < count; i++) {
+				s += String.fromCharCode(33 + random(94));
+			}
+			return s;
+		};
+
+		// this PRIVATE "hash" function is used to evolve the generator's internal
+		// entropy state. It is also called by the EXPORTED addEntropy() function
+		// which is used to pour entropy into the PRNG.
+		var hash = function () {
+			var args = Array.prototype.slice.call(arguments);
+			for (i = 0; i < args.length; i++) {
+				for (j = 0; j < o; j++) {
+					s[j] -= mash(args[i]);
+					if (s[j] < 0) {
+						s[j] += 1;
+					}
+				}
+			}
+		};
+
+		// this EXPORTED "clean string" function removes leading and trailing spaces and non-printing
+		// control characters, including any embedded carriage-return (CR) and line-feed (LF) characters,
+		// from any string it is handed. this is also used by the 'hashstring' function (below) to help
+		// users always obtain the same EFFECTIVE uheprng seeding key.
+		random.cleanString = function (inStr) {
+			inStr = inStr.replace(/(^\s*)|(\s*$)/gi, ''); // remove any/all leading spaces
+			inStr = inStr.replace(/[\x00-\x1F]/gi, ''); // remove any/all control characters
+			inStr = inStr.replace(/\n /, '\n'); // remove any/all trailing spaces
+			return inStr; // return the cleaned up result
+		};
+
+		// this EXPORTED "hash string" function hashes the provided character string after first removing
+		// any leading or trailing spaces and ignoring any embedded carriage returns (CR) or Line Feeds (LF)
+		random.hashString = function (inStr) {
+			inStr = random.cleanString(inStr);
+			mash(inStr); // use the string to evolve the 'mash' state
+			for (i = 0; i < inStr.length; i++) { // scan through the characters in our string
+				k = inStr.charCodeAt(i); // get the character code at the location
+				for (j = 0; j < o; j++) { //	"mash" it into the UHEPRNG state
+					s[j] -= mash(k);
+					if (s[j] < 0) {
+						s[j] += 1;
+					}
+				}
+			}
+		};
+
+		// this EXPORTED function allows you to seed the random generator.
+		random.seed = function (seed) {
+			if (typeof seed === 'undefined' || seed === null) {
+				seed = Math.random();
+			}
+			if (typeof seed !== 'string') {
+				seed = stringify_1(seed, function (key, value) {
+					if (typeof value === 'function') {
+						return (value).toString();
+					}
+					return value;
+				});
+			}
+			random.initState();
+			random.hashString(seed);
+		};
+
+		// this handy exported function is used to add entropy to our uheprng at any time
+		random.addEntropy = function ( /* accept zero or more arguments */ ) {
+			var args = [];
+			for (i = 0; i < arguments.length; i++) {
+				args.push(arguments[i]);
+			}
+			hash((k++) + (new Date().getTime()) + args.join('') + Math.random());
+		};
+
+		// if we want to provide a deterministic startup context for our PRNG,
+		// but without directly setting the internal state variables, this allows
+		// us to initialize the mash hash and PRNG's internal state before providing
+		// some hashing input
+		random.initState = function () {
+			mash(); // pass a null arg to force mash hash to init
+			for (i = 0; i < o; i++) {
+				s[i] = mash(' '); // fill the array with initial mash hash values
+			}
+			c = 1; // init our multiply-with-carry carry
+			p = o; // init our phase
+		};
+
+		// we use this (optional) exported function to signal the JavaScript interpreter
+		// that we're finished using the "Mash" hash function so that it can free up the
+		// local "instance variables" is will have been maintaining.  It's not strictly
+		// necessary, of course, but it's good JavaScript citizenship.
+		random.done = function () {
+			mash = null;
+		};
+
+		// if we called "uheprng" with a seed value, then execute random.seed() before returning
+		if (typeof seed !== 'undefined') {
+			random.seed(seed);
+		}
+
+		// Returns a random integer between 0 (inclusive) and range (exclusive)
+		random.range = function (range) {
+			return random(range);
+		};
+
+		// Returns a random float between 0 (inclusive) and 1 (exclusive)
+		random.random = function () {
+			return random(Number.MAX_VALUE - 1) / Number.MAX_VALUE;
+		};
+
+		// Returns a random float between min (inclusive) and max (exclusive)
+		random.floatBetween = function (min, max) {
+			return random.random() * (max - min) + min;
+		};
+
+		// Returns a random integer between min (inclusive) and max (inclusive)
+		random.intBetween = function (min, max) {
+			return Math.floor(random.random() * (max - min + 1)) + min;
+		};
+
+		// when our main outer "uheprng" function is called, after setting up our
+		// initial variables and entropic state, we return an "instance pointer"
+		// to the internal anonymous function which can then be used to access
+		// the uheprng's various exported functions.  As with the ".done" function
+		// above, we should set the returned value to 'null' once we're finished
+		// using any of these functions.
+		return random;
+	}());
+};
+
+// Modification for use in node:
+uheprng.create = function (seed) {
+	return new uheprng(seed);
+};
+var randomSeed = uheprng;
+
+class Noise {
+  constructor (s) {
+    this.p = new Uint8Array(512);
+    this.seed(s);
+  }
+
+  gen () {}
+
+  seed (s) {
+    const rng = randomSeed.create(s || Math.random());
+
+    for (let i = 0; i < 256; i++) this.p[i] = i;
+    for (let i = 0; i < 256; i++) {
+      const r = rng(256);
+      const temp = this.p[i];
+      this.p[i] = this.p[r];
+      this.p[r] = temp;
+    }
+    for (let i = 0; i < 256; i++) this.p[i + 256] = this.p[i];
+  }
+
+  transform (fn) {
+    const transformedFn = (...dims) => fn.apply(this, dims);
+
+    return transformedFn.bind(this)
+  }
+
+  octavate (...args) {
+    const octaves = args[0];
+    const dims = args.slice(1);
+    let val = 0;
+    let max = 0;
+
+    for (let i = 0; i < octaves; i++) {
+      const w = 1 << i;
+      val += this.gen.apply(this, dims.map(x => x * w)) / w;
+    }
+
+    for (let i = 0; i < octaves; i++) {
+      max += 1 / (1 << i);
+    }
+
+    return val / max
+  }
+}
+
+var noise = Noise;
+
+class Vec1 {
+  constructor (x) {
+    this.x = x;
+  }
+
+  dot (x) {
+    return this.x * x
+  }
+}
+
+const g1 = [ new Vec1(1), new Vec1(-1) ];
+
+function grad1 (p, x) {
+  return g1[p[x] % g1.length]
+}
+
+var _1d = {
+  grad1
+};
+
+function falloff (...args) {
+  const dims = args.slice(1);
+  const t = args[0] - dims.reduce((sum, val) => {
+    return sum + val * val
+  }, 0);
+
+  return t * t * t * t
+}
+
+function lerp (a, b, t) {
+  return a * (1 - t) + b * t
+}
+function fade (t) {
+  return t * t * t * (10 + t * (-15 + t * 6))
+}
+const cut1 = falloff.bind(null, 1);
+const cut = falloff.bind(null, 0.5);
+
+var math = {
+  lerp,
+  fade,
+  cut1,
+  cut
+};
+
+const { grad1: grad1$1 } = _1d;
+const { cut1: cut1$1 } = math;
+
+class Simplex1 extends noise {
+  gen (x) {
+    const gx = Math.floor(x) % 256;
+    const dx = x - gx;
+
+    const n0 = cut1$1(dx) * grad1$1(this.p, gx).dot(dx);
+    const n1 = cut1$1(dx - 1) * grad1$1(this.p, gx + 1).dot(dx - 1);
+
+    return 0.5 * (n0 + n1)
+  }
+}
+
+var simplex1 = Simplex1;
+
+class Vec2 {
+  constructor (x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  dot (x, y) {
+    return this.x * x + this.y * y
+  }
+}
+
+const g2 = [
+  new Vec2(1, 0), new Vec2(1, 1), new Vec2(0, 1), new Vec2(-1, 1),
+  new Vec2(-1, 0), new Vec2(-1, -1), new Vec2(0, -1), new Vec2(1, -1)
+];
+
+function grad2 (p, x, y) {
+  const hash = p[x + p[y]] % g2.length;
+  return g2[hash]
+}
+const S2_TO_C = 0.5 * (Math.sqrt(3) - 1);
+const C_TO_S2 = (3 - Math.sqrt(3)) / 6;
+
+var _2d = {
+  grad2,
+  S2_TO_C,
+  C_TO_S2
+};
+
+const { grad2: grad2$1, S2_TO_C: S2_TO_C$1, C_TO_S2: C_TO_S2$1 } = _2d;
+const { cut: cut$1 } = math;
+
+class Simplex2 extends noise {
+  gen (x, y) {
+    const skew = (x + y) * S2_TO_C$1;
+    const i = Math.trunc(x + skew);
+    const j = Math.trunc(y + skew);
+
+    const unskew = (i + j) * C_TO_S2$1;
+    const gx = i - unskew;
+    const gy = j - unskew;
+
+    const dx0 = x - gx;
+    const dy0 = y - gy;
+
+    const di = dx0 > dy0 ? 1 : 0;
+    const dj = dx0 > dy0 ? 0 : 1;
+
+    const dx1 = dx0 - di + C_TO_S2$1;
+    const dy1 = dy0 - dj + C_TO_S2$1;
+    const dx2 = dx0 - 1 + 2 * C_TO_S2$1;
+    const dy2 = dy0 - 1 + 2 * C_TO_S2$1;
+
+    const n0 = cut$1(dx0, dy0) * grad2$1(this.p, i, j).dot(dx0, dy0);
+    const n1 = cut$1(dx1, dy1) * grad2$1(this.p, i + di, j + dj).dot(dx1, dy1);
+    const n2 = cut$1(dx2, dy2) * grad2$1(this.p, i + 1, j + 1).dot(dx2, dy2);
+
+    return 70 * (n0 + n1 + n2)
+  }
+}
+
+var simplex2 = Simplex2;
+
+const { grad1: grad1$2 } = _1d;
+const { lerp: lerp$1, fade: fade$1 } = math;
+
+class Perlin1 extends noise {
+  gen (x) {
+    const gx = Math.floor(x) % 256;
+    const dx = x - gx;
+
+    const n0 = grad1$2(this.p, gx).dot(dx);
+    const n1 = grad1$2(this.p, gx + 1).dot(dx - 1);
+
+    return lerp$1(n0, n1, fade$1(dx))
+  }
+}
+
+var perlin1 = Perlin1;
+
+const { grad2: grad2$2 } = _2d;
+const { fade: fade$2, lerp: lerp$2 } = math;
+
+class Perlin2 extends noise {
+  gen (x, y) {
+    const gx = Math.trunc(x) % 256;
+    const gy = Math.trunc(y) % 256;
+
+    const dx = x - gx;
+    const dy = y - gy;
+
+    const n00 = grad2$2(this.p, gx, gy).dot(dx, dy);
+    const n10 = grad2$2(this.p, gx + 1, gy).dot(dx - 1, dy);
+    const n01 = grad2$2(this.p, gx, gy + 1).dot(dx, dy - 1);
+    const n11 = grad2$2(this.p, gx + 1, gy + 1).dot(dx - 1, dy - 1);
+
+    return lerp$2(
+      lerp$2(n00, n10, fade$2(dx)),
+      lerp$2(n01, n11, fade$2(dx)),
+      fade$2(dy)
+    )
+  }
+}
+
+var perlin2 = Perlin2;
+
+class Vec3 {
+  constructor (x, y, z) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+  }
+
+  dot (x, y, z) {
+    return this.x * x + this.y * y + this.z * z
+  }
+}
+
+const g3 = [
+  new Vec3(1, 1, 1), new Vec3(-1, 1, 1), new Vec3(1, -1, 1), new Vec3(-1, -1, 1),
+  new Vec3(1, 1, 0), new Vec3(-1, 1, 0), new Vec3(1, -1, 0), new Vec3(-1, -1, 0),
+  new Vec3(1, 1, -1), new Vec3(-1, 1, -1), new Vec3(1, -1, -1), new Vec3(-1, -1, -1)
+];
+
+function grad3 (p, x, y, z) {
+  const hash = p[x + p[y + p[z]]] % g3.length;
+  return g3[hash]
+}
+
+var _3d = {
+  grad3
+};
+
+const { grad3: grad3$1 } = _3d;
+const { fade: fade$3, lerp: lerp$3 } = math;
+
+class Perlin3 extends noise {
+  gen (x, y, z) {
+    const gx = Math.trunc(x) % 256;
+    const gy = Math.trunc(y) % 256;
+    const gz = Math.trunc(z) % 256;
+
+    const dx = x - gx;
+    const dy = y - gy;
+    const dz = z - gz;
+
+    const n000 = grad3$1(this.p, gx, gy, gz).dot(dx, dy, dz);
+    const n100 = grad3$1(this.p, gx + 1, gy, gz).dot(dx - 1, dy, dz);
+    const n010 = grad3$1(this.p, gx, gy + 1, gz).dot(dx, dy - 1, dz);
+    const n110 = grad3$1(this.p, gx + 1, gy + 1, gz).dot(dx - 1, dy - 1, dz);
+    const n001 = grad3$1(this.p, gx, gy, gz + 1).dot(dx, dy, dz - 1);
+    const n101 = grad3$1(this.p, gx + 1, gy, gz + 1).dot(dx - 1, dy, dz - 1);
+    const n011 = grad3$1(this.p, gx, gy + 1, gz + 1).dot(dx, dy - 1, dz - 1);
+    const n111 = grad3$1(this.p, gx + 1, gy + 1, gz + 1).dot(dx - 1, dy - 1, dz - 1);
+
+    return lerp$3(
+      lerp$3(
+        lerp$3(n000, n100, dx),
+        lerp$3(n010, n110, dx),
+        fade$3(dy)
+      ),
+      lerp$3(
+        lerp$3(n001, n101, dx),
+        lerp$3(n011, n111, dx),
+        fade$3(dy)
+      ),
+      fade$3(dz)
+    )
+  }
+}
+
+var perlin3 = Perlin3;
+
+class Vec4 {
+  constructor (x, y, z, t) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.t = t;
+  }
+
+  dot (x, y, z, t) {
+    return this.x * x + this.y * y + this.z * z + this.t * t
+  }
+}
+
+const g4 = [
+  new Vec4(0, 1, 1, 1), new Vec4(0, 1, 1, -1), new Vec4(0, 1, -1, 1), new Vec4(0, 1, -1, -1),
+  new Vec4(0, -1, 1, 1), new Vec4(0, -1, 1, -1), new Vec4(0, -1, -1, 1), new Vec4(0, -1, -1, -1),
+  new Vec4(1, 0, 1, 1), new Vec4(1, 0, 1, -1), new Vec4(1, 0, -1, 1), new Vec4(1, 0, -1, -1),
+  new Vec4(-1, 0, 1, 1), new Vec4(-1, 0, 1, -1), new Vec4(-1, 0, -1, 1), new Vec4(-1, 0, -1, -1),
+  new Vec4(1, 1, 0, 1), new Vec4(1, 1, 0, -1), new Vec4(1, -1, 0, 1), new Vec4(1, -1, 0, -1),
+  new Vec4(-1, 1, 0, 1), new Vec4(-1, 1, 0, -1), new Vec4(-1, -1, 0, 1), new Vec4(-1, -1, 0, -1),
+  new Vec4(1, 1, 1, 0), new Vec4(1, 1, -1, 0), new Vec4(1, -1, 1, 0), new Vec4(1, -1, -1, 0),
+  new Vec4(-1, 1, 1, 0), new Vec4(-1, 1, -1, 0), new Vec4(-1, -1, 1, 0), new Vec4(-1, -1, -1, 0)
+];
+
+function grad4 (p, x, y, z, t) {
+  const hash = p[x + p[y + p[z + p[t]]]] % g4.length;
+  return g4[hash]
+}
+
+var _4d = {
+  grad4
+};
+
+const { grad4: grad4$1 } = _4d;
+const { fade: fade$4, lerp: lerp$4 } = math;
+
+class Perlin4 extends noise {
+  gen (x, y, z, t) {
+    const gx = Math.trunc(x) % 256;
+    const gy = Math.trunc(y) % 256;
+    const gz = Math.trunc(z) % 256;
+    const gt = Math.trunc(t) % 256;
+
+    const dx = x - gx;
+    const dy = y - gy;
+    const dz = z - gz;
+    const dt = t - gt;
+
+    const n0000 = grad4$1(this.p, gx, gy, gz, gt).dot(dx, dy, dz, dt);
+    const n1000 = grad4$1(this.p, gx + 1, gy, gz, gt).dot(dx - 1, dy, dz);
+    const n0100 = grad4$1(this.p, gx, gy + 1, gz, gt).dot(dx, dy - 1, dz);
+    const n1100 = grad4$1(this.p, gx + 1, gy + 1, gz, gt).dot(dx - 1, dy - 1, dz);
+    const n0010 = grad4$1(this.p, gx, gy, gz + 1, gt).dot(dx, dy, dz - 1);
+    const n1010 = grad4$1(this.p, gx + 1, gy, gz + 1, gt).dot(dx - 1, dy, dz - 1);
+    const n0110 = grad4$1(this.p, gx, gy + 1, gz + 1, gt).dot(dx, dy - 1, dz - 1);
+    const n1110 = grad4$1(this.p, gx + 1, gy + 1, gz + 1, gt).dot(dx - 1, dy - 1, dz - 1);
+    const n0001 = grad4$1(this.p, gx, gy, gz, gt + 1).dot(dx, dy, dz, dt - 1);
+    const n1001 = grad4$1(this.p, gx + 1, gy, gz, gt + 1).dot(dx - 1, dy, dz, dt - 1);
+    const n0101 = grad4$1(this.p, gx, gy + 1, gz, gt + 1).dot(dx, dy - 1, dz, dt - 1);
+    const n1101 = grad4$1(this.p, gx + 1, gy + 1, gz, gt + 1).dot(dx - 1, dy - 1, dz, dt - 1);
+    const n0011 = grad4$1(this.p, gx, gy, gz + 1, gt + 1).dot(dx, dy, dz - 1, dt - 1);
+    const n1011 = grad4$1(this.p, gx + 1, gy, gz + 1, gt + 1).dot(dx - 1, dy, dz - 1, dt - 1);
+    const n0111 = grad4$1(this.p, gx, gy + 1, gz + 1, gt + 1).dot(dx, dy - 1, dz - 1, dt - 1);
+    const n1111 = grad4$1(this.p, gx + 1, gy + 1, gz + 1, gt + 1).dot(dx - 1, dy - 1, dz - 1, dt - 1);
+
+    return lerp$4(
+      lerp$4(
+        lerp$4(
+          lerp$4(n0000, n1000, dx),
+          lerp$4(n0100, n1100, dx),
+          fade$4(dy)
+        ),
+        lerp$4(
+          lerp$4(n0010, n1010, dx),
+          lerp$4(n0110, n1110, dx),
+          fade$4(dy)
+        ),
+        fade$4(dz)
+      ),
+      lerp$4(
+        lerp$4(
+          lerp$4(n0001, n1001, dx),
+          lerp$4(n0101, n1101, dx),
+          fade$4(dy)
+        ),
+        lerp$4(
+          lerp$4(n0011, n1011, dx),
+          lerp$4(n0111, n1111, dx),
+          fade$4(dy)
+        ),
+        fade$4(dz)
+      ),
+      fade$4(dt)
+    )
+  }
+}
+
+var perlin4 = Perlin4;
+
+const { lerp: lerp$5, fade: fade$5 } = math;
+
+function hashN (p, gs) {
+  if (gs.length === 1) return p[gs[0]]
+
+  return p[gs[0] + hashN(p, gs.slice(1))]
+}
+
+class VecN {
+  constructor (R) {
+    this.R = R;
+  }
+
+  dot (R) {
+    let val = 0;
+
+    for (let i = 0; i < R.length; i++) {
+      val += this.R[i] * R[i];
+    }
+
+    return val
+  }
+}
+
+const gN = [];
+function generateGN (dim) {
+  for (let i = 0; i < dim * 2; i++) {
+    const vec = new Array(dim).fill(0);
+
+    vec[i % dim] = i / dim >= 1 ? 1 : -1;
+    gN[i] = new VecN(vec);
+  }
+}
+
+function lerpN (ns, ds) {
+  if (ds.length === 1) return lerp$5(ns[0], ns[1], fade$5(ds[0]))
+
+  const ns1 = ns.slice(0, Math.floor(ns.length / 2));
+  const ns2 = ns.slice(Math.ceil(ns.length / 2));
+
+  return lerp$5(
+    lerpN(ns1, ds.slice(0, ds.length - 1)),
+    lerpN(ns2, ds.slice(0, ds.length - 1)),
+    fade$5(ds[ds.length - 1])
+  )
+}
+function getNs (p, dim, gs, ds) {
+  const ns = [];
+
+  if (gN.length === 0) {
+    generateGN(dim);
+  }
+
+  for (let i = 0; i < (2 << (dim - 1)); i++) {
+    const gsPerm = gs.slice();
+    const dsPerm = ds.slice();
+    let temp = i;
+
+    for (let j = 0; j < dim; j++) {
+      if (temp & 1) {
+        gsPerm[j] += 1;
+        dsPerm[j] -= 1;
+      }
+      temp = temp >> 1;
+    }
+    ns[i] = gN[hashN(p, gsPerm) % gN.length].dot(dsPerm);
+  }
+
+  return ns
+}
+
+var nd = {
+  lerpN,
+  getNs
+};
+
+const { lerpN: lerpN$1, getNs: getNs$1 } = nd;
+
+class PerlinN extends noise {
+  gen (...args) {
+    const gs = [];
+    const ds = [];
+
+    for (let i = 0; i < args.length; i++) {
+      gs[i] = Math.trunc(args[i]) % 256;
+      ds[i] = args[i] - gs[i];
+    }
+
+    const ns = getNs$1(this.p, args.length, gs, ds);
+
+    return lerpN$1(ns, ds)
+  }
+}
+
+var perlinN = PerlinN;
+
+var lib = {
+  Simplex1: simplex1,
+  Simplex2: simplex2,
+  Perlin1: perlin1,
+  Perlin2: perlin2,
+  Perlin3: perlin3,
+  Perlin4: perlin4,
+  PerlinN: perlinN
+};
+
+var tumult = lib;
+
+var perlin = createCommonjsModule(function (module) {
+/*
+ * A speed-improved perlin and simplex noise algorithms for 2D.
+ *
+ * Based on example code by Stefan Gustavson (stegu@itn.liu.se).
+ * Optimisations by Peter Eastman (peastman@drizzle.stanford.edu).
+ * Better rank ordering method by Stefan Gustavson in 2012.
+ * Converted to Javascript by Joseph Gentle.
+ *
+ * Version 2012-03-09
+ *
+ * This code was placed in the public domain by its original author,
+ * Stefan Gustavson. You may use it as you see fit, but
+ * attribution is appreciated.
+ *
+ */
+
+(function(global){
+  var module = global.noise = {};
+
+  function Grad(x, y, z) {
+    this.x = x; this.y = y; this.z = z;
+  }
+  
+  Grad.prototype.dot2 = function(x, y) {
+    return this.x*x + this.y*y;
+  };
+
+  Grad.prototype.dot3 = function(x, y, z) {
+    return this.x*x + this.y*y + this.z*z;
+  };
+
+  var grad3 = [new Grad(1,1,0),new Grad(-1,1,0),new Grad(1,-1,0),new Grad(-1,-1,0),
+               new Grad(1,0,1),new Grad(-1,0,1),new Grad(1,0,-1),new Grad(-1,0,-1),
+               new Grad(0,1,1),new Grad(0,-1,1),new Grad(0,1,-1),new Grad(0,-1,-1)];
+
+  var p = [151,160,137,91,90,15,
+  131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
+  190, 6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,
+  88,237,149,56,87,174,20,125,136,171,168, 68,175,74,165,71,134,139,48,27,166,
+  77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,
+  102,143,54, 65,25,63,161, 1,216,80,73,209,76,132,187,208, 89,18,169,200,196,
+  135,130,116,188,159,86,164,100,109,198,173,186, 3,64,52,217,226,250,124,123,
+  5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,
+  223,183,170,213,119,248,152, 2,44,154,163, 70,221,153,101,155,167, 43,172,9,
+  129,22,39,253, 19,98,108,110,79,113,224,232,178,185, 112,104,218,246,97,228,
+  251,34,242,193,238,210,144,12,191,179,162,241, 81,51,145,235,249,14,239,107,
+  49,192,214, 31,181,199,106,157,184, 84,204,176,115,121,50,45,127, 4,150,254,
+  138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180];
+  // To remove the need for index wrapping, double the permutation table length
+  var perm = new Array(512);
+  var gradP = new Array(512);
+
+  // This isn't a very good seeding function, but it works ok. It supports 2^16
+  // different seed values. Write something better if you need more seeds.
+  module.seed = function(seed) {
+    if(seed > 0 && seed < 1) {
+      // Scale the seed out
+      seed *= 65536;
+    }
+
+    seed = Math.floor(seed);
+    if(seed < 256) {
+      seed |= seed << 8;
+    }
+
+    for(var i = 0; i < 256; i++) {
+      var v;
+      if (i & 1) {
+        v = p[i] ^ (seed & 255);
+      } else {
+        v = p[i] ^ ((seed>>8) & 255);
+      }
+
+      perm[i] = perm[i + 256] = v;
+      gradP[i] = gradP[i + 256] = grad3[v % 12];
+    }
+  };
+
+  module.seed(0);
+
+  /*
+  for(var i=0; i<256; i++) {
+    perm[i] = perm[i + 256] = p[i];
+    gradP[i] = gradP[i + 256] = grad3[perm[i] % 12];
+  }*/
+
+  // Skewing and unskewing factors for 2, 3, and 4 dimensions
+  var F2 = 0.5*(Math.sqrt(3)-1);
+  var G2 = (3-Math.sqrt(3))/6;
+
+  var F3 = 1/3;
+  var G3 = 1/6;
+
+  // 2D simplex noise
+  module.simplex2 = function(xin, yin) {
+    var n0, n1, n2; // Noise contributions from the three corners
+    // Skew the input space to determine which simplex cell we're in
+    var s = (xin+yin)*F2; // Hairy factor for 2D
+    var i = Math.floor(xin+s);
+    var j = Math.floor(yin+s);
+    var t = (i+j)*G2;
+    var x0 = xin-i+t; // The x,y distances from the cell origin, unskewed.
+    var y0 = yin-j+t;
+    // For the 2D case, the simplex shape is an equilateral triangle.
+    // Determine which simplex we are in.
+    var i1, j1; // Offsets for second (middle) corner of simplex in (i,j) coords
+    if(x0>y0) { // lower triangle, XY order: (0,0)->(1,0)->(1,1)
+      i1=1; j1=0;
+    } else {    // upper triangle, YX order: (0,0)->(0,1)->(1,1)
+      i1=0; j1=1;
+    }
+    // A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and
+    // a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y), where
+    // c = (3-sqrt(3))/6
+    var x1 = x0 - i1 + G2; // Offsets for middle corner in (x,y) unskewed coords
+    var y1 = y0 - j1 + G2;
+    var x2 = x0 - 1 + 2 * G2; // Offsets for last corner in (x,y) unskewed coords
+    var y2 = y0 - 1 + 2 * G2;
+    // Work out the hashed gradient indices of the three simplex corners
+    i &= 255;
+    j &= 255;
+    var gi0 = gradP[i+perm[j]];
+    var gi1 = gradP[i+i1+perm[j+j1]];
+    var gi2 = gradP[i+1+perm[j+1]];
+    // Calculate the contribution from the three corners
+    var t0 = 0.5 - x0*x0-y0*y0;
+    if(t0<0) {
+      n0 = 0;
+    } else {
+      t0 *= t0;
+      n0 = t0 * t0 * gi0.dot2(x0, y0);  // (x,y) of grad3 used for 2D gradient
+    }
+    var t1 = 0.5 - x1*x1-y1*y1;
+    if(t1<0) {
+      n1 = 0;
+    } else {
+      t1 *= t1;
+      n1 = t1 * t1 * gi1.dot2(x1, y1);
+    }
+    var t2 = 0.5 - x2*x2-y2*y2;
+    if(t2<0) {
+      n2 = 0;
+    } else {
+      t2 *= t2;
+      n2 = t2 * t2 * gi2.dot2(x2, y2);
+    }
+    // Add contributions from each corner to get the final noise value.
+    // The result is scaled to return values in the interval [-1,1].
+    return 70 * (n0 + n1 + n2);
+  };
+
+  // 3D simplex noise
+  module.simplex3 = function(xin, yin, zin) {
+    var n0, n1, n2, n3; // Noise contributions from the four corners
+
+    // Skew the input space to determine which simplex cell we're in
+    var s = (xin+yin+zin)*F3; // Hairy factor for 2D
+    var i = Math.floor(xin+s);
+    var j = Math.floor(yin+s);
+    var k = Math.floor(zin+s);
+
+    var t = (i+j+k)*G3;
+    var x0 = xin-i+t; // The x,y distances from the cell origin, unskewed.
+    var y0 = yin-j+t;
+    var z0 = zin-k+t;
+
+    // For the 3D case, the simplex shape is a slightly irregular tetrahedron.
+    // Determine which simplex we are in.
+    var i1, j1, k1; // Offsets for second corner of simplex in (i,j,k) coords
+    var i2, j2, k2; // Offsets for third corner of simplex in (i,j,k) coords
+    if(x0 >= y0) {
+      if(y0 >= z0)      { i1=1; j1=0; k1=0; i2=1; j2=1; k2=0; }
+      else if(x0 >= z0) { i1=1; j1=0; k1=0; i2=1; j2=0; k2=1; }
+      else              { i1=0; j1=0; k1=1; i2=1; j2=0; k2=1; }
+    } else {
+      if(y0 < z0)      { i1=0; j1=0; k1=1; i2=0; j2=1; k2=1; }
+      else if(x0 < z0) { i1=0; j1=1; k1=0; i2=0; j2=1; k2=1; }
+      else             { i1=0; j1=1; k1=0; i2=1; j2=1; k2=0; }
+    }
+    // A step of (1,0,0) in (i,j,k) means a step of (1-c,-c,-c) in (x,y,z),
+    // a step of (0,1,0) in (i,j,k) means a step of (-c,1-c,-c) in (x,y,z), and
+    // a step of (0,0,1) in (i,j,k) means a step of (-c,-c,1-c) in (x,y,z), where
+    // c = 1/6.
+    var x1 = x0 - i1 + G3; // Offsets for second corner
+    var y1 = y0 - j1 + G3;
+    var z1 = z0 - k1 + G3;
+
+    var x2 = x0 - i2 + 2 * G3; // Offsets for third corner
+    var y2 = y0 - j2 + 2 * G3;
+    var z2 = z0 - k2 + 2 * G3;
+
+    var x3 = x0 - 1 + 3 * G3; // Offsets for fourth corner
+    var y3 = y0 - 1 + 3 * G3;
+    var z3 = z0 - 1 + 3 * G3;
+
+    // Work out the hashed gradient indices of the four simplex corners
+    i &= 255;
+    j &= 255;
+    k &= 255;
+    var gi0 = gradP[i+   perm[j+   perm[k   ]]];
+    var gi1 = gradP[i+i1+perm[j+j1+perm[k+k1]]];
+    var gi2 = gradP[i+i2+perm[j+j2+perm[k+k2]]];
+    var gi3 = gradP[i+ 1+perm[j+ 1+perm[k+ 1]]];
+
+    // Calculate the contribution from the four corners
+    var t0 = 0.5 - x0*x0-y0*y0-z0*z0;
+    if(t0<0) {
+      n0 = 0;
+    } else {
+      t0 *= t0;
+      n0 = t0 * t0 * gi0.dot3(x0, y0, z0);  // (x,y) of grad3 used for 2D gradient
+    }
+    var t1 = 0.5 - x1*x1-y1*y1-z1*z1;
+    if(t1<0) {
+      n1 = 0;
+    } else {
+      t1 *= t1;
+      n1 = t1 * t1 * gi1.dot3(x1, y1, z1);
+    }
+    var t2 = 0.5 - x2*x2-y2*y2-z2*z2;
+    if(t2<0) {
+      n2 = 0;
+    } else {
+      t2 *= t2;
+      n2 = t2 * t2 * gi2.dot3(x2, y2, z2);
+    }
+    var t3 = 0.5 - x3*x3-y3*y3-z3*z3;
+    if(t3<0) {
+      n3 = 0;
+    } else {
+      t3 *= t3;
+      n3 = t3 * t3 * gi3.dot3(x3, y3, z3);
+    }
+    // Add contributions from each corner to get the final noise value.
+    // The result is scaled to return values in the interval [-1,1].
+    return 32 * (n0 + n1 + n2 + n3);
+
+  };
+
+  // ##### Perlin noise stuff
+
+  function fade(t) {
+    return t*t*t*(t*(t*6-15)+10);
+  }
+
+  function lerp(a, b, t) {
+    return (1-t)*a + t*b;
+  }
+
+  // 2D Perlin Noise
+  module.perlin2 = function(x, y) {
+    // Find unit grid cell containing point
+    var X = Math.floor(x), Y = Math.floor(y);
+    // Get relative xy coordinates of point within that cell
+    x = x - X; y = y - Y;
+    // Wrap the integer cells at 255 (smaller integer period can be introduced here)
+    X = X & 255; Y = Y & 255;
+
+    // Calculate noise contributions from each of the four corners
+    var n00 = gradP[X+perm[Y]].dot2(x, y);
+    var n01 = gradP[X+perm[Y+1]].dot2(x, y-1);
+    var n10 = gradP[X+1+perm[Y]].dot2(x-1, y);
+    var n11 = gradP[X+1+perm[Y+1]].dot2(x-1, y-1);
+
+    // Compute the fade curve value for x
+    var u = fade(x);
+
+    // Interpolate the four results
+    return lerp(
+        lerp(n00, n10, u),
+        lerp(n01, n11, u),
+       fade(y));
+  };
+
+  // 3D Perlin Noise
+  module.perlin3 = function(x, y, z) {
+    // Find unit grid cell containing point
+    var X = Math.floor(x), Y = Math.floor(y), Z = Math.floor(z);
+    // Get relative xyz coordinates of point within that cell
+    x = x - X; y = y - Y; z = z - Z;
+    // Wrap the integer cells at 255 (smaller integer period can be introduced here)
+    X = X & 255; Y = Y & 255; Z = Z & 255;
+
+    // Calculate noise contributions from each of the eight corners
+    var n000 = gradP[X+  perm[Y+  perm[Z  ]]].dot3(x,   y,     z);
+    var n001 = gradP[X+  perm[Y+  perm[Z+1]]].dot3(x,   y,   z-1);
+    var n010 = gradP[X+  perm[Y+1+perm[Z  ]]].dot3(x,   y-1,   z);
+    var n011 = gradP[X+  perm[Y+1+perm[Z+1]]].dot3(x,   y-1, z-1);
+    var n100 = gradP[X+1+perm[Y+  perm[Z  ]]].dot3(x-1,   y,   z);
+    var n101 = gradP[X+1+perm[Y+  perm[Z+1]]].dot3(x-1,   y, z-1);
+    var n110 = gradP[X+1+perm[Y+1+perm[Z  ]]].dot3(x-1, y-1,   z);
+    var n111 = gradP[X+1+perm[Y+1+perm[Z+1]]].dot3(x-1, y-1, z-1);
+
+    // Compute the fade curve value for x, y, z
+    var u = fade(x);
+    var v = fade(y);
+    var w = fade(z);
+
+    // Interpolate
+    return lerp(
+        lerp(
+          lerp(n000, n100, u),
+          lerp(n001, n101, u), w),
+        lerp(
+          lerp(n010, n110, u),
+          lerp(n011, n111, u), w),
+       v);
+  };
+
+})(module.exports);
+});
+
+var lib$2 = createCommonjsModule(function (module) {
+const noise = perlin.noise;
+
+const clamp = (a, min, max) => Math.max(min, Math.min(a, max));
+const normalize = (a, min, max) => map(a, min, max, 0, 1);
+const map = (a, in_min, in_max, out_min, out_max) => (a - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+const lerp = (a, b, t) => a + t * (b - a);
+const random = (a, b) => {
+  if (b !== undefined) return lerp(a, b, Math.random())
+  return lerp(0, a, Math.random())
+};
+
+function perlin$$1 (x, y, z) {
+  if (arguments.length === 3) return noise.perlin3(x, y, z)
+  if (arguments.length === 2) return noise.perlin2(x, y)
+  if (arguments.length === 1) return noise.perlin2(x, null)
+  return null
+}
+
+module.exports = {
+  clamp,
+  constrain: clamp,
+  degrees: rad => rad * 180 / Math.PI,
+  radians: deg => deg * Math.PI / 180,
+  lerp,
+  normalize,
+  norm: normalize,
+  map,
+  random,
+  rnd: random,
+  perlin: perlin$$1,
+  noise: perlin$$1
+};
+});
+
+var lib_1$1 = lib$2.clamp;
+var lib_2$1 = lib$2.constrain;
+var lib_3$1 = lib$2.degrees;
+var lib_4$1 = lib$2.radians;
+var lib_5$1 = lib$2.lerp;
+var lib_6$1 = lib$2.normalize;
+var lib_7$1 = lib$2.norm;
+var lib_8 = lib$2.map;
+var lib_9 = lib$2.random;
+var lib_10 = lib$2.rnd;
+var lib_11 = lib$2.perlin;
+var lib_12 = lib$2.noise;
+
+var Gradient = function Gradient(f) {
+    if ( f === void 0 ) f = function (x, y, width, height) { return 1; };
+
+    this.compute = f.bind(this);
+};
+
+var staticAccessors = { methods: { configurable: true } };
+staticAccessors.methods.get = function () {
+    return Object.getOwnPropertyNames(Gradient).filter(function (prop) { return prop !== 'methods'; }).filter(function (prop) { return typeof Gradient[prop] === 'function'; });
+};
+Gradient.normalize = function normalize$1 (x, y, width, height) {
+    return [lib_6$1(x, 0, width),lib_6$1(y, 0, height)];
+};
+Gradient.simplex = function simplex (ref) {
+        if ( ref === void 0 ) ref = {};
+        var seed = ref.seed; if ( seed === void 0 ) seed = null;
+        var octaves = ref.octaves; if ( octaves === void 0 ) octaves = 2;
+        var power = ref.power; if ( power === void 0 ) power = 1;
+
+    var frequency = Math.pow(2, octaves);
+    var simplex = new tumult.Simplex2(seed);
+    return new Gradient(function (x, y, width, height) {
+        var ref = Gradient.normalize(x, y, width, height);
+            var i = ref[0];
+            var j = ref[1];
+        return Math.pow( lib_6$1(simplex.gen(i / frequency, j / frequency), -1, 1), power );
+    });
+};
+Gradient.linear = function linear (alpha) {
+        if ( alpha === void 0 ) alpha = 0;
+
+    return new Gradient(function (x, y, width, height) {
+        var ref = Gradient.normalize(x, y, width, height);
+            var i = ref[0];
+            var j = ref[1];
+        var theta = lib_4$1(alpha);
+        var dirx = lib_5$1(1 - i, i, (Math.sin(theta) + 1) / 2);
+        var diry = lib_5$1(1 - j, j, (Math.cos(theta) + 1) / 2);
+        return (dirx + diry) / 2;
+    });
+};
+Gradient.random = function random (rng) {
+        if ( rng === void 0 ) rng = Math.random;
+
+    return new Gradient(rng);
+};
+Gradient.fix = function fix (value) {
+        if ( value === void 0 ) value = 1;
+
+    return new Gradient(function () { return value; });
+};
+
+Object.defineProperties( Gradient, staticAccessors );
+
+
+
+
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIkdyYWRpZW50LmpzKG9yaWdpbmFsKSJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxPQUFPLFlBQVk7QUFDbkIsUUFBUyxXQUFXLFNBQVMsV0FBWTtBQUV6QyxlQUFlLE1BQU0sU0FBUztJQUU1QixZQUFhLENBQUEsSUFBSyxDQUFHLEVBQUEsQ0FBRyxFQUFBLEtBQU8sRUFBQSxRQUFkLEdBQXlCLEdBQUc7UUFDM0MsSUFBQSxDQUFLLE9BQUwsQ0FBQSxDQUFBLENBQWUsQ0FBQSxDQUFFLElBQUYsQ0FBTztJQUMxQjtJQUVFLE9BQUEsR0FBQSxDQUFXLFVBQVc7UUFDcEIsT0FBTyxNQUFBLENBQU8sbUJBQVAsQ0FBMkIsU0FBM0IsQ0FDSixNQURJLENBQ0csSUFBQSxJQUFRLElBQUEsQ0FBQSxHQUFBLENBQVMsVUFEcEIsQ0FFSixNQUZJLENBRUcsSUFBQSxJQUFRLE1BQUEsQ0FBTyxRQUFBLENBQVMsS0FBaEIsQ0FBQSxHQUFBLENBQTBCO0lBQ2hEO0lBRUUsT0FBTyxVQUFXLENBQUcsRUFBQSxDQUFHLEVBQUEsS0FBTyxFQUFBLFFBQVE7UUFDckMsT0FBTyxDQUNMLFNBQUEsQ0FBVSxHQUFHLEdBQUcsT0FDaEIsU0FBQSxDQUFVLEdBQUcsR0FBRztJQUV0QjtJQUVFLE9BQU8sUUFBUyxDQUNkLElBQUEsR0FBTyxNQUNQLE9BQUEsR0FBVSxHQUNWLEtBQUEsR0FBUSxFQUhNLEdBSVosSUFBSTtRQUNOLEtBQUEsQ0FBTSxZQUFZLElBQUEsQ0FBSyxHQUFMLENBQVMsR0FBRztRQUM5QixLQUFBLENBQU0sVUFBVSxJQUFJLE1BQUEsQ0FBTyxRQUFYLENBQW9CO1FBQ3BDLE9BQU8sSUFBSSxRQUFKLEVBQWMsQ0FBRyxFQUFBLENBQUcsRUFBQSxLQUFPLEVBQUEsUUFBZCxHQUF5QjtZQUMzQyxLQUFBLENBQU0sQ0FBQyxFQUFHLEtBQUssUUFBQSxDQUFTLFNBQVQsQ0FBbUIsR0FBRyxHQUFHLE9BQU87WUFDL0MsT0FBTyxTQUFBLENBQVUsT0FBQSxDQUFRLEdBQVIsQ0FBWSxDQUFBLENBQUEsQ0FBQSxDQUFJLFdBQVcsQ0FBQSxDQUFBLENBQUEsQ0FBSSxZQUFZLENBQUMsR0FBRyxFQUF6RCxDQUFBLEVBQUEsQ0FBK0Q7UUFDNUU7SUFDQTtJQUVFLE9BQU8sT0FBUSxLQUFBLEdBQVEsR0FBRztRQUN4QixPQUFPLElBQUksUUFBSixFQUFjLENBQUcsRUFBQSxDQUFHLEVBQUEsS0FBTyxFQUFBLFFBQWQsR0FBeUI7WUFDM0MsS0FBQSxDQUFNLENBQUMsRUFBRyxLQUFLLFFBQUEsQ0FBUyxTQUFULENBQW1CLEdBQUcsR0FBRyxPQUFPO1lBQy9DLEtBQUEsQ0FBTSxRQUFRLE9BQUEsQ0FBUTtZQUV0QixLQUFBLENBQU0sT0FBTyxJQUFBLENBQUssQ0FBQSxDQUFBLENBQUEsQ0FBSSxHQUFHLElBQUksSUFBQSxDQUFLLEdBQUwsQ0FBUyxNQUFULENBQUEsQ0FBQSxDQUFrQixFQUFuQixDQUFBLENBQUEsQ0FBd0I7WUFDcEQsS0FBQSxDQUFNLE9BQU8sSUFBQSxDQUFLLENBQUEsQ0FBQSxDQUFBLENBQUksR0FBRyxJQUFJLElBQUEsQ0FBSyxHQUFMLENBQVMsTUFBVCxDQUFBLENBQUEsQ0FBa0IsRUFBbkIsQ0FBQSxDQUFBLENBQXdCO1lBQ3BELFFBQVMsSUFBQSxDQUFBLENBQUEsQ0FBTyxLQUFSLENBQUEsQ0FBQSxDQUFnQjtRQUM5QjtJQUNBO0lBRUUsT0FBTyxPQUFRLEdBQUEsR0FBTSxJQUFBLENBQUssUUFBUTtRQUNoQyxPQUFPLElBQUksUUFBSixDQUFhO0lBQ3hCO0lBRUUsT0FBTyxJQUFLLEtBQUEsR0FBUSxHQUFHO1FBQ3JCLE9BQU8sSUFBSSxRQUFKLElBQWEsR0FBTTtJQUM5QjtBQUNBO0FBckRBIiwiZmlsZSI6IkdyYWRpZW50LmpzKG9yaWdpbmFsKSIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB0dW11bHQgZnJvbSAndHVtdWx0J1xuaW1wb3J0IHsgbm9ybWFsaXplLCByYWRpYW5zLCBsZXJwIH0gZnJvbSAnbWlzc2luZy1tYXRoJ1xuXG5leHBvcnQgZGVmYXVsdCBjbGFzcyBHcmFkaWVudCB7XG4gIC8vIElNUE9SVEFOVDogZigpIHNob3VsZCByZXR1cm4gYSBub3JtYWxpemVkIHZhbHVlXG4gIGNvbnN0cnVjdG9yIChmID0gKHgsIHksIHdpZHRoLCBoZWlnaHQpID0+IDEpIHtcbiAgICB0aGlzLmNvbXB1dGUgPSBmLmJpbmQodGhpcylcbiAgfVxuXG4gIHN0YXRpYyBnZXQgbWV0aG9kcyAoKSB7XG4gICAgcmV0dXJuIE9iamVjdC5nZXRPd25Qcm9wZXJ0eU5hbWVzKEdyYWRpZW50KVxuICAgICAgLmZpbHRlcihwcm9wID0+IHByb3AgIT09ICdtZXRob2RzJylcbiAgICAgIC5maWx0ZXIocHJvcCA9PiB0eXBlb2YgR3JhZGllbnRbcHJvcF0gPT09ICdmdW5jdGlvbicpXG4gIH1cblxuICBzdGF0aWMgbm9ybWFsaXplICh4LCB5LCB3aWR0aCwgaGVpZ2h0KSB7XG4gICAgcmV0dXJuIFtcbiAgICAgIG5vcm1hbGl6ZSh4LCAwLCB3aWR0aCksXG4gICAgICBub3JtYWxpemUoeSwgMCwgaGVpZ2h0KVxuICAgIF1cbiAgfVxuXG4gIHN0YXRpYyBzaW1wbGV4ICh7XG4gICAgc2VlZCA9IG51bGwsXG4gICAgb2N0YXZlcyA9IDIsXG4gICAgcG93ZXIgPSAxXG4gIH0gPSB7fSkge1xuICAgIGNvbnN0IGZyZXF1ZW5jeSA9IE1hdGgucG93KDIsIG9jdGF2ZXMpXG4gICAgY29uc3Qgc2ltcGxleCA9IG5ldyB0dW11bHQuU2ltcGxleDIoc2VlZClcbiAgICByZXR1cm4gbmV3IEdyYWRpZW50KCh4LCB5LCB3aWR0aCwgaGVpZ2h0KSA9PiB7XG4gICAgICBjb25zdCBbaSwgal0gPSBHcmFkaWVudC5ub3JtYWxpemUoeCwgeSwgd2lkdGgsIGhlaWdodClcbiAgICAgIHJldHVybiBub3JtYWxpemUoc2ltcGxleC5nZW4oaSAvIGZyZXF1ZW5jeSwgaiAvIGZyZXF1ZW5jeSksIC0xLCAxKSAqKiBwb3dlclxuICAgIH0pXG4gIH1cblxuICBzdGF0aWMgbGluZWFyIChhbHBoYSA9IDApIHtcbiAgICByZXR1cm4gbmV3IEdyYWRpZW50KCh4LCB5LCB3aWR0aCwgaGVpZ2h0KSA9PiB7XG4gICAgICBjb25zdCBbaSwgal0gPSBHcmFkaWVudC5ub3JtYWxpemUoeCwgeSwgd2lkdGgsIGhlaWdodClcbiAgICAgIGNvbnN0IHRoZXRhID0gcmFkaWFucyhhbHBoYSlcblxuICAgICAgY29uc3QgZGlyeCA9IGxlcnAoMSAtIGksIGksIChNYXRoLnNpbih0aGV0YSkgKyAxKSAvIDIpXG4gICAgICBjb25zdCBkaXJ5ID0gbGVycCgxIC0gaiwgaiwgKE1hdGguY29zKHRoZXRhKSArIDEpIC8gMilcbiAgICAgIHJldHVybiAoKGRpcnggKyBkaXJ5KSAvIDIpXG4gICAgfSlcbiAgfVxuXG4gIHN0YXRpYyByYW5kb20gKHJuZyA9IE1hdGgucmFuZG9tKSB7XG4gICAgcmV0dXJuIG5ldyBHcmFkaWVudChybmcpXG4gIH1cblxuICBzdGF0aWMgZml4ICh2YWx1ZSA9IDEpIHtcbiAgICByZXR1cm4gbmV3IEdyYWRpZW50KCgpID0+IHZhbHVlKVxuICB9XG59XG4iXX0=
+
+function drawBackground (x, y, width, height, ref) {
+    if ( ref === void 0 ) ref = {};
+    var ctx = ref.ctx;
+    var color = ref.color;
+
+    if (color === 'transparent') 
+        { return; }
+    if (color) 
+        { ctx.fillStyle = color; }
+    ctx.fillRect(x, y, width, height);
+}
+
+
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImRyYXctYmFja2dyb3VuZC5qcyhvcmlnaW5hbCkiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsZ0JBQWdCLENBQUcsRUFBQSxDQUFHLEVBQUEsS0FBTyxFQUFBLE1BQVEsRUFBQSxDQUFFLEtBQUssTUFBUCxHQUFpQixJQUF2QyxHQUE4QztJQUMzRCxJQUFJLEtBQUEsQ0FBQSxHQUFBLENBQVU7UUFBZTtJQUU3QixJQUFJO1FBQU8sR0FBQSxDQUFJLFNBQUosQ0FBQSxDQUFBLENBQWdCO0lBQzNCLEdBQUEsQ0FBSSxRQUFKLENBQWEsR0FBRyxHQUFHLE9BQU87QUFDNUI7QUFMQSIsImZpbGUiOiJkcmF3LWJhY2tncm91bmQuanMob3JpZ2luYWwpIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGRlZmF1bHQgKHgsIHksIHdpZHRoLCBoZWlnaHQsIHsgY3R4LCBjb2xvciB9ID0ge30pID0+IHtcbiAgaWYgKGNvbG9yID09PSAndHJhbnNwYXJlbnQnKSByZXR1cm5cblxuICBpZiAoY29sb3IpIGN0eC5maWxsU3R5bGUgPSBjb2xvclxuICBjdHguZmlsbFJlY3QoeCwgeSwgd2lkdGgsIGhlaWdodClcbn1cbiJdfQ==
+
+function makePattern (symbol) { return function (x, y, ref) {
+    if ( ref === void 0 ) ref = {};
+    var ctx = ref.ctx;
+    var unit = ref.unit;
+    var scale = ref.scale; if ( scale === void 0 ) scale = 1;
+    var foregroundColor = ref.foregroundColor; if ( foregroundColor === void 0 ) foregroundColor = 'black';
+    var backgroundColor = ref.backgroundColor; if ( backgroundColor === void 0 ) backgroundColor = 'white';
+
+    ctx.isSVG && ctx.beginSVGGroup();
+    drawBackground(x, y, unit, unit, {
+        ctx: ctx,
+        color: backgroundColor
+    });
+    ctx.fillStyle = foregroundColor;
+    symbol(x, y, {
+        ctx: ctx,
+        unit: unit,
+        scale: scale
+    });
+    ctx.isSVG && ctx.endSVGGroup();
+}; }
+
+
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm1ha2UtcGF0dGVybi5qcyhvcmlnaW5hbCkiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxnQkFBZ0I7QUFFdkIsZUFBZSxNQUFBLEtBQ0wsQ0FBRyxFQUFBLENBQUcsRUFBQSxDQUNaLEtBQ0EsTUFDQSxLQUFBLEdBQVEsR0FDUixlQUFBLEdBQWtCLFNBQ2xCLGVBQUEsR0FBa0IsUUFMTixHQU1WLElBTkcsR0FNSTtJQUNULEdBQUEsQ0FBSSxLQUFKLENBQUEsRUFBQSxDQUFhLEdBQUEsQ0FBSSxhQUFKO0lBRWIsVUFBQSxDQUFXLEdBQUcsR0FBRyxNQUFNLE1BQU07UUFBRSxHQUFGLENBQUE7UUFBTyxPQUFPOztJQUUzQyxHQUFBLENBQUksU0FBSixDQUFBLENBQUEsQ0FBZ0I7SUFDaEIsTUFBQSxDQUFPLEdBQUcsR0FBRztRQUFFLEdBQUYsQ0FBQTtRQUFPLElBQVAsQ0FBQTtRQUFhOztJQUUxQixHQUFBLENBQUksS0FBSixDQUFBLEVBQUEsQ0FBYSxHQUFBLENBQUksV0FBSjtBQUNqQjtBQWxCQSIsImZpbGUiOiJtYWtlLXBhdHRlcm4uanMob3JpZ2luYWwpIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IGJhY2tncm91bmQgZnJvbSAnLi4vdXRpbHMvZHJhdy1iYWNrZ3JvdW5kJ1xuXG5leHBvcnQgZGVmYXVsdCBzeW1ib2wgPT4ge1xuICByZXR1cm4gKHgsIHksIHtcbiAgICBjdHgsXG4gICAgdW5pdCxcbiAgICBzY2FsZSA9IDEsXG4gICAgZm9yZWdyb3VuZENvbG9yID0gJ2JsYWNrJyxcbiAgICBiYWNrZ3JvdW5kQ29sb3IgPSAnd2hpdGUnXG4gIH0gPSB7fSkgPT4ge1xuICAgIGN0eC5pc1NWRyAmJiBjdHguYmVnaW5TVkdHcm91cCgpXG5cbiAgICBiYWNrZ3JvdW5kKHgsIHksIHVuaXQsIHVuaXQsIHsgY3R4LCBjb2xvcjogYmFja2dyb3VuZENvbG9yIH0pXG5cbiAgICBjdHguZmlsbFN0eWxlID0gZm9yZWdyb3VuZENvbG9yXG4gICAgc3ltYm9sKHgsIHksIHsgY3R4LCB1bml0LCBzY2FsZSB9KVxuXG4gICAgY3R4LmlzU1ZHICYmIGN0eC5lbmRTVkdHcm91cCgpXG4gIH1cbn1cbiJdfQ==
+
+var lineclip_1 = lineclip;
+
+lineclip.polyline = lineclip;
+lineclip.polygon = polygonclip;
+
+
+// Cohen-Sutherland line clippign algorithm, adapted to efficiently
+// handle polylines rather than just segments
+
+function lineclip(points, bbox, result) {
+
+    var len = points.length,
+        codeA = bitCode(points[0], bbox),
+        part = [],
+        i, a, b, codeB, lastCode;
+
+    if (!result) result = [];
+
+    for (i = 1; i < len; i++) {
+        a = points[i - 1];
+        b = points[i];
+        codeB = lastCode = bitCode(b, bbox);
+
+        while (true) {
+
+            if (!(codeA | codeB)) { // accept
+                part.push(a);
+
+                if (codeB !== lastCode) { // segment went outside
+                    part.push(b);
+
+                    if (i < len - 1) { // start a new line
+                        result.push(part);
+                        part = [];
+                    }
+                } else if (i === len - 1) {
+                    part.push(b);
+                }
+                break;
+
+            } else if (codeA & codeB) { // trivial reject
+                break;
+
+            } else if (codeA) { // a outside, intersect with clip edge
+                a = intersect(a, b, codeA, bbox);
+                codeA = bitCode(a, bbox);
+
+            } else { // b outside
+                b = intersect(a, b, codeB, bbox);
+                codeB = bitCode(b, bbox);
+            }
+        }
+
+        codeA = lastCode;
+    }
+
+    if (part.length) result.push(part);
+
+    return result;
+}
+
+// Sutherland-Hodgeman polygon clipping algorithm
+
+function polygonclip(points, bbox) {
+
+    var result, edge, prev, prevInside, i, p, inside;
+
+    // clip against each side of the clip rectangle
+    for (edge = 1; edge <= 8; edge *= 2) {
+        result = [];
+        prev = points[points.length - 1];
+        prevInside = !(bitCode(prev, bbox) & edge);
+
+        for (i = 0; i < points.length; i++) {
+            p = points[i];
+            inside = !(bitCode(p, bbox) & edge);
+
+            // if segment goes through the clip window, add an intersection
+            if (inside !== prevInside) result.push(intersect(prev, p, edge, bbox));
+
+            if (inside) result.push(p); // add a point if it's inside
+
+            prev = p;
+            prevInside = inside;
+        }
+
+        points = result;
+
+        if (!points.length) break;
+    }
+
+    return result;
+}
+
+// intersect a segment against one of the 4 lines that make up the bbox
+
+function intersect(a, b, edge, bbox) {
+    return edge & 8 ? [a[0] + (b[0] - a[0]) * (bbox[3] - a[1]) / (b[1] - a[1]), bbox[3]] : // top
+           edge & 4 ? [a[0] + (b[0] - a[0]) * (bbox[1] - a[1]) / (b[1] - a[1]), bbox[1]] : // bottom
+           edge & 2 ? [bbox[2], a[1] + (b[1] - a[1]) * (bbox[2] - a[0]) / (b[0] - a[0])] : // right
+           edge & 1 ? [bbox[0], a[1] + (b[1] - a[1]) * (bbox[0] - a[0]) / (b[0] - a[0])] : // left
+           null;
+}
+
+// bit code reflects the point position relative to the bbox:
+
+//         left  mid  right
+//    top  1001  1000  1010
+//    mid  0001  0000  0010
+// bottom  0101  0100  0110
+
+function bitCode(p, bbox) {
+    var code = 0;
+
+    if (p[0] < bbox[0]) code |= 1; // left
+    else if (p[0] > bbox[2]) code |= 2; // right
+
+    if (p[1] < bbox[1]) code |= 4; // bottom
+    else if (p[1] > bbox[3]) code |= 8; // top
+
+    return code;
+}
+
+function drawPath (ctx, path) {
+    ctx.beginPath();
+    path.forEach(function (point, index) {
+        ctx[index === 0 ? 'moveTo' : 'lineTo'].apply(ctx, point);
+    });
+}
+
+
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImRyYXctcGF0aC5qcyhvcmlnaW5hbCkiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsZ0JBQWdCLEdBQUssRUFBQSxNQUFOLEdBQWU7SUFDNUIsR0FBQSxDQUFJLFNBQUo7SUFDQSxJQUFBLENBQUssT0FBTCxFQUFjLEtBQU8sRUFBQSxPQUFSLEdBQWtCO1FBQzdCLEdBQUEsQ0FBSSxLQUFBLENBQUEsR0FBQSxDQUFVLENBQVYsR0FBYyxXQUFXLFNBQTdCLENBQXVDLEdBQUc7SUFDOUM7QUFDQTtBQUxBIiwiZmlsZSI6ImRyYXctcGF0aC5qcyhvcmlnaW5hbCkiLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZGVmYXVsdCAoY3R4LCBwYXRoKSA9PiB7XG4gIGN0eC5iZWdpblBhdGgoKVxuICBwYXRoLmZvckVhY2goKHBvaW50LCBpbmRleCkgPT4ge1xuICAgIGN0eFtpbmRleCA9PT0gMCA/ICdtb3ZlVG8nIDogJ2xpbmVUbyddKC4uLnBvaW50KVxuICB9KVxufVxuIl19
+
+function roundTo (value, nearest) { return Math.floor(value / nearest) * nearest; }
+
+
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInJvdW5kLXRvLmpzKG9yaWdpbmFsKSJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxnQkFBZ0IsS0FBTyxFQUFBLFNBQVIsR0FBb0IsSUFBQSxDQUFLLEtBQUwsQ0FBVyxLQUFBLENBQUEsQ0FBQSxDQUFRLFFBQW5CLENBQUEsQ0FBQSxDQUE4QjtBQUFqRSIsImZpbGUiOiJyb3VuZC10by5qcyhvcmlnaW5hbCkiLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZGVmYXVsdCAodmFsdWUsIG5lYXJlc3QpID0+IE1hdGguZmxvb3IodmFsdWUgLyBuZWFyZXN0KSAqIG5lYXJlc3RcbiJdfQ==
+
+function steps(unit, step) {
+    return unit / step;
+}
+
+var symbols = {
+    empty: function () {},
+    debug: function (x, y, ref) {
+        if ( ref === void 0 ) ref = {};
+        var ctx = ref.ctx;
+        var unit = ref.unit;
+        var scale = ref.scale; if ( scale === void 0 ) scale = 1;
+
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = unit / 12;
+        ctx.strokeRect(x, y, unit, unit);
+    },
+    square: function (x, y, ref) {
+        if ( ref === void 0 ) ref = {};
+        var ctx = ref.ctx;
+        var unit = ref.unit;
+        var scale = ref.scale; if ( scale === void 0 ) scale = 1;
+
+        var thickness = roundTo(unit * scale, steps(unit, 24));
+        if (thickness < 0) 
+            { return; }
+        ctx.fillRect(x + unit / 2 - thickness / 2, y + unit / 2 - thickness / 2, thickness, thickness);
+    },
+    square_offset: function (x, y, ref) {
+        if ( ref === void 0 ) ref = {};
+        var ctx = ref.ctx;
+        var unit = ref.unit;
+        var scale = ref.scale; if ( scale === void 0 ) scale = 1;
+
+        var thickness = roundTo(unit * scale, steps(unit, 24)) - 10;
+        if (thickness < 0) 
+            { return; }
+        ctx.fillRect(x + unit / 2 - thickness / 2, y + unit / 2 - thickness / 2, thickness, thickness);
+    },
+    vertical_line: function (x, y, ref) {
+        if ( ref === void 0 ) ref = {};
+        var ctx = ref.ctx;
+        var unit = ref.unit;
+        var scale = ref.scale; if ( scale === void 0 ) scale = 1;
+
+        var thickness = roundTo(unit * scale, steps(unit, 24));
+        if (thickness < 0) 
+            { return; }
+        ctx.fillRect(x + unit / 2 - thickness / 2, y, thickness, unit);
+    },
+    vertical_line_offset: function (x, y, ref) {
+        if ( ref === void 0 ) ref = {};
+        var ctx = ref.ctx;
+        var unit = ref.unit;
+        var scale = ref.scale; if ( scale === void 0 ) scale = 1;
+
+        var thickness = roundTo(unit * scale, steps(unit, 24)) - 10;
+        if (thickness < 0) 
+            { return; }
+        ctx.fillRect(x + unit / 2 - thickness / 2, y, thickness, unit);
+    },
+    horizontal_line: function (x, y, ref) {
+        if ( ref === void 0 ) ref = {};
+        var ctx = ref.ctx;
+        var unit = ref.unit;
+        var scale = ref.scale; if ( scale === void 0 ) scale = 1;
+
+        var thickness = roundTo(unit * scale, steps(unit, 24));
+        if (thickness < 0) 
+            { return; }
+        ctx.fillRect(x, y + unit / 2 - thickness / 2, unit, thickness);
+    },
+    horizontal_line_offset: function (x, y, ref) {
+        if ( ref === void 0 ) ref = {};
+        var ctx = ref.ctx;
+        var unit = ref.unit;
+        var scale = ref.scale; if ( scale === void 0 ) scale = 1;
+
+        var thickness = roundTo(unit * scale, steps(unit, 24)) - 10;
+        if (thickness < 0) 
+            { return; }
+        ctx.fillRect(x, y + unit / 2 - thickness / 2, unit, thickness);
+    },
+    diagonal: function (x, y, ref) {
+        if ( ref === void 0 ) ref = {};
+        var ctx = ref.ctx;
+        var unit = ref.unit;
+        var scale = ref.scale; if ( scale === void 0 ) scale = 1;
+
+        var thickness = roundTo(unit * scale, steps(unit, 24));
+        if (thickness < 0) 
+            { return; }
+        ctx.beginPath();
+        ctx.moveTo(x + unit - thickness, y);
+        ctx.lineTo(x + unit, y);
+        ctx.lineTo(x + thickness, y + unit);
+        ctx.lineTo(x, y + unit);
+        ctx.fill();
+    },
+    diamond: function (x, y, ref) {
+        if ( ref === void 0 ) ref = {};
+        var ctx = ref.ctx;
+        var unit = ref.unit;
+        var scale = ref.scale; if ( scale === void 0 ) scale = 1;
+
+        var thickness = roundTo(unit * scale, steps(unit, 24)) - 1;
+        if (thickness < 0) 
+            { return; }
+        drawPath(ctx, lineclip_1.polygon([[x + unit / 2,y + thickness],[x + unit - thickness,
+            y + unit / 2],[x + unit / 2,y + unit - thickness],[x + thickness,y + unit / 2]], [x,
+            y,x + unit,y + unit]));
+        ctx.fill();
+    },
+    circle: function (x, y, ref) {
+        if ( ref === void 0 ) ref = {};
+        var ctx = ref.ctx;
+        var unit = ref.unit;
+        var scale = ref.scale; if ( scale === void 0 ) scale = 1;
+
+        var diameter = roundTo((unit - 1) * scale, steps(unit, 24));
+        if (diameter < 0) 
+            { return; }
+        var path = [];
+        for (var alpha = 0;alpha < 360; alpha += 360 / 36) {
+            var theta = lib_4$1(alpha);
+            path.push([x + unit / 2 + Math.sin(theta) * diameter,y + unit / 2 + Math.cos(theta) * diameter]);
+        }
+        drawPath(ctx, lineclip_1.polygon(path, [x,y,x + unit,y + unit]));
+        ctx.closePath();
+        ctx.fill();
+    },
+    ffp: function (x, y, ref) {
+        if ( ref === void 0 ) ref = {};
+        var ctx = ref.ctx;
+        var unit = ref.unit;
+        var scale = ref.scale; if ( scale === void 0 ) scale = 1;
+
+        var gradient = 'FFP'.split('');
+        var char = gradient[Math.floor(Math.random() * gradient.length)];
+        if (!char) 
+            { return; }
+        ctx.font = (unit * 1.2) + "px Space Mono";
+        ctx.fillText(char, x, y + unit);
+    }
+};
+
+
+
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInN5bWJvbHMuanMob3JpZ2luYWwpIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sY0FBYztBQUNyQixRQUFTLGNBQWU7QUFFeEIsT0FBTyxjQUFjO0FBQ3JCLE9BQU8sYUFBYTtBQUlwQixTQUFTLE1BQU8sSUFBTSxFQUFBLE1BQU07SUFDMUIsT0FBTyxJQUFBLENBQUEsQ0FBQSxDQUFPO0FBQ2hCOztBQUVBLEtBQUEsQ0FBTSxVQUFVO0lBQ2QsVUFBTyxHQUFNLENBQWYsQ0FEZ0IsQ0FBQTtJQUdkLFFBQVEsQ0FBRyxFQUFBLENBQUcsRUFBQSxDQUFFLEtBQUssTUFBTSxLQUFBLEdBQVEsRUFBckIsR0FBMkIsSUFBbEMsR0FBeUM7UUFDOUMsR0FBQSxDQUFJLFdBQUosQ0FBQSxDQUFBLENBQWtCO1FBQ2xCLEdBQUEsQ0FBSSxTQUFKLENBQUEsQ0FBQSxDQUFnQixJQUFBLENBQUEsQ0FBQSxDQUFPO1FBQ3ZCLEdBQUEsQ0FBSSxVQUFKLENBQWUsR0FBRyxHQUFHLE1BQU07SUFDL0IsQ0FQZ0IsQ0FBQTtJQVNkLFNBQVMsQ0FBRyxFQUFBLENBQUcsRUFBQSxDQUFFLEtBQUssTUFBTSxLQUFBLEdBQVEsRUFBckIsR0FBMkIsSUFBbEMsR0FBeUM7UUFDL0MsS0FBQSxDQUFNLFlBQVksT0FBQSxDQUFRLElBQUEsQ0FBQSxDQUFBLENBQU8sT0FBTyxLQUFBLENBQU0sTUFBTTtRQUNwRCxJQUFJLFNBQUEsQ0FBQSxDQUFBLENBQVk7WUFBRztRQUVuQixHQUFBLENBQUksUUFBSixDQUFhLENBQUEsQ0FBQSxDQUFBLENBQUssSUFBQSxDQUFBLENBQUEsQ0FBTyxDQUFaLENBQUEsQ0FBQSxDQUFpQixTQUFBLENBQUEsQ0FBQSxDQUFZLEdBQUcsQ0FBQSxDQUFBLENBQUEsQ0FBSyxJQUFBLENBQUEsQ0FBQSxDQUFPLENBQVosQ0FBQSxDQUFBLENBQWlCLFNBQUEsQ0FBQSxDQUFBLENBQVksR0FBRyxXQUFXO0lBQzVGLENBZGdCLENBQUE7SUFnQmQsZ0JB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QSxDQUFTLE9BQVQsQ0FBaUIsTUFBTSxDQUFDLEVBQUcsRUFBRyxDQUFBLENBQUEsQ0FBQSxDQUFJLEtBQU0sQ0FBQSxDQUFBLENBQUEsQ0FBSTtRQUMxRCxHQUFBLENBQUksU0FBSjtRQUNBLEdBQUEsQ0FBSSxJQUFKO0lBQ0osQ0E1RmdCLENBQUE7SUE4RmQsTUFBTSxDQUFHLEVBQUEsQ0FBRyxFQUFBLENBQUUsS0FBSyxNQUFNLEtBQUEsR0FBUSxFQUFyQixHQUEyQixJQUFsQyxHQUF5QztRQUM1QyxLQUFBLENBQU0sV0FBVyxLQUFBLENBQU0sS0FBTixDQUFZO1FBQzdCLEtBQUEsQ0FBTSxPQUFPLFFBQUEsQ0FBUyxJQUFBLENBQUssS0FBTCxDQUFXLElBQUEsQ0FBSyxNQUFMLEVBQUEsQ0FBQSxDQUFBLENBQWdCLFFBQUEsQ0FBUztRQUMxRCxJQUFJLENBQUM7WUFBTTtRQUVYLEdBQUEsQ0FBSSxJQUFKLENBQUEsQ0FBQSxDQUFXLEdBQUcsSUFBQSxDQUFBLENBQUEsQ0FBTyxpQkFBVjtRQUNYLEdBQUEsQ0FBSSxRQUFKLENBQWEsTUFBTSxHQUFHLENBQUEsQ0FBQSxDQUFBLENBQUk7SUFDOUI7O0FBR0EsZUFBZTtBQXBIZiIsImZpbGUiOiJzeW1ib2xzLmpzKG9yaWdpbmFsKSIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBsaW5lY2xpcCBmcm9tICdsaW5lY2xpcCdcbmltcG9ydCB7IHJhZGlhbnMgfSBmcm9tICdtaXNzaW5nLW1hdGgnXG5cbmltcG9ydCBkcmF3UGF0aCBmcm9tICcuLi91dGlscy9kcmF3LXBhdGgnXG5pbXBvcnQgcm91bmRUbyBmcm9tICcuLi91dGlscy9yb3VuZC10bydcblxuLyogZXNsaW50LWRpc2FibGUgY2FtZWxjYXNlICovXG5cbmZ1bmN0aW9uIHN0ZXBzICh1bml0LCBzdGVwKSB7XG4gIHJldHVybiB1bml0IC8gc3RlcFxufVxuXG5jb25zdCBzeW1ib2xzID0ge1xuICBlbXB0eTogKCkgPT4ge30sXG5cbiAgZGVidWc6ICh4LCB5LCB7IGN0eCwgdW5pdCwgc2NhbGUgPSAxIH0gPSB7fSkgPT4ge1xuICAgIGN0eC5zdHJva2VTdHlsZSA9ICdibGFjaydcbiAgICBjdHgubGluZVdpZHRoID0gdW5pdCAvIDEyXG4gICAgY3R4LnN0cm9rZVJlY3QoeCwgeSwgdW5pdCwgdW5pdClcbiAgfSxcblxuICBzcXVhcmU6ICh4LCB5LCB7IGN0eCwgdW5pdCwgc2NhbGUgPSAxIH0gPSB7fSkgPT4ge1xuICAgIGNvbnN0IHRoaWNrbmVzcyA9IHJvdW5kVG8odW5pdCAqIHNjYWxlLCBzdGVwcyh1bml0LCAyNCkpXG4gICAgaWYgKHRoaWNrbmVzcyA8IDApIHJldHVyblxuXG4gICAgY3R4LmZpbGxSZWN0KHggKyAodW5pdCAvIDIpIC0gdGhpY2tuZXNzIC8gMiwgeSArICh1bml0IC8gMikgLSB0aGlja25lc3MgLyAyLCB0aGlja25lc3MsIHRoaWNrbmVzcylcbiAgfSxcblxuICBzcXVhcmVfb2Zmc2V0OiAoeCwgeSwgeyBjdHgsIHVuaXQsIHNjYWxlID0gMSB9ID0ge30pID0+IHtcbiAgICBjb25zdCB0aGlja25lc3MgPSByb3VuZFRvKHVuaXQgKiBzY2FsZSwgc3RlcHModW5pdCwgMjQpKSAtIDEwXG4gICAgaWYgKHRoaWNrbmVzcyA8IDApIHJldHVyblxuXG4gICAgY3R4LmZpbGxSZWN0KHggKyAodW5pdCAvIDIpIC0gdGhpY2tuZXNzIC8gMiwgeSArICh1bml0IC8gMikgLSB0aGlja25lc3MgLyAyLCB0aGlja25lc3MsIHRoaWNrbmVzcylcbiAgfSxcblxuICB2ZXJ0aWNhbF9saW5lOiAoeCwgeSwgeyBjdHgsIHVuaXQsIHNjYWxlID0gMSB9ID0ge30pID0+IHtcbiAgICBjb25zdCB0aGlja25lc3MgPSByb3VuZFRvKHVuaXQgKiBzY2FsZSwgc3RlcHModW5pdCwgMjQpKVxuICAgIGlmICh0aGlja25lc3MgPCAwKSByZXR1cm5cblxuICAgIGN0eC5maWxsUmVjdCh4ICsgKHVuaXQgLyAyKSAtICh0aGlja25lc3MgLyAyKSwgeSwgdGhpY2tuZXNzLCB1bml0KVxuICB9LFxuXG4gIHZlcnRpY2FsX2xpbmVfb2Zmc2V0OiAoeCwgeSwgeyBjdHgsIHVuaXQsIHNjYWxlID0gMSB9ID0ge30pID0+IHtcbiAgICBjb25zdCB0aGlja25lc3MgPSByb3VuZFRvKHVuaXQgKiBzY2FsZSwgc3RlcHModW5pdCwgMjQpKSAtIDEwXG4gICAgaWYgKHRoaWNrbmVzcyA8IDApIHJldHVyblxuXG4gICAgY3R4LmZpbGxSZWN0KHggKyAodW5pdCAvIDIpIC0gKHRoaWNrbmVzcyAvIDIpLCB5LCB0aGlja25lc3MsIHVuaXQpXG4gIH0sXG5cbiAgaG9yaXpvbnRhbF9saW5lOiAoeCwgeSwgeyBjdHgsIHVuaXQsIHNjYWxlID0gMSB9ID0ge30pID0+IHtcbiAgICBjb25zdCB0aGlja25lc3MgPSByb3VuZFRvKHVuaXQgKiBzY2FsZSwgc3RlcHModW5pdCwgMjQpKVxuICAgIGlmICh0aGlja25lc3MgPCAwKSByZXR1cm5cblxuICAgIGN0eC5maWxsUmVjdCh4LCB5ICsgKHVuaXQgLyAyKSAtICh0aGlja25lc3MgLyAyKSwgdW5pdCwgdGhpY2tuZXNzKVxuICB9LFxuXG4gIGhvcml6b250YWxfbGluZV9vZmZzZXQ6ICh4LCB5LCB7IGN0eCwgdW5pdCwgc2NhbGUgPSAxIH0gPSB7fSkgPT4ge1xuICAgIGNvbnN0IHRoaWNrbmVzcyA9IHJvdW5kVG8odW5pdCAqIHNjYWxlLCBzdGVwcyh1bml0LCAyNCkpIC0gMTBcbiAgICBpZiAodGhpY2tuZXNzIDwgMCkgcmV0dXJuXG5cbiAgICBjdHguZmlsbFJlY3QoeCwgeSArICh1bml0IC8gMikgLSAodGhpY2tuZXNzIC8gMiksIHVuaXQsIHRoaWNrbmVzcylcbiAgfSxcblxuICBkaWFnb25hbDogKHgsIHksIHsgY3R4LCB1bml0LCBzY2FsZSA9IDEgfSA9IHt9KSA9PiB7XG4gICAgY29uc3QgdGhpY2tuZXNzID0gcm91bmRUbyh1bml0ICogc2NhbGUsIHN0ZXBzKHVuaXQsIDI0KSlcbiAgICBpZiAodGhpY2tuZXNzIDwgMCkgcmV0dXJuXG5cbiAgICBjdHguYmVnaW5QYXRoKClcbiAgICBjdHgubW92ZVRvKHggKyB1bml0IC0gdGhpY2tuZXNzLCB5KVxuICAgIGN0eC5saW5lVG8oeCArIHVuaXQsIHkpXG4gICAgY3R4LmxpbmVUbyh4ICsgdGhpY2tuZXNzLCB5ICsgdW5pdClcbiAgICBjdHgubGluZVRvKHgsIHkgKyB1bml0KVxuICAgIGN0eC5maWxsKClcbiAgfSxcblxuICBkaWFtb25kOiAoeCwgeSwgeyBjdHgsIHVuaXQsIHNjYWxlID0gMSB9ID0ge30pID0+IHtcbiAgICBjb25zdCB0aGlja25lc3MgPSByb3VuZFRvKHVuaXQgKiBzY2FsZSwgc3RlcHModW5pdCwgMjQpKSAtIDFcbiAgICBpZiAodGhpY2tuZXNzIDwgMCkgcmV0dXJuXG5cbiAgICBkcmF3UGF0aChjdHgsIGxpbmVjbGlwLnBvbHlnb24oW1xuICAgICAgW3ggKyB1bml0IC8gMiwgeSArIHRoaWNrbmVzc10sXG4gICAgICBbeCArIHVuaXQgLSB0aGlja25lc3MsIHkgKyB1bml0IC8gMl0sXG4gICAgICBbeCArIHVuaXQgLyAyLCB5ICsgdW5pdCAtIHRoaWNrbmVzc10sXG4gICAgICBbeCArIHRoaWNrbmVzcywgeSArIHVuaXQgLyAyXVxuICAgIF0sIFt4LCB5LCB4ICsgdW5pdCwgeSArIHVuaXRdKSlcbiAgICBjdHguZmlsbCgpXG4gIH0sXG5cbiAgY2lyY2xlOiAoeCwgeSwgeyBjdHgsIHVuaXQsIHNjYWxlID0gMSB9ID0ge30pID0+IHtcbiAgICBjb25zdCBkaWFtZXRlciA9IHJvdW5kVG8oKHVuaXQgLSAxKSAqIHNjYWxlLCBzdGVwcyh1bml0LCAyNCkpXG4gICAgaWYgKGRpYW1ldGVyIDwgMCkgcmV0dXJuXG5cbiAgICBjb25zdCBwYXRoID0gW11cbiAgICBmb3IgKGxldCBhbHBoYSA9IDA7IGFscGhhIDwgMzYwOyBhbHBoYSArPSAoMzYwIC8gMzYpKSB7XG4gICAgICBjb25zdCB0aGV0YSA9IHJhZGlhbnMoYWxwaGEpXG4gICAgICBwYXRoLnB1c2goW1xuICAgICAgICAoeCArIHVuaXQgLyAyKSArIE1hdGguc2luKHRoZXRhKSAqIChkaWFtZXRlciksXG4gICAgICAgICh5ICsgdW5pdCAvIDIpICsgTWF0aC5jb3ModGhldGEpICogKGRpYW1ldGVyKVxuICAgICAgXSlcbiAgICB9XG5cbiAgICBkcmF3UGF0aChjdHgsIGxpbmVjbGlwLnBvbHlnb24ocGF0aCwgW3gsIHksIHggKyB1bml0LCB5ICsgdW5pdF0pKVxuICAgIGN0eC5jbG9zZVBhdGgoKVxuICAgIGN0eC5maWxsKClcbiAgfSxcblxuICBmZnA6ICh4LCB5LCB7IGN0eCwgdW5pdCwgc2NhbGUgPSAxIH0gPSB7fSkgPT4ge1xuICAgIGNvbnN0IGdyYWRpZW50ID0gJ0ZGUCcuc3BsaXQoJycpXG4gICAgY29uc3QgY2hhciA9IGdyYWRpZW50W01hdGguZmxvb3IoTWF0aC5yYW5kb20oKSAqIGdyYWRpZW50Lmxlbmd0aCldXG4gICAgaWYgKCFjaGFyKSByZXR1cm5cblxuICAgIGN0eC5mb250ID0gYCR7dW5pdCAqIDEuMn1weCBTcGFjZSBNb25vYFxuICAgIGN0eC5maWxsVGV4dChjaGFyLCB4LCB5ICsgdW5pdClcbiAgfVxufVxuXG5leHBvcnQgZGVmYXVsdCBzeW1ib2xzXG4iXX0=
+
+function createCanvasFromContext (ctx) {
+    if (ctx.isSVG) 
+        { throw new Error('This function does not handle SVG context'); }
+    var canvas = document.createElement('canvas');
+    canvas.width = ctx.canvas.width;
+    canvas.height = ctx.canvas.height;
+    return canvas;
+}
+
+
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNyZWF0ZS1jYW52YXMtZnJvbS1jb250ZXh0LmpzKG9yaWdpbmFsKSJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxlQUFlLEdBQUEsSUFBTztJQUNwQixJQUFJLEdBQUEsQ0FBSTtRQUFPLE1BQU0sSUFBSSxLQUFKLENBQVU7SUFFL0IsS0FBQSxDQUFNLFNBQVMsUUFBQSxDQUFTLGFBQVQsQ0FBdUI7SUFDdEMsTUFBQSxDQUFPLEtBQVAsQ0FBQSxDQUFBLENBQWUsR0FBQSxDQUFJLE1BQUosQ0FBVztJQUMxQixNQUFBLENBQU8sTUFBUCxDQUFBLENBQUEsQ0FBZ0IsR0FBQSxDQUFJLE1BQUosQ0FBVztJQUUzQixPQUFPO0FBQ1Q7QUFSQSIsImZpbGUiOiJjcmVhdGUtY2FudmFzLWZyb20tY29udGV4dC5qcyhvcmlnaW5hbCkiLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZGVmYXVsdCBjdHggPT4ge1xuICBpZiAoY3R4LmlzU1ZHKSB0aHJvdyBuZXcgRXJyb3IoJ1RoaXMgZnVuY3Rpb24gZG9lcyBub3QgaGFuZGxlIFNWRyBjb250ZXh0JylcblxuICBjb25zdCBjYW52YXMgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdjYW52YXMnKVxuICBjYW52YXMud2lkdGggPSBjdHguY2FudmFzLndpZHRoXG4gIGNhbnZhcy5oZWlnaHQgPSBjdHguY2FudmFzLmhlaWdodFxuXG4gIHJldHVybiBjYW52YXNcbn1cbiJdfQ==
+
+var Ground = function Ground(ref) {
+    if ( ref === void 0 ) ref = {};
+    var width = ref.width;
+    var height = ref.height;
+    var unit = ref.unit; if ( unit === void 0 ) unit = 24;
+    var line = ref.line;
+    var gradient = ref.gradient;
+    var pattern = ref.pattern; if ( pattern === void 0 ) pattern = makePattern(symbols['debug']);
+    var foregroundColor = ref.foregroundColor; if ( foregroundColor === void 0 ) foregroundColor = 'black';
+    var backgroundColor = ref.backgroundColor; if ( backgroundColor === void 0 ) backgroundColor = 'white';
+
+    this.width = width;
+    this.height = height;
+    this.unit = unit;
+    this.line = line;
+    this.gradient = gradient;
+    this.pattern = pattern;
+    this.backgroundColor = backgroundColor;
+    this.foregroundColor = foregroundColor;
+    this.grid = [];
+    this.cells = [];
+    this._populate();
+};
+
+var prototypeAccessors = { isEmpty: { configurable: true } };
+Ground.prototype._populate = function _populate () {
+        var this$1 = this;
+
+    for (var x = 0;x < this.width; x += this.unit) {
+        var i = Math.floor(x / this$1.unit);
+        var ystart = this$1.line.compute(i) * this$1.height;
+        for (var y = ystart;y < this.height; y += this.unit) {
+            var j = Math.floor(y / this$1.unit);
+            this$1.setCell(i, j);
+        }
+    }
+};
+Ground.prototype.setCell = function setCell (i, j) {
+    if (!this.grid[i]) 
+        { this.grid[i] = []; }
+    var cell = {
+        i: i,
+        j: j,
+        x: i * this.unit,
+        y: j * this.unit,
+        shouldRender: true
+    };
+    this.grid[i][j] = cell;
+    this.cells.push(cell);
+};
+Ground.prototype.hasCell = function hasCell (i, j) {
+    return this.grid[i] && this.grid[i][j];
+};
+Ground.prototype.isInFrontOf = function isInFrontOf (x, y) {
+    var i = Math.floor(x / this.unit);
+    var j = Math.floor(y / this.unit);
+    return this.hasCell(i, j);
+};
+Ground.prototype.setBehind = function setBehind (grounds) {
+    this.grid.forEach(function (column) {
+        column.forEach(function (cell) {
+            if (!cell || !cell.shouldRender) 
+                { return; }
+            cell.shouldRender = !grounds.some(function (ground) { return ground.isInFrontOf(cell.x, cell.y); });
+        });
+    });
+};
+prototypeAccessors.isEmpty.get = function () {
+    return !this.cells.find(function (cell) { return cell.shouldRender; });
+};
+Ground.prototype.render = function render (ctx) {
+        var this$1 = this;
+
+    this.cells.forEach(function (cell) {
+        if (!cell.shouldRender) 
+            { return; }
+        this$1.pattern(cell.x, cell.y, {
+            ctx: ctx,
+            unit: this$1.unit,
+            backgroundColor: this$1.backgroundColor,
+            foregroundColor: this$1.foregroundColor,
+            scale: this$1.gradient.compute(cell.x, cell.y, this$1.width, this$1.height)
+        });
+    });
+};
+Ground.prototype.createSprite = function createSprite (ctx) {
+    if (ctx.isSVG) 
+        { throw new Error('Sprite rendering only works on non-SVG context'); }
+    this.sprite = createCanvasFromContext(ctx);
+    this.render(this.sprite.getContext('2d'));
+};
+
+Object.defineProperties( Ground.prototype, prototypeAccessors );
+
+
+
+
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIkdyb3VuZC5qcyhvcmlnaW5hbCkiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxpQkFBaUI7QUFDeEIsT0FBTyxhQUFhO0FBRXBCLE9BQU8sNkJBQTZCO0FBRXBDLGVBQWUsTUFBTSxPQUFPO0lBQzFCLFlBQWEsQ0FDWCxPQUNBLFFBQ0EsSUFBQSxHQUFPLElBQ1AsTUFDQSxVQUNBLE9BQUEsR0FBVSxXQUFBLENBQVksT0FBQSxDQUFRLFdBQzlCLGVBQUEsR0FBa0IsU0FDbEIsZUFBQSxHQUFrQixRQVJQLEdBU1QsSUFBSTtRQUNOLElBQUEsQ0FBSyxLQUFMLENBQUEsQ0FBQSxDQUFhO1FBQ2IsSUFBQSxDQUFLLE1BQUwsQ0FBQSxDQUFBLENBQWM7UUFDZCxJQUFBLENBQUssSUFBTCxDQUFBLENBQUEsQ0FBWTtRQUVaLElBQUEsQ0FBSyxJQUFMLENBQUEsQ0FBQSxDQUFZO1FBQ1osSUFBQSxDQUFLLFFBQUwsQ0FBQSxDQUFBLENBQWdCO1FBQ2hCLElBQUEsQ0FBSyxPQUFMLENBQUEsQ0FBQSxDQUFlO1FBRWYsSUFBQSxDQUFLLGVBQUwsQ0FBQSxDQUFBLENBQXVCO1FBQ3ZCLElBQUEsQ0FBSyxlQUFMLENBQUEsQ0FBQSxDQUF1QjtRQUV2QixJQUFBLENBQUssSUFBTCxDQUFBLENBQUEsQ0FBWTtRQUNaLElBQUEsQ0FBSyxLQUFMLENBQUEsQ0FBQSxDQUFhO1FBQ2IsSUFBQSxDQUFLLFNBQUw7SUFDSjtJQUVFLFlBQWE7UUFDWCxLQUFLLEdBQUEsQ0FBSSxJQUFJLEVBQUcsQ0FBQSxDQUFBLENBQUEsQ0FBSSxJQUFBLENBQUssT0FBTyxDQUFBLENBQUEsRUFBQSxDQUFLLElBQUEsQ0FBSyxNQUFNO1lBQzlDLEtBQUEsQ0FBTSxJQUFJLElBQUEsQ0FBSyxLQUFMLENBQVcsQ0FBQSxDQUFBLENBQUEsQ0FBSSxJQUFBLENBQUs7WUFDOUIsS0FBQSxDQUFNLFNBQVMsSUFBQSxDQUFLLElBQUwsQ0FBVSxPQUFWLENBQWtCLEVBQWxCLENBQUEsQ0FB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Q3RDLElBQUEsQ0FBSyxNQUFMLENBQVksSUFBQSxDQUFLLE1BQUwsQ0FBWSxVQUFaLENBQXVCO0lBQ3ZDO0FBQ0E7QUF0R0EiLCJmaWxlIjoiR3JvdW5kLmpzKG9yaWdpbmFsKSIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBtYWtlUGF0dGVybiBmcm9tICcuLi9jb250cm9sbGVycy9tYWtlLXBhdHRlcm4nXG5pbXBvcnQgc3ltYm9scyBmcm9tICcuLi9jb250cm9sbGVycy9zeW1ib2xzJ1xuXG5pbXBvcnQgY3JlYXRlQ2FudmFzRnJvbUNvbnRleHQgZnJvbSAnLi4vdXRpbHMvY3JlYXRlLWNhbnZhcy1mcm9tLWNvbnRleHQnXG5cbmV4cG9ydCBkZWZhdWx0IGNsYXNzIEdyb3VuZCB7XG4gIGNvbnN0cnVjdG9yICh7XG4gICAgd2lkdGgsXG4gICAgaGVpZ2h0LFxuICAgIHVuaXQgPSAyNCxcbiAgICBsaW5lLFxuICAgIGdyYWRpZW50LFxuICAgIHBhdHRlcm4gPSBtYWtlUGF0dGVybihzeW1ib2xzWydkZWJ1ZyddKSxcbiAgICBmb3JlZ3JvdW5kQ29sb3IgPSAnYmxhY2snLFxuICAgIGJhY2tncm91bmRDb2xvciA9ICd3aGl0ZSdcbiAgfSA9IHt9KSB7XG4gICAgdGhpcy53aWR0aCA9IHdpZHRoXG4gICAgdGhpcy5oZWlnaHQgPSBoZWlnaHRcbiAgICB0aGlzLnVuaXQgPSB1bml0XG5cbiAgICB0aGlzLmxpbmUgPSBsaW5lXG4gICAgdGhpcy5ncmFkaWVudCA9IGdyYWRpZW50XG4gICAgdGhpcy5wYXR0ZXJuID0gcGF0dGVyblxuXG4gICAgdGhpcy5iYWNrZ3JvdW5kQ29sb3IgPSBiYWNrZ3JvdW5kQ29sb3JcbiAgICB0aGlzLmZvcmVncm91bmRDb2xvciA9IGZvcmVncm91bmRDb2xvclxuXG4gICAgdGhpcy5ncmlkID0gW11cbiAgICB0aGlzLmNlbGxzID0gW11cbiAgICB0aGlzLl9wb3B1bGF0ZSgpXG4gIH1cblxuICBfcG9wdWxhdGUgKCkge1xuICAgIGZvciAobGV0IHggPSAwOyB4IDwgdGhpcy53aWR0aDsgeCArPSB0aGlzLnVuaXQpIHtcbiAgICAgIGNvbnN0IGkgPSBNYXRoLmZsb29yKHggLyB0aGlzLnVuaXQpXG4gICAgICBjb25zdCB5c3RhcnQgPSB0aGlzLmxpbmUuY29tcHV0ZShpKSAqIHRoaXMuaGVpZ2h0XG4gICAgICBmb3IgKGxldCB5ID0geXN0YXJ0OyB5IDwgdGhpcy5oZWlnaHQ7IHkgKz0gdGhpcy51bml0KSB7XG4gICAgICAgIGNvbnN0IGogPSBNYXRoLmZsb29yKHkgLyB0aGlzLnVuaXQpXG4gICAgICAgIHRoaXMuc2V0Q2VsbChpLCBqKVxuICAgICAgfVxuICAgIH1cbiAgfVxuXG4gIHNldENlbGwgKGksIGopIHtcbiAgICBpZiAoIXRoaXMuZ3JpZFtpXSkgdGhpcy5ncmlkW2ldID0gW11cblxuICAgIGNvbnN0IGNlbGwgPSB7XG4gICAgICBpLFxuICAgICAgaixcbiAgICAgIHg6IGkgKiB0aGlzLnVuaXQsXG4gICAgICB5OiBqICogdGhpcy51bml0LFxuICAgICAgc2hvdWxkUmVuZGVyOiB0cnVlXG4gICAgfVxuICAgIHRoaXMuZ3JpZFtpXVtqXSA9IGNlbGxcbiAgICB0aGlzLmNlbGxzLnB1c2goY2VsbClcbiAgfVxuXG4gIGhhc0NlbGwgKGksIGopIHtcbiAgICByZXR1cm4gdGhpcy5ncmlkW2ldICYmIHRoaXMuZ3JpZFtpXVtqXVxuICB9XG5cbiAgaXNJbkZyb250T2YgKHgsIHkpIHtcbiAgICBjb25zdCBpID0gTWF0aC5mbG9vcih4IC8gdGhpcy51bml0KVxuICAgIGNvbnN0IGogPSBNYXRoLmZsb29yKHkgLyB0aGlzLnVuaXQpXG4gICAgcmV0dXJuIHRoaXMuaGFzQ2VsbChpLCBqKVxuICB9XG5cbiAgc2V0QmVoaW5kIChncm91bmRzKSB7XG4gICAgdGhpcy5ncmlkLmZvckVhY2goY29sdW1uID0+IHtcbiAgICAgIGNvbHVtbi5mb3JFYWNoKGNlbGwgPT4ge1xuICAgICAgICBpZiAoIWNlbGwgfHwgIWNlbGwuc2hvdWxkUmVuZGVyKSByZXR1cm5cbiAgICAgICAgY2VsbC5zaG91bGRSZW5kZXIgPSAhZ3JvdW5kcy5zb21lKGdyb3VuZCA9PiB7XG4gICAgICAgICAgcmV0dXJuIGdyb3VuZC5pc0luRnJvbnRPZihjZWxsLngsIGNlbGwueSlcbiAgICAgICAgfSlcbiAgICAgIH0pXG4gICAgfSlcbiAgfVxuXG4gIGdldCBpc0VtcHR5ICgpIHtcbiAgICByZXR1cm4gIXRoaXMuY2VsbHMuZmluZChjZWxsID0+IGNlbGwuc2hvdWxkUmVuZGVyKVxuICB9XG5cbiAgcmVuZGVyIChjdHgpIHtcbiAgICB0aGlzLmNlbGxzLmZvckVhY2goY2VsbCA9PiB7XG4gICAgICBpZiAoIWNlbGwuc2hvdWxkUmVuZGVyKSByZXR1cm5cblxuICAgICAgdGhpcy5wYXR0ZXJuKGNlbGwueCwgY2VsbC55LCB7XG4gICAgICAgIGN0eCxcbiAgICAgICAgdW5pdDogdGhpcy51bml0LFxuICAgICAgICBiYWNrZ3JvdW5kQ29sb3I6IHRoaXMuYmFja2dyb3VuZENvbG9yLFxuICAgICAgICBmb3JlZ3JvdW5kQ29sb3I6IHRoaXMuZm9yZWdyb3VuZENvbG9yLFxuICAgICAgICBzY2FsZTogdGhpcy5ncmFkaWVudC5jb21wdXRlKGNlbGwueCwgY2VsbC55LCB0aGlzLndpZHRoLCB0aGlzLmhlaWdodClcbiAgICAgIH0pXG4gICAgfSlcbiAgfVxuXG4gIGNyZWF0ZVNwcml0ZSAoY3R4KSB7XG4gICAgaWYgKGN0eC5pc1NWRykgdGhyb3cgbmV3IEVycm9yKCdTcHJpdGUgcmVuZGVyaW5nIG9ubHkgd29ya3Mgb24gbm9uLVNWRyBjb250ZXh0JylcblxuICAgIHRoaXMuc3ByaXRlID0gY3JlYXRlQ2FudmFzRnJvbUNvbnRleHQoY3R4KVxuICAgIHRoaXMucmVuZGVyKHRoaXMuc3ByaXRlLmdldENvbnRleHQoJzJkJykpXG4gIH1cbn1cbiJdfQ==
+
+var canvas2svg = createCommonjsModule(function (module) {
+/*!!
+ *  Canvas 2 Svg v1.0.15
+ *  A low level canvas to SVG converter. Uses a mock canvas context to build an SVG document.
+ *
+ *  Licensed under the MIT license:
+ *  http://www.opensource.org/licenses/mit-license.php
+ *
+ *  Author:
+ *  Kerry Liu
+ *
+ *  Copyright (c) 2014 Gliffy Inc.
+ */
+
+(function() {
+    var STYLES, ctx, CanvasGradient, CanvasPattern, namedEntities;
+
+    //helper function to format a string
+    function format(str, args) {
+        var keys = Object.keys(args), i;
+        for (i=0; i<keys.length; i++) {
+            str = str.replace(new RegExp("\\{" + keys[i] + "\\}", "gi"), args[keys[i]]);
+        }
+        return str;
+    }
+
+    //helper function that generates a random string
+    function randomString(holder) {
+        var chars, randomstring, i;
+        if (!holder) {
+            throw new Error("cannot create a random attribute name for an undefined object");
+        }
+        chars = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+        randomstring = "";
+        do {
+            randomstring = "";
+            for (i = 0; i < 12; i++) {
+                randomstring += chars[Math.floor(Math.random() * chars.length)];
+            }
+        } while (holder[randomstring]);
+        return randomstring;
+    }
+
+    //helper function to map named to numbered entities
+    function createNamedToNumberedLookup(items, radix) {
+        var i, entity, lookup = {}, base10;
+        items = items.split(',');
+        radix = radix || 10;
+        // Map from named to numbered entities.
+        for (i = 0; i < items.length; i += 2) {
+            entity = '&' + items[i + 1] + ';';
+            base10 = parseInt(items[i], radix);
+            lookup[entity] = '&#'+base10+';';
+        }
+        //FF and IE need to create a regex from hex values ie &nbsp; == \xa0
+        lookup["\\xa0"] = '&#160;';
+        return lookup;
+    }
+
+    //helper function to map canvas-textAlign to svg-textAnchor
+    function getTextAnchor(textAlign) {
+        //TODO: support rtl languages
+        var mapping = {"left":"start", "right":"end", "center":"middle", "start":"start", "end":"end"};
+        return mapping[textAlign] || mapping.start;
+    }
+
+    //helper function to map canvas-textBaseline to svg-dominantBaseline
+    function getDominantBaseline(textBaseline) {
+        //INFO: not supported in all browsers
+        var mapping = {"alphabetic": "alphabetic", "hanging": "hanging", "top":"text-before-edge", "bottom":"text-after-edge", "middle":"central"};
+        return mapping[textBaseline] || mapping.alphabetic;
+    }
+
+    // Unpack entities lookup where the numbers are in radix 32 to reduce the size
+    // entity mapping courtesy of tinymce
+    namedEntities = createNamedToNumberedLookup(
+        '50,nbsp,51,iexcl,52,cent,53,pound,54,curren,55,yen,56,brvbar,57,sect,58,uml,59,copy,' +
+            '5a,ordf,5b,laquo,5c,not,5d,shy,5e,reg,5f,macr,5g,deg,5h,plusmn,5i,sup2,5j,sup3,5k,acute,' +
+            '5l,micro,5m,para,5n,middot,5o,cedil,5p,sup1,5q,ordm,5r,raquo,5s,frac14,5t,frac12,5u,frac34,' +
+            '5v,iquest,60,Agrave,61,Aacute,62,Acirc,63,Atilde,64,Auml,65,Aring,66,AElig,67,Ccedil,' +
+            '68,Egrave,69,Eacute,6a,Ecirc,6b,Euml,6c,Igrave,6d,Iacute,6e,Icirc,6f,Iuml,6g,ETH,6h,Ntilde,' +
+            '6i,Ograve,6j,Oacute,6k,Ocirc,6l,Otilde,6m,Ouml,6n,times,6o,Oslash,6p,Ugrave,6q,Uacute,' +
+            '6r,Ucirc,6s,Uuml,6t,Yacute,6u,THORN,6v,szlig,70,agrave,71,aacute,72,acirc,73,atilde,74,auml,' +
+            '75,aring,76,aelig,77,ccedil,78,egrave,79,eacute,7a,ecirc,7b,euml,7c,igrave,7d,iacute,7e,icirc,' +
+            '7f,iuml,7g,eth,7h,ntilde,7i,ograve,7j,oacute,7k,ocirc,7l,otilde,7m,ouml,7n,divide,7o,oslash,' +
+            '7p,ugrave,7q,uacute,7r,ucirc,7s,uuml,7t,yacute,7u,thorn,7v,yuml,ci,fnof,sh,Alpha,si,Beta,' +
+            'sj,Gamma,sk,Delta,sl,Epsilon,sm,Zeta,sn,Eta,so,Theta,sp,Iota,sq,Kappa,sr,Lambda,ss,Mu,' +
+            'st,Nu,su,Xi,sv,Omicron,t0,Pi,t1,Rho,t3,Sigma,t4,Tau,t5,Upsilon,t6,Phi,t7,Chi,t8,Psi,' +
+            't9,Omega,th,alpha,ti,beta,tj,gamma,tk,delta,tl,epsilon,tm,zeta,tn,eta,to,theta,tp,iota,' +
+            'tq,kappa,tr,lambda,ts,mu,tt,nu,tu,xi,tv,omicron,u0,pi,u1,rho,u2,sigmaf,u3,sigma,u4,tau,' +
+            'u5,upsilon,u6,phi,u7,chi,u8,psi,u9,omega,uh,thetasym,ui,upsih,um,piv,812,bull,816,hellip,' +
+            '81i,prime,81j,Prime,81u,oline,824,frasl,88o,weierp,88h,image,88s,real,892,trade,89l,alefsym,' +
+            '8cg,larr,8ch,uarr,8ci,rarr,8cj,darr,8ck,harr,8dl,crarr,8eg,lArr,8eh,uArr,8ei,rArr,8ej,dArr,' +
+            '8ek,hArr,8g0,forall,8g2,part,8g3,exist,8g5,empty,8g7,nabla,8g8,isin,8g9,notin,8gb,ni,8gf,prod,' +
+            '8gh,sum,8gi,minus,8gn,lowast,8gq,radic,8gt,prop,8gu,infin,8h0,ang,8h7,and,8h8,or,8h9,cap,8ha,cup,' +
+            '8hb,int,8hk,there4,8hs,sim,8i5,cong,8i8,asymp,8j0,ne,8j1,equiv,8j4,le,8j5,ge,8k2,sub,8k3,sup,8k4,' +
+            'nsub,8k6,sube,8k7,supe,8kl,oplus,8kn,otimes,8l5,perp,8m5,sdot,8o8,lceil,8o9,rceil,8oa,lfloor,8ob,' +
+            'rfloor,8p9,lang,8pa,rang,9ea,loz,9j0,spades,9j3,clubs,9j5,hearts,9j6,diams,ai,OElig,aj,oelig,b0,' +
+            'Scaron,b1,scaron,bo,Yuml,m6,circ,ms,tilde,802,ensp,803,emsp,809,thinsp,80c,zwnj,80d,zwj,80e,lrm,' +
+            '80f,rlm,80j,ndash,80k,mdash,80o,lsquo,80p,rsquo,80q,sbquo,80s,ldquo,80t,rdquo,80u,bdquo,810,dagger,' +
+            '811,Dagger,81g,permil,81p,lsaquo,81q,rsaquo,85c,euro', 32);
+
+
+    //Some basic mappings for attributes and default values.
+    STYLES = {
+        "strokeStyle":{
+            svgAttr : "stroke", //corresponding svg attribute
+            canvas : "#000000", //canvas default
+            svg : "none",       //svg default
+            apply : "stroke"    //apply on stroke() or fill()
+        },
+        "fillStyle":{
+            svgAttr : "fill",
+            canvas : "#000000",
+            svg : null, //svg default is black, but we need to special case this to handle canvas stroke without fill
+            apply : "fill"
+        },
+        "lineCap":{
+            svgAttr : "stroke-linecap",
+            canvas : "butt",
+            svg : "butt",
+            apply : "stroke"
+        },
+        "lineJoin":{
+            svgAttr : "stroke-linejoin",
+            canvas : "miter",
+            svg : "miter",
+            apply : "stroke"
+        },
+        "miterLimit":{
+            svgAttr : "stroke-miterlimit",
+            canvas : 10,
+            svg : 4,
+            apply : "stroke"
+        },
+        "lineWidth":{
+            svgAttr : "stroke-width",
+            canvas : 1,
+            svg : 1,
+            apply : "stroke"
+        },
+        "globalAlpha": {
+            svgAttr : "opacity",
+            canvas : 1,
+            svg : 1,
+            apply : "fill stroke"
+        },
+        "font":{
+            //font converts to multiple svg attributes, there is custom logic for this
+            canvas : "10px sans-serif"
+        },
+        "shadowColor":{
+            canvas : "#000000"
+        },
+        "shadowOffsetX":{
+            canvas : 0
+        },
+        "shadowOffsetY":{
+            canvas : 0
+        },
+        "shadowBlur":{
+            canvas : 0
+        },
+        "textAlign":{
+            canvas : "start"
+        },
+        "textBaseline":{
+            canvas : "alphabetic"
+        }
+    };
+
+    /**
+     *
+     * @param gradientNode - reference to the gradient
+     * @constructor
+     */
+    CanvasGradient = function(gradientNode, ctx) {
+        this.__root = gradientNode;
+        this.__ctx = ctx;
+    };
+
+    /**
+     * Adds a color stop to the gradient root
+     */
+    CanvasGradient.prototype.addColorStop = function(offset, color) {
+        var stop = this.__ctx.__createElement("stop"), regex, matches;
+        stop.setAttribute("offset", offset);
+        if(color.indexOf("rgba") !== -1) {
+            //separate alpha value, since webkit can't handle it
+            regex = /rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d?\.?\d*)\s*\)/gi;
+            matches = regex.exec(color);
+            stop.setAttribute("stop-color", format("rgb({r},{g},{b})", {r:matches[1], g:matches[2], b:matches[3]}));
+            stop.setAttribute("stop-opacity", matches[4]);
+        } else {
+            stop.setAttribute("stop-color", color);
+        }
+        this.__root.appendChild(stop);
+    };
+
+    CanvasPattern = function(pattern, ctx) {
+        this.__root = pattern;
+        this.__ctx = ctx;
+    };
+
+    /**
+     * The mock canvas context
+     * @param o - options include:
+     * width - width of your canvas (defaults to 500)
+     * height - height of your canvas (defaults to 500)
+     * enableMirroring - enables canvas mirroring (get image data) (defaults to false)
+     * document - the document object (defaults to the current document)
+     */
+    ctx = function(o) {
+
+        var defaultOptions = { width:500, height:500, enableMirroring : false}, options;
+
+        //keep support for this way of calling C2S: new C2S(width,height)
+        if(arguments.length > 1) {
+            options = defaultOptions;
+            options.width = arguments[0];
+            options.height = arguments[1];
+        } else if( !o ) {
+            options = defaultOptions;
+        } else {
+            options = o;
+        }
+
+        if(!(this instanceof ctx)) {
+            //did someone call this without new?
+            return new ctx(options);
+        }
+
+        //setup options
+        this.width = options.width || defaultOptions.width;
+        this.height = options.height || defaultOptions.height;
+        this.enableMirroring = options.enableMirroring !== undefined ? options.enableMirroring : defaultOptions.enableMirroring;
+
+        this.canvas = this;   ///point back to this instance!
+        this.__document = options.document || document;
+        this.__canvas = this.__document.createElement("canvas");
+        this.__ctx = this.__canvas.getContext("2d");
+
+        this.__setDefaultStyles();
+        this.__stack = [this.__getStyleState()];
+        this.__groupStack = [];
+
+        //the root svg element
+        this.__root = this.__document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        this.__root.setAttribute("version", 1.1);
+        this.__root.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        this.__root.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
+        this.__root.setAttribute("width", this.width);
+        this.__root.setAttribute("height", this.height);
+
+        //make sure we don't generate the same ids in defs
+        this.__ids = {};
+
+        //defs tag
+        this.__defs = this.__document.createElementNS("http://www.w3.org/2000/svg", "defs");
+        this.__root.appendChild(this.__defs);
+
+        //also add a group child. the svg element can't use the transform attribute
+        this.__currentElement = this.__document.createElementNS("http://www.w3.org/2000/svg", "g");
+        this.__root.appendChild(this.__currentElement);
+    };
+
+
+    /**
+     * Creates the specified svg element
+     * @private
+     */
+    ctx.prototype.__createElement = function (elementName, properties, resetFill) {
+        if (typeof properties === "undefined") {
+            properties = {};
+        }
+
+        var element = this.__document.createElementNS("http://www.w3.org/2000/svg", elementName),
+            keys = Object.keys(properties), i, key;
+        if(resetFill) {
+            //if fill or stroke is not specified, the svg element should not display. By default SVG's fill is black.
+            element.setAttribute("fill", "none");
+            element.setAttribute("stroke", "none");
+        }
+        for(i=0; i<keys.length; i++) {
+            key = keys[i];
+            element.setAttribute(key, properties[key]);
+        }
+        return element;
+    };
+
+    /**
+     * Applies default canvas styles to the context
+     * @private
+     */
+    ctx.prototype.__setDefaultStyles = function() {
+        //default 2d canvas context properties see:http://www.w3.org/TR/2dcontext/
+        var keys = Object.keys(STYLES), i, key;
+        for(i=0; i<keys.length; i++) {
+            key = keys[i];
+            this[key] = STYLES[key].canvas;
+        }
+    };
+
+    /**
+     * Applies styles on restore
+     * @param styleState
+     * @private
+     */
+    ctx.prototype.__applyStyleState = function(styleState) {
+        var keys = Object.keys(styleState), i, key;
+        for(i=0; i<keys.length; i++) {
+            key = keys[i];
+            this[key] = styleState[key];
+        }
+    };
+
+    /**
+     * Gets the current style state
+     * @return {Object}
+     * @private
+     */
+    ctx.prototype.__getStyleState = function() {
+        var i, styleState = {}, keys = Object.keys(STYLES), key;
+        for(i=0; i<keys.length; i++) {
+            key = keys[i];
+            styleState[key] = this[key];
+        }
+        return styleState;
+    };
+
+    /**
+     * Apples the current styles to the current SVG element. On "ctx.fill" or "ctx.stroke"
+     * @param type
+     * @private
+     */
+    ctx.prototype.__applyStyleToCurrentElement = function(type) {
+        var keys = Object.keys(STYLES), i, style, value, id, regex, matches;
+        for(i=0; i<keys.length; i++) {
+            style = STYLES[keys[i]];
+            value = this[keys[i]];
+            if(style.apply) {
+                //is this a gradient or pattern?
+                if(style.apply.indexOf("fill")!==-1 && value instanceof CanvasPattern) {
+                    //pattern
+                    if(value.__ctx) {
+                        //copy over defs
+                        while(value.__ctx.__defs.childNodes.length) {
+                            id = value.__ctx.__defs.childNodes[0].getAttribute("id");
+                            this.__ids[id] = id;
+                            this.__defs.appendChild(value.__ctx.__defs.childNodes[0]);
+                        }
+                    }
+                    this.__currentElement.setAttribute("fill", format("url(#{id})", {id:value.__root.getAttribute("id")}));
+                }
+                else if(style.apply.indexOf("fill")!==-1 && value instanceof CanvasGradient) {
+                    //gradient
+                    this.__currentElement.setAttribute("fill", format("url(#{id})", {id:value.__root.getAttribute("id")}));
+                } else if(style.apply.indexOf(type)!==-1 && style.svg !== value) {
+                    if((style.svgAttr === "stroke" || style.svgAttr === "fill") && value.indexOf("rgba") !== -1) {
+                        //separate alpha value, since illustrator can't handle it
+                        regex = /rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d?\.?\d*)\s*\)/gi;
+                        matches = regex.exec(value);
+                        this.__currentElement.setAttribute(style.svgAttr, format("rgb({r},{g},{b})", {r:matches[1], g:matches[2], b:matches[3]}));
+                        this.__currentElement.setAttribute(style.svgAttr+"-opacity", matches[4]);
+                    } else {
+                        //otherwise only update attribute if right type, and not svg default
+                        this.__currentElement.setAttribute(style.svgAttr, value);
+                    }
+                }
+            }
+        }
+
+    };
+
+    /**
+     * Will return the closest group or svg node. May return the current element.
+     * @private
+     */
+    ctx.prototype.__closestGroupOrSvg = function(node) {
+        node = node || this.__currentElement;
+        if(node.nodeName === "g" || node.nodeName === "svg") {
+            return node;
+        } else {
+            return this.__closestGroupOrSvg(node.parentNode);
+        }
+    };
+
+    /**
+     * Returns the serialized value of the svg so far
+     * @param fixNamedEntities - Standalone SVG doesn't support named entities, which document.createTextNode encodes.
+     *                           If true, we attempt to find all named entities and encode it as a numeric entity.
+     * @return serialized svg
+     */
+    ctx.prototype.getSerializedSvg = function(fixNamedEntities) {
+        var serialized = new XMLSerializer().serializeToString(this.__root),
+            keys, i, key, value, regexp, xmlns;
+
+        //IE search for a duplicate xmnls because they didn't implement setAttributeNS correctly
+        xmlns = /xmlns="http:\/\/www\.w3\.org\/2000\/svg".+xmlns="http:\/\/www\.w3\.org\/2000\/svg/gi;
+        if(xmlns.test(serialized)) {
+            serialized = serialized.replace('xmlns="http://www.w3.org/2000/svg','xmlns:xlink="http://www.w3.org/1999/xlink');
+        }
+
+        if(fixNamedEntities) {
+            keys = Object.keys(namedEntities);
+            //loop over each named entity and replace with the proper equivalent.
+            for(i=0; i<keys.length; i++) {
+                key = keys[i];
+                value = namedEntities[key];
+                regexp = new RegExp(key, "gi");
+                if(regexp.test(serialized)) {
+                    serialized = serialized.replace(regexp, value);
+                }
+            }
+        }
+
+        return serialized;
+    };
+
+
+    /**
+     * Returns the root svg
+     * @return
+     */
+    ctx.prototype.getSvg = function() {
+        return this.__root;
+    };
+    /**
+     * Will generate a group tag.
+     */
+    ctx.prototype.save = function() {
+        var group = this.__createElement("g"), parent = this.__closestGroupOrSvg();
+        this.__groupStack.push(parent);
+        parent.appendChild(group);
+        this.__currentElement = group;
+        this.__stack.push(this.__getStyleState());
+    };
+    /**
+     * Sets current element to parent, or just root if already root
+     */
+    ctx.prototype.restore = function(){
+        this.__currentElement = this.__groupStack.pop();
+        var state = this.__stack.pop();
+        this.__applyStyleState(state);
+
+    };
+
+    /**
+     * Helper method to add transform
+     * @private
+     */
+    ctx.prototype.__addTransform = function(t) {
+
+        //if the current element has siblings, add another group
+        var parent = this.__closestGroupOrSvg();
+        if(parent.childNodes.length > 0) {
+            var group = this.__createElement("g");
+            parent.appendChild(group);
+            this.__currentElement = group;
+        }
+
+        var transform = this.__currentElement.getAttribute("transform");
+        if(transform) {
+            transform += " ";
+        } else {
+            transform = "";
+        }
+        transform += t;
+        this.__currentElement.setAttribute("transform", transform);
+    };
+
+    /**
+     *  scales the current element
+     */
+    ctx.prototype.scale = function(x, y) {
+        if(y === undefined) {
+            y = x;
+        }
+        this.__addTransform(format("scale({x},{y})", {x:x, y:y}));
+    };
+
+    /**
+     * rotates the current element
+     */
+    ctx.prototype.rotate = function(angle){
+        var degrees = (angle * 180 / Math.PI);
+        this.__addTransform(format("rotate({angle},{cx},{cy})", {angle:degrees, cx:0, cy:0}));
+    };
+
+    /**
+     * translates the current element
+     */
+    ctx.prototype.translate = function(x, y){
+        this.__addTransform(format("translate({x},{y})", {x:x,y:y}));
+    };
+
+    /**
+     * applies a transform to the current element
+     */
+    ctx.prototype.transform = function(a, b, c, d, e, f){
+        this.__addTransform(format("matrix({a},{b},{c},{d},{e},{f})", {a:a, b:b, c:c, d:d, e:e, f:f}));
+    };
+
+    /**
+     * Create a new Path Element
+     */
+    ctx.prototype.beginPath = function(){
+        var path, parent;
+
+        // Note that there is only one current default path, it is not part of the drawing state.
+        // See also: https://html.spec.whatwg.org/multipage/scripting.html#current-default-path
+        this.__currentDefaultPath = "";
+        this.__currentPosition = {};
+
+        path = this.__createElement("path", {}, true);
+        parent = this.__closestGroupOrSvg();
+        parent.appendChild(path);
+        this.__currentElement = path;
+    };
+
+    /**
+     * Helper function to apply currentDefaultPath to current path element
+     * @private
+     */
+    ctx.prototype.__applyCurrentDefaultPath = function() {
+        if(this.__currentElement.nodeName === "path") {
+            var d = this.__currentDefaultPath;
+            this.__currentElement.setAttribute("d", d);
+        } else {
+            throw new Error("Attempted to apply path command to node " + this.__currentElement.nodeName);
+        }
+    };
+
+    /**
+     * Helper function to add path command
+     * @private
+     */
+    ctx.prototype.__addPathCommand = function(command){
+        this.__currentDefaultPath += " ";
+        this.__currentDefaultPath += command;
+    };
+
+    /**
+     * Adds the move command to the current path element,
+     * if the currentPathElement is not empty create a new path element
+     */
+    ctx.prototype.moveTo = function(x,y){
+        if(this.__currentElement.nodeName !== "path") {
+            this.beginPath();
+        }
+
+        // creates a new subpath with the given point
+        this.__currentPosition = {x: x, y: y};
+        this.__addPathCommand(format("M {x} {y}", {x:x, y:y}));
+    };
+
+    /**
+     * Closes the current path
+     */
+    ctx.prototype.closePath = function(){
+        this.__addPathCommand("Z");
+    };
+
+    /**
+     * Adds a line to command
+     */
+    ctx.prototype.lineTo = function(x, y){
+        this.__currentPosition = {x: x, y: y};
+        if (this.__currentDefaultPath.indexOf('M') > -1) {
+            this.__addPathCommand(format("L {x} {y}", {x:x, y:y}));
+        } else {
+            this.__addPathCommand(format("M {x} {y}", {x:x, y:y}));
+        }
+    };
+
+    /**
+     * Add a bezier command
+     */
+    ctx.prototype.bezierCurveTo = function(cp1x, cp1y, cp2x, cp2y, x, y) {
+        this.__currentPosition = {x: x, y: y};
+        this.__addPathCommand(format("C {cp1x} {cp1y} {cp2x} {cp2y} {x} {y}",
+            {cp1x:cp1x, cp1y:cp1y, cp2x:cp2x, cp2y:cp2y, x:x, y:y}));
+    };
+
+    /**
+     * Adds a quadratic curve to command
+     */
+    ctx.prototype.quadraticCurveTo = function(cpx, cpy, x, y){
+        this.__currentPosition = {x: x, y: y};
+        this.__addPathCommand(format("Q {cpx} {cpy} {x} {y}", {cpx:cpx, cpy:cpy, x:x, y:y}));
+    };
+
+
+    /**
+     * Return a new normalized vector of given vector
+     */
+    var normalize = function(vector) {
+        var len = Math.sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
+        return [vector[0] / len, vector[1] / len];
+    };
+
+    /**
+     * Adds the arcTo to the current path
+     *
+     * @see http://www.w3.org/TR/2015/WD-2dcontext-20150514/#dom-context-2d-arcto
+     */
+    ctx.prototype.arcTo = function(x1, y1, x2, y2, radius) {
+        // Let the point (x0, y0) be the last point in the subpath.
+        var x0 = this.__currentPosition && this.__currentPosition.x;
+        var y0 = this.__currentPosition && this.__currentPosition.y;
+
+        // First ensure there is a subpath for (x1, y1).
+        if (typeof x0 == "undefined" || typeof y0 == "undefined") {
+            return;
+        }
+
+        // Negative values for radius must cause the implementation to throw an IndexSizeError exception.
+        if (radius < 0) {
+            throw new Error("IndexSizeError: The radius provided (" + radius + ") is negative.");
+        }
+
+        // If the point (x0, y0) is equal to the point (x1, y1),
+        // or if the point (x1, y1) is equal to the point (x2, y2),
+        // or if the radius radius is zero,
+        // then the method must add the point (x1, y1) to the subpath,
+        // and connect that point to the previous point (x0, y0) by a straight line.
+        if (((x0 === x1) && (y0 === y1))
+            || ((x1 === x2) && (y1 === y2))
+            || (radius === 0)) {
+            this.lineTo(x1, y1);
+            return;
+        }
+
+        // Otherwise, if the points (x0, y0), (x1, y1), and (x2, y2) all lie on a single straight line,
+        // then the method must add the point (x1, y1) to the subpath,
+        // and connect that point to the previous point (x0, y0) by a straight line.
+        var unit_vec_p1_p0 = normalize([x0 - x1, y0 - y1]);
+        var unit_vec_p1_p2 = normalize([x2 - x1, y2 - y1]);
+        if (unit_vec_p1_p0[0] * unit_vec_p1_p2[1] === unit_vec_p1_p0[1] * unit_vec_p1_p2[0]) {
+            this.lineTo(x1, y1);
+            return;
+        }
+
+        // Otherwise, let The Arc be the shortest arc given by circumference of the circle that has radius radius,
+        // and that has one point tangent to the half-infinite line that crosses the point (x0, y0) and ends at the point (x1, y1),
+        // and that has a different point tangent to the half-infinite line that ends at the point (x1, y1), and crosses the point (x2, y2).
+        // The points at which this circle touches these two lines are called the start and end tangent points respectively.
+
+        // note that both vectors are unit vectors, so the length is 1
+        var cos = (unit_vec_p1_p0[0] * unit_vec_p1_p2[0] + unit_vec_p1_p0[1] * unit_vec_p1_p2[1]);
+        var theta = Math.acos(Math.abs(cos));
+
+        // Calculate origin
+        var unit_vec_p1_origin = normalize([
+            unit_vec_p1_p0[0] + unit_vec_p1_p2[0],
+            unit_vec_p1_p0[1] + unit_vec_p1_p2[1]
+        ]);
+        var len_p1_origin = radius / Math.sin(theta / 2);
+        var x = x1 + len_p1_origin * unit_vec_p1_origin[0];
+        var y = y1 + len_p1_origin * unit_vec_p1_origin[1];
+
+        // Calculate start angle and end angle
+        // rotate 90deg clockwise (note that y axis points to its down)
+        var unit_vec_origin_start_tangent = [
+            -unit_vec_p1_p0[1],
+            unit_vec_p1_p0[0]
+        ];
+        // rotate 90deg counter clockwise (note that y axis points to its down)
+        var unit_vec_origin_end_tangent = [
+            unit_vec_p1_p2[1],
+            -unit_vec_p1_p2[0]
+        ];
+        var getAngle = function(vector) {
+            // get angle (clockwise) between vector and (1, 0)
+            var x = vector[0];
+            var y = vector[1];
+            if (y >= 0) { // note that y axis points to its down
+                return Math.acos(x);
+            } else {
+                return -Math.acos(x);
+            }
+        };
+        var startAngle = getAngle(unit_vec_origin_start_tangent);
+        var endAngle = getAngle(unit_vec_origin_end_tangent);
+
+        // Connect the point (x0, y0) to the start tangent point by a straight line
+        this.lineTo(x + unit_vec_origin_start_tangent[0] * radius,
+                    y + unit_vec_origin_start_tangent[1] * radius);
+
+        // Connect the start tangent point to the end tangent point by arc
+        // and adding the end tangent point to the subpath.
+        this.arc(x, y, radius, startAngle, endAngle);
+    };
+
+    /**
+     * Sets the stroke property on the current element
+     */
+    ctx.prototype.stroke = function(){
+        if(this.__currentElement.nodeName === "path") {
+            this.__currentElement.setAttribute("paint-order", "fill stroke markers");
+        }
+        this.__applyCurrentDefaultPath();
+        this.__applyStyleToCurrentElement("stroke");
+    };
+
+    /**
+     * Sets fill properties on the current element
+     */
+    ctx.prototype.fill = function(){
+        if(this.__currentElement.nodeName === "path") {
+            this.__currentElement.setAttribute("paint-order", "stroke fill markers");
+        }
+        this.__applyCurrentDefaultPath();
+        this.__applyStyleToCurrentElement("fill");
+    };
+
+    /**
+     *  Adds a rectangle to the path.
+     */
+    ctx.prototype.rect = function(x, y, width, height){
+        if(this.__currentElement.nodeName !== "path") {
+            this.beginPath();
+        }
+        this.moveTo(x, y);
+        this.lineTo(x+width, y);
+        this.lineTo(x+width, y+height);
+        this.lineTo(x, y+height);
+        this.lineTo(x, y);
+        this.closePath();
+    };
+
+
+    /**
+     * adds a rectangle element
+     */
+    ctx.prototype.fillRect = function(x, y, width, height){
+        var rect, parent;
+        rect = this.__createElement("rect", {
+            x : x,
+            y : y,
+            width : width,
+            height : height
+        }, true);
+        parent = this.__closestGroupOrSvg();
+        parent.appendChild(rect);
+        this.__currentElement = rect;
+        this.__applyStyleToCurrentElement("fill");
+    };
+
+    /**
+     * Draws a rectangle with no fill
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     */
+    ctx.prototype.strokeRect = function(x, y, width, height){
+        var rect, parent;
+        rect = this.__createElement("rect", {
+            x : x,
+            y : y,
+            width : width,
+            height : height
+        }, true);
+        parent = this.__closestGroupOrSvg();
+        parent.appendChild(rect);
+        this.__currentElement = rect;
+        this.__applyStyleToCurrentElement("stroke");
+    };
+
+
+    /**
+     * "Clears" a canvas by just drawing a white rectangle in the current group.
+     */
+    ctx.prototype.clearRect = function(x, y, width, height) {
+        var rect, parent = this.__closestGroupOrSvg();
+        rect = this.__createElement("rect", {
+            x : x,
+            y : y,
+            width : width,
+            height : height,
+            fill : "#FFFFFF"
+        }, true);
+        parent.appendChild(rect);
+    };
+
+    /**
+     * Adds a linear gradient to a defs tag.
+     * Returns a canvas gradient object that has a reference to it's parent def
+     */
+    ctx.prototype.createLinearGradient = function(x1, y1, x2, y2){
+        var grad = this.__createElement("linearGradient", {
+            id : randomString(this.__ids),
+            x1 : x1+"px",
+            x2 : x2+"px",
+            y1 : y1+"px",
+            y2 : y2+"px",
+            "gradientUnits" : "userSpaceOnUse"
+        }, false);
+        this.__defs.appendChild(grad);
+        return new CanvasGradient(grad, this);
+    };
+
+    /**
+     * Adds a radial gradient to a defs tag.
+     * Returns a canvas gradient object that has a reference to it's parent def
+     */
+    ctx.prototype.createRadialGradient = function(x0, y0, r0, x1, y1, r1){
+        var grad = this.__createElement("radialGradient", {
+            id : randomString(this.__ids),
+            cx : x1+"px",
+            cy : y1+"px",
+            r  : r1+"px",
+            fx : x0+"px",
+            fy : y0+"px",
+            "gradientUnits" : "userSpaceOnUse"
+        }, false);
+        this.__defs.appendChild(grad);
+        return new CanvasGradient(grad, this);
+
+    };
+
+    /**
+     * Parses the font string and returns svg mapping
+     * @private
+     */
+    ctx.prototype.__parseFont = function() {
+        var regex = /^\s*(?=(?:(?:[-a-z]+\s*){0,2}(italic|oblique))?)(?=(?:(?:[-a-z]+\s*){0,2}(small-caps))?)(?=(?:(?:[-a-z]+\s*){0,2}(bold(?:er)?|lighter|[1-9]00))?)(?:(?:normal|\1|\2|\3)\s*){0,3}((?:xx?-)?(?:small|large)|medium|smaller|larger|[.\d]+(?:\%|in|[cem]m|ex|p[ctx]))(?:\s*\/\s*(normal|[.\d]+(?:\%|in|[cem]m|ex|p[ctx])))?\s*([-,\"\sa-z]+?)\s*$/i;
+        var fontPart = regex.exec( this.font );
+        var data = {
+            style : fontPart[1] || 'normal',
+            size : fontPart[4] || '10px',
+            family : fontPart[6] || 'sans-serif',
+            weight: fontPart[3] || 'normal',
+            decoration : fontPart[2] || 'normal',
+            href : null
+        };
+
+        //canvas doesn't support underline natively, but we can pass this attribute
+        if(this.__fontUnderline === "underline") {
+            data.decoration = "underline";
+        }
+
+        //canvas also doesn't support linking, but we can pass this as well
+        if(this.__fontHref) {
+            data.href = this.__fontHref;
+        }
+
+        return data;
+    };
+
+    /**
+     * Helper to link text fragments
+     * @param font
+     * @param element
+     * @return {*}
+     * @private
+     */
+    ctx.prototype.__wrapTextLink = function(font, element) {
+        if(font.href) {
+            var a = this.__createElement("a");
+            a.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", font.href);
+            a.appendChild(element);
+            return a;
+        }
+        return element;
+    };
+
+    /**
+     * Fills or strokes text
+     * @param text
+     * @param x
+     * @param y
+     * @param action - stroke or fill
+     * @private
+     */
+    ctx.prototype.__applyText = function(text, x, y, action) {
+        var font = this.__parseFont(),
+            parent = this.__closestGroupOrSvg(),
+            textElement = this.__createElement("text", {
+                "font-family" : font.family,
+                "font-size" : font.size,
+                "font-style" : font.style,
+                "font-weight" : font.weight,
+                "text-decoration" : font.decoration,
+                "x" : x,
+                "y" : y,
+                "text-anchor": getTextAnchor(this.textAlign),
+                "dominant-baseline": getDominantBaseline(this.textBaseline)
+            }, true);
+
+        textElement.appendChild(this.__document.createTextNode(text));
+        this.__currentElement = textElement;
+        this.__applyStyleToCurrentElement(action);
+        parent.appendChild(this.__wrapTextLink(font,textElement));
+    };
+
+    /**
+     * Creates a text element
+     * @param text
+     * @param x
+     * @param y
+     */
+    ctx.prototype.fillText = function(text, x, y){
+        this.__applyText(text, x, y, "fill");
+    };
+
+    /**
+     * Strokes text
+     * @param text
+     * @param x
+     * @param y
+     */
+    ctx.prototype.strokeText = function(text, x, y){
+        this.__applyText(text, x, y, "stroke");
+    };
+
+    /**
+     * No need to implement this for svg.
+     * @param text
+     * @return {TextMetrics}
+     */
+    ctx.prototype.measureText = function(text){
+        this.__ctx.font = this.font;
+        return this.__ctx.measureText(text);
+    };
+
+    /**
+     *  Arc command!
+     */
+    ctx.prototype.arc = function(x, y, radius, startAngle, endAngle, counterClockwise) {
+        // in canvas no circle is drawn if no angle is provided.
+        if (startAngle === endAngle) {
+            return;
+        }
+        startAngle = startAngle % (2*Math.PI);
+        endAngle = endAngle % (2*Math.PI);
+        if(startAngle === endAngle) {
+            //circle time! subtract some of the angle so svg is happy (svg elliptical arc can't draw a full circle)
+            endAngle = ((endAngle + (2*Math.PI)) - 0.001 * (counterClockwise ? -1 : 1)) % (2*Math.PI);
+        }
+        var endX = x+radius*Math.cos(endAngle),
+            endY = y+radius*Math.sin(endAngle),
+            startX = x+radius*Math.cos(startAngle),
+            startY = y+radius*Math.sin(startAngle),
+            sweepFlag = counterClockwise ? 0 : 1,
+            largeArcFlag = 0,
+            diff = endAngle - startAngle;
+
+        // https://github.com/gliffy/canvas2svg/issues/4
+        if(diff < 0) {
+            diff += 2*Math.PI;
+        }
+
+        if(counterClockwise) {
+            largeArcFlag = diff > Math.PI ? 0 : 1;
+        } else {
+            largeArcFlag = diff > Math.PI ? 1 : 0;
+        }
+
+        this.lineTo(startX, startY);
+        this.__addPathCommand(format("A {rx} {ry} {xAxisRotation} {largeArcFlag} {sweepFlag} {endX} {endY}",
+            {rx:radius, ry:radius, xAxisRotation:0, largeArcFlag:largeArcFlag, sweepFlag:sweepFlag, endX:endX, endY:endY}));
+
+        this.__currentPosition = {x: endX, y: endY};
+    };
+
+    /**
+     * Generates a ClipPath from the clip command.
+     */
+    ctx.prototype.clip = function(){
+        var group = this.__closestGroupOrSvg(),
+            clipPath = this.__createElement("clipPath"),
+            id =  randomString(this.__ids),
+            newGroup = this.__createElement("g");
+
+        group.removeChild(this.__currentElement);
+        clipPath.setAttribute("id", id);
+        clipPath.appendChild(this.__currentElement);
+
+        this.__defs.appendChild(clipPath);
+
+        //set the clip path to this group
+        group.setAttribute("clip-path", format("url(#{id})", {id:id}));
+
+        //clip paths can be scaled and transformed, we need to add another wrapper group to avoid later transformations
+        // to this path
+        group.appendChild(newGroup);
+
+        this.__currentElement = newGroup;
+
+    };
+
+    /**
+     * Draws a canvas, image or mock context to this canvas.
+     * Note that all svg dom manipulation uses node.childNodes rather than node.children for IE support.
+     * http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#dom-context-2d-drawimage
+     */
+    ctx.prototype.drawImage = function(){
+        //convert arguments to a real array
+        var args = Array.prototype.slice.call(arguments),
+            image=args[0],
+            dx, dy, dw, dh, sx=0, sy=0, sw, sh, parent, svg, defs, group,
+            currentElement, svgImage, canvas, context, id;
+
+        if(args.length === 3) {
+            dx = args[1];
+            dy = args[2];
+            sw = image.width;
+            sh = image.height;
+            dw = sw;
+            dh = sh;
+        } else if(args.length === 5) {
+            dx = args[1];
+            dy = args[2];
+            dw = args[3];
+            dh = args[4];
+            sw = image.width;
+            sh = image.height;
+        } else if(args.length === 9) {
+            sx = args[1];
+            sy = args[2];
+            sw = args[3];
+            sh = args[4];
+            dx = args[5];
+            dy = args[6];
+            dw = args[7];
+            dh = args[8];
+        } else {
+            throw new Error("Inavlid number of arguments passed to drawImage: " + arguments.length);
+        }
+
+        parent = this.__closestGroupOrSvg();
+        currentElement = this.__currentElement;
+
+        if(image instanceof ctx) {
+            //canvas2svg mock canvas context. In the future we may want to clone nodes instead.
+            //also I'm currently ignoring dw, dh, sw, sh, sx, sy for a mock context.
+            svg = image.getSvg();
+            defs = svg.childNodes[0];
+            while(defs.childNodes.length) {
+                id = defs.childNodes[0].getAttribute("id");
+                this.__ids[id] = id;
+                this.__defs.appendChild(defs.childNodes[0]);
+            }
+            group = svg.childNodes[1];
+            parent.appendChild(group);
+            this.__currentElement = group;
+            this.translate(dx, dy);
+            this.__currentElement = currentElement;
+        } else if(image.nodeName === "CANVAS" || image.nodeName === "IMG") {
+            //canvas or image
+            svgImage = this.__createElement("image");
+            svgImage.setAttribute("width", dw);
+            svgImage.setAttribute("height", dh);
+            svgImage.setAttribute("preserveAspectRatio", "none");
+
+            if(sx || sy || sw !== image.width || sh !== image.height) {
+                //crop the image using a temporary canvas
+                canvas = this.__document.createElement("canvas");
+                canvas.width = dw;
+                canvas.height = dh;
+                context = canvas.getContext("2d");
+                context.drawImage(image, sx, sy, sw, sh, 0, 0, dw, dh);
+                image = canvas;
+            }
+
+            svgImage.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href",
+                image.nodeName === "CANVAS" ? image.toDataURL() : image.getAttribute("src"));
+            parent.appendChild(svgImage);
+            this.__currentElement = svgImage;
+            this.translate(dx, dy);
+            this.__currentElement = currentElement;
+        }
+    };
+
+    /**
+     * Generates a pattern tag
+     */
+    ctx.prototype.createPattern = function(image, repetition){
+        var pattern = this.__document.createElementNS("http://www.w3.org/2000/svg", "pattern"), id = randomString(this.__ids),
+            img;
+        pattern.setAttribute("id", id);
+        pattern.setAttribute("width", image.width);
+        pattern.setAttribute("height", image.height);
+        if(image.nodeName === "CANVAS" || image.nodeName === "IMG") {
+            img = this.__document.createElementNS("http://www.w3.org/2000/svg", "image");
+            img.setAttribute("width", image.width);
+            img.setAttribute("height", image.height);
+            img.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href",
+                image.nodeName === "CANVAS" ? image.toDataURL() : image.getAttribute("src"));
+            pattern.appendChild(img);
+            this.__defs.appendChild(pattern);
+        } else if(image instanceof ctx) {
+            pattern.appendChild(image.__root.childNodes[1]);
+            this.__defs.appendChild(pattern);
+        }
+        return new CanvasPattern(pattern, this);
+    };
+
+    /**
+     * Not yet implemented
+     */
+    ctx.prototype.drawFocusRing = function(){};
+    ctx.prototype.createImageData = function(){};
+    ctx.prototype.getImageData = function(){};
+    ctx.prototype.putImageData = function(){};
+    ctx.prototype.globalCompositeOperation = function(){};
+    ctx.prototype.setTransform = function(){};
+
+    //add options for alternative namespace
+    if (typeof window === "object") {
+        window.C2S = ctx;
+    }
+
+    // CommonJS/Browserify
+    {
+        module.exports = ctx;
+    }
+
+}());
+});
+
+var FileSaver_min = createCommonjsModule(function (module, exports) {
+(function(a,b){if("function"==typeof undefined&&undefined.amd)undefined([],b);else b();})(commonjsGlobal,function(){function b(a,b){return"undefined"==typeof b?b={autoBom:!1}:"object"!=typeof b&&(console.warn("Deprecated: Expected third argument to be a object"), b={autoBom:!b}), b.autoBom&&/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(a.type)?new Blob(["\uFEFF",a],{type:a.type}):a}function c(b,c,d){var e=new XMLHttpRequest;e.open("GET",b), e.responseType="blob", e.onload=function(){a(e.response,c,d);}, e.onerror=function(){console.error("could not download file");}, e.send();}function d(a){var b=new XMLHttpRequest;b.open("HEAD",a,!1);try{b.send();}catch(a){}return 200<=b.status&&299>=b.status}function e(a){try{a.dispatchEvent(new MouseEvent("click"));}catch(c){var b=document.createEvent("MouseEvents");b.initMouseEvent("click",!0,!0,window,0,0,0,80,20,!1,!1,!1,!1,0,null), a.dispatchEvent(b);}}var f="object"==typeof window&&window.window===window?window:"object"==typeof self&&self.self===self?self:"object"==typeof commonjsGlobal&&commonjsGlobal.global===commonjsGlobal?commonjsGlobal:void 0,a=f.saveAs||("object"!=typeof window||window!==f?function(){}:"download"in HTMLAnchorElement.prototype?function(b,g,h){var i=f.URL||f.webkitURL,j=document.createElement("a");g=g||b.name||"download", j.download=g, j.rel="noopener", "string"==typeof b?(j.href=b, j.origin===location.origin?e(j):d(j.href)?c(b,g,h):e(j,j.target="_blank")):(j.href=i.createObjectURL(b), setTimeout(function(){i.revokeObjectURL(j.href);},4E4), setTimeout(function(){e(j);},0));}:"msSaveOrOpenBlob"in navigator?function(f,g,h){if(g=g||f.name||"download", "string"!=typeof f)navigator.msSaveOrOpenBlob(b(f,h),g);else if(d(f))c(f,g,h);else{var i=document.createElement("a");i.href=f, i.target="_blank", setTimeout(function(){e(i);});}}:function(a,b,d,e){if(e=e||open("","_blank"), e&&(e.document.title=e.document.body.innerText="downloading..."), "string"==typeof a)return c(a,b,d);var g="application/octet-stream"===a.type,h=/constructor/i.test(f.HTMLElement)||f.safari,i=/CriOS\/[\d]+/.test(navigator.userAgent);if((i||g&&h)&&"object"==typeof FileReader){var j=new FileReader;j.onloadend=function(){var a=j.result;a=i?a:a.replace(/^data:[^;]*;/,"data:attachment/file;"), e?e.location.href=a:location=a, e=null;}, j.readAsDataURL(a);}else{var k=f.URL||f.webkitURL,l=k.createObjectURL(a);e?e.location=l:location.href=l, e=null, setTimeout(function(){k.revokeObjectURL(l);},4E4);}});f.saveAs=a.saveAs=a, "undefined"!='object'&&(module.exports=a);});
+
+//# sourceMappingURL=FileSaver.min.js.map
+});
+
+var SVGCanvas = function SVGCanvas(width, height, canvas) {
+    var this$1 = this;
+
+    if (!width || !height) {
+        throw new Error('You must specify a width and a height');
+    }
+    this.width = width;
+    this.height = height;
+    this.canvas = canvas;
+    if (this.canvas) {
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
+        this.canvas.style.width = this.width + 'px';
+        this.canvas.style.height = this.height + 'px';
+    }
+    this.ctx = this.canvas ? this.canvas.getContext('2d') : new canvas2svg(width, height);
+    this.ctx.isSVG = !this.canvas;
+    this.ctx.beginSVGGroup = this.ctx.save;
+    this.ctx.endSVGGroup = this.ctx.restore;
+    this.ctx.group = (function (fn) {
+        this$1.ctx.isSVG && this$1.ctx.beginSVGGroup();
+        fn();
+        this$1.ctx.isSVG && this$1.ctx.endSVGGroup();
+    });
+};
+
+var prototypeAccessors$1 = { context: { configurable: true },svg: { configurable: true },serializedSvg: { configurable: true } };
+var staticAccessors$1 = { SUPPORTED_MIME_TYPES: { configurable: true } };
+prototypeAccessors$1.context.get = function () {
+    return this.ctx;
+};
+prototypeAccessors$1.svg.get = function () {
+    return this.ctx.getSvg();
+};
+prototypeAccessors$1.serializedSvg.get = function () {
+    return this.ctx.getSerializedSvg(true);
+};
+SVGCanvas.prototype.toBlob = function toBlob (type) {
+    return new Promise((function ($return, $error) {
+            var this$1 = this;
+
+        if (!type) 
+            { type = this.ctx.isSVG ? 'image/svg+xml' : 'image/png'; }
+        if (!SVGCanvas.isSupportedMimeType(type)) {
+            return $error(new Error(("Invalid or unsupported mime type.\nSupported mime types are: " + (SVGCanvas.SUPPORTED_MIME_TYPES))));
+        }
+        if (type === 'image/svg+xml' && !this.ctx.isSVG) {
+            return $error(new Error("image/svg+xml mime type is not compatible with the current context."));
+        }
+        return $return(type === 'image/svg+xml' ? new Blob([this.serializedSvg], {
+            type: 'image/svg+xml;charset=utf-8'
+        }) : new Promise(function (resolve) { return this$1.canvas.toBlob(resolve, type); }));
+    }).bind(this));
+};
+SVGCanvas.prototype.didMount = function didMount () {};
+SVGCanvas.prototype.mount = function mount (parent, sibling) {
+        if ( sibling === void 0 ) sibling = null;
+
+    if (!parent || this.mounted) 
+        { return; }
+    this.parent = parent;
+    this.el = this.canvas || this.svg;
+    if (sibling) 
+        { this.parent.insertBefore(this.el, sibling); }
+     else 
+        { this.parent.appendChild(this.el); }
+    this.mounted = true;
+    this.didMount(this.el);
+};
+SVGCanvas.prototype.background = function background (color) {
+    drawBackground(0, 0, this.width, this.height, {
+        color: color,
+        ctx: this.ctx
+    });
+};
+SVGCanvas.prototype.copy = function copy (canvas) {
+        if ( canvas === void 0 ) canvas = document.createElement('canvas');
+
+    if (this.ctx.isSVG) 
+        { throw new Error('Copying canvas with SVG context is not supported yet'); }
+    canvas.width = this.width;
+    canvas.height = this.height;
+    var ctx = canvas.getContext('2d');
+    ctx.drawImage(this.canvas, 0, 0);
+    return canvas;
+};
+SVGCanvas.prototype.clear = function clear () {
+    if (!this.ctx.isSVG) 
+        { this.ctx.clearRect(0, 0, this.width, this.height); }
+     else {
+        if (!this.mounted) 
+            { return; }
+        this.el.querySelector('g').innerHTML = '';
+    }
+};
+staticAccessors$1.SUPPORTED_MIME_TYPES.get = function () {
+    return ['image/png','image/jpeg','image/svg+xml'];
+};
+SVGCanvas.isSupportedMimeType = function isSupportedMimeType (type) {
+    return SVGCanvas.SUPPORTED_MIME_TYPES.includes(type);
+};
+SVGCanvas.prototype.save = function save (filename, ref) {
+        if ( filename === void 0 ) filename = Date.now();
+        if ( ref === void 0 ) ref = {};
+        var type = ref.type; if ( type === void 0 ) type = 'image/png';
+
+    return new Promise((function ($return, $error) {
+        var blob;
+        if (!SVGCanvas.isSupportedMimeType(type)) {
+            return $error(new Error(("Invalid or unsupported mime type.\nSupported mime types are: " + (SVGCanvas.SUPPORTED_MIME_TYPES))));
+        }
+        return this.toBlob(type).then(function ($await_1) {
+            try {
+                blob = $await_1;
+                return $return(FileSaver_min.saveAs(blob, filename));
+            } catch ($boundEx) {
+                return $error($boundEx);
+            }
+        }, $error);
+    }).bind(this));
+};
+
+Object.defineProperties( SVGCanvas.prototype, prototypeAccessors$1 );
+Object.defineProperties( SVGCanvas, staticAccessors$1 );
+
+
+
+
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIlNWR0NhbnZhcy5qcyhvcmlnaW5hbCkiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxZQUFZO0FBQ25CLE9BQU8sZUFBZTtBQUV0QixPQUFPLG9CQUFvQjtBQUkzQixlQUFlLE1BQU0sVUFBVTtJQUM3QixZQUFhLEtBQU8sRUFBQSxNQUFRLEVBQUEsUUFBUTtRQUNsQyxJQUFJLENBQUMsS0FBRCxDQUFBLEVBQUEsQ0FBVSxDQUFDLFFBQVE7WUFDckIsTUFBTSxJQUFJLEtBQUosQ0FBVTtRQUN0QjtRQUVJLElBQUEsQ0FBSyxLQUFMLENBQUEsQ0FBQSxDQUFhO1FBQ2IsSUFBQSxDQUFLLE1BQUwsQ0FBQSxDQUFBLENBQWM7UUFDZCxJQUFBLENBQUssTUFBTCxDQUFBLENBQUEsQ0FBYztRQUVkLElBQUksSUFBQSxDQUFLLFFBQVE7WUFDZixJQUFBLENBQUssTUFBTCxDQUFZLEtBQVosQ0FBQSxDQUFBLENBQW9CLElBQUEsQ0FBSztZQUN6QixJQUFBLENBQUssTUFBTCxDQUFZLE1BQVosQ0FBQSxDQUFBLENBQXFCLElBQUEsQ0FBSztZQUMxQixJQUFBLENBQUssTUFBTCxDQUFZLEtBQVosQ0FBa0IsS0FBbEIsQ0FBQSxDQUFBLENBQTBCLElBQUEsQ0FBSyxLQUFMLENBQUEsQ0FBQSxDQUFhO1lBQ3ZDLElBQUEsQ0FBSyxNQUFMLENBQVksS0FBWixDQUFrQixNQUFsQixDQUFBLENBQUEsQ0FBMkIsSUFBQSxDQUFLLE1BQUwsQ0FBQSxDQUFBLENBQWM7UUFDL0M7UUFFSSxJQUFBLENBQUssR0FBTCxDQUFBLENBQUEsQ0FBVyxJQUFBLENBQUssTUFBTCxHQUNQLElBQUEsQ0FBSyxNQUFMLENBQVksVUFBWixDQUF1QixRQUN2QixJQUFJLE1BQUosQ0FBVyxPQUFPO1FBQ3RCLElBQUEsQ0FBSyxHQUFMLENBQVMsS0FBVCxDQUFBLENBQUEsQ0FBaUIsQ0FBQyxJQUFBLENBQUs7UUFJdkIsSUFBQSxDQUFLLEdBQUwsQ0FBUyxhQUFULENBQUEsQ0FBQSxD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SUFBQSxDQUFLLEdBQUwsQ0FBUztZQUFPLElBQUEsQ0FBSyxHQUFMLENBQVMsU0FBVCxDQUFtQixHQUFHLEdBQUcsSUFBQSxDQUFLLE9BQU8sSUFBQSxDQUFLO2NBQzFEO1lBQ0gsSUFBSSxDQUFDLElBQUEsQ0FBSztnQkFBUztZQUNuQixJQUFBLENBQUssRUFBTCxDQUFRLGFBQVIsQ0FBc0IsSUFBdEIsQ0FBMkIsU0FBM0IsQ0FBQSxDQUFBLENBQXVDO1FBQzdDO0lBQ0E7SUFFRSxPQUFBLEdBQUEsQ0FBVyx1QkFBd0I7UUFDakMsT0FBTyxDQUNMLFlBQ0EsYUFDQTtJQUVOO0lBRUUsT0FBTyxvQkFBcUIsTUFBTTtRQUNoQyxPQUFPLFNBQUEsQ0FBVSxvQkFBVixDQUErQixRQUEvQixDQUF3QztJQUNuRDtJQUVRLEtBQU0sUUFBQSxHQUFXLElBQUEsQ0FBSyxHQUFMLEVBQVksRUFBQSxDQUFFLElBQUEsR0FBTyxZQUFULEdBQXlCO1FBQWpEOztZQUNULElBQUksQ0FBQyxTQUFBLENBQVUsbUJBQVYsQ0FBOEIsT0FBTztnQkFDeEMsY0FBTSxJQUFJLEtBQUosQ0FBVSxnRUFBZ0UsU0FBQSxDQUFVLHFCQUExRTtZQUN0QjtZQUVpQixPQUFNLElBQUEsQ0FBSyxNQUFMLENBQVksTUFBbEI7O29CQUFQLE9BQU87b0JBQ2IsZUFBTyxTQUFBLENBQVUsTUFBVixDQUFpQixNQUFNOzs7Ozs7O0FBRWxDO0FBdkhBIiwiZmlsZSI6IlNWR0NhbnZhcy5qcyhvcmlnaW5hbCkiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgQ2FudmFzIGZyb20gJ2NhbnZhczJzdmcnXG5pbXBvcnQgRmlsZVNhdmVyIGZyb20gJ2ZpbGUtc2F2ZXInXG5cbmltcG9ydCBkcmF3QmFja2dyb3VuZCBmcm9tICcuLi91dGlscy9kcmF3LWJhY2tncm91bmQnXG5cbi8qIGdsb2JhbCBCbG9iICovXG5cbmV4cG9ydCBkZWZhdWx0IGNsYXNzIFNWR0NhbnZhcyB7XG4gIGNvbnN0cnVjdG9yICh3aWR0aCwgaGVpZ2h0LCBjYW52YXMpIHtcbiAgICBpZiAoIXdpZHRoIHx8ICFoZWlnaHQpIHtcbiAgICAgIHRocm93IG5ldyBFcnJvcignWW91IG11c3Qgc3BlY2lmeSBhIHdpZHRoIGFuZCBhIGhlaWdodCcpXG4gICAgfVxuXG4gICAgdGhpcy53aWR0aCA9IHdpZHRoXG4gICAgdGhpcy5oZWlnaHQgPSBoZWlnaHRcbiAgICB0aGlzLmNhbnZhcyA9IGNhbnZhc1xuXG4gICAgaWYgKHRoaXMuY2FudmFzKSB7XG4gICAgICB0aGlzLmNhbnZhcy53aWR0aCA9IHRoaXMud2lkdGhcbiAgICAgIHRoaXMuY2FudmFzLmhlaWdodCA9IHRoaXMuaGVpZ2h0XG4gICAgICB0aGlzLmNhbnZhcy5zdHlsZS53aWR0aCA9IHRoaXMud2lkdGggKyAncHgnXG4gICAgICB0aGlzLmNhbnZhcy5zdHlsZS5oZWlnaHQgPSB0aGlzLmhlaWdodCArICdweCdcbiAgICB9XG5cbiAgICB0aGlzLmN0eCA9IHRoaXMuY2FudmFzXG4gICAgICA/IHRoaXMuY2FudmFzLmdldENvbnRleHQoJzJkJylcbiAgICAgIDogbmV3IENhbnZhcyh3aWR0aCwgaGVpZ2h0KVxuICAgIHRoaXMuY3R4LmlzU1ZHID0gIXRoaXMuY2FudmFzXG5cbiAgICAvLyBOT1RFOiBjYW52YXMyc3ZnIHVzZXMgY29udGV4dFtzYXZlfHJlc3RvcmVdIHRvIGhhbmRsZSBzdmcgZ3JvdXBpbmdcbiAgICAvLyBUaGVzZXMgYWxpYXNlcyBhcmUgZGVzaWduZWQgdG8gaW1wcm92ZSBjb2RlIHJlYWRhYmlsaXR5XG4gICAgdGhpcy5jdHguYmVnaW5TVkdHcm91cCA9IHRoaXMuY3R4LnNhdmVcbiAgICB0aGlzLmN0eC5lbmRTVkdHcm91cCA9IHRoaXMuY3R4LnJlc3RvcmVcbiAgICB0aGlzLmN0eC5ncm91cCA9IGZuID0+IHtcbiAgICAgIHRoaXMuY3R4LmlzU1ZHICYmIHRoaXMuY3R4LmJlZ2luU1ZHR3JvdXAoKVxuICAgICAgZm4oKVxuICAgICAgdGhpcy5jdHguaXNTVkcgJiYgdGhpcy5jdHguZW5kU1ZHR3JvdXAoKVxuICAgIH1cbiAgfVxuXG4gIGdldCBjb250ZXh0ICgpIHsgcmV0dXJuIHRoaXMuY3R4IH1cblxuICBnZXQgc3ZnICgpIHsgcmV0dXJuIHRoaXMuY3R4LmdldFN2ZygpIH1cbiAgZ2V0IHNlcmlhbGl6ZWRTdmcgKCkgeyByZXR1cm4gdGhpcy5jdHguZ2V0U2VyaWFsaXplZFN2Zyh0cnVlKSB9XG5cbiAgYXN5bmMgdG9CbG9iICh0eXBlKSB7XG4gICAgaWYgKCF0eXBlKSB0eXBlID0gdGhpcy5jdHguaXNTVkcgPyAnaW1hZ2Uvc3ZnK3htbCcgOiAnaW1hZ2UvcG5nJ1xuXG4gICAgaWYgKCFTVkdDYW52YXMuaXNTdXBwb3J0ZWRNaW1lVHlwZSh0eXBlKSkge1xuICAgICAgdGhyb3cgbmV3IEVycm9yKGBJbnZhbGlkIG9yIHVuc3VwcG9ydGVkIG1pbWUgdHlwZS5cXG5TdXBwb3J0ZWQgbWltZSB0eXBlcyBhcmU6ICR7U1ZHQ2FudmFzLlNVUFBPUlRFRF9NSU1FX1RZUEVTfWApXG4gICAgfVxuXG4gICAgaWYgKHR5cGUgPT09ICdpbWFnZS9zdmcreG1sJyAmJiAhdGhpcy5jdHguaXNTVkcpIHtcbiAgICAgIHRocm93IG5ldyBFcnJvcihgaW1hZ2Uvc3ZnK3htbCBtaW1lIHR5cGUgaXMgbm90IGNvbXBhdGlibGUgd2l0aCB0aGUgY3VycmVudCBjb250ZXh0LmApXG4gICAgfVxuXG4gICAgcmV0dXJuICh0eXBlID09PSAnaW1hZ2Uvc3ZnK3htbCcpXG4gICAgICA/IG5ldyBCbG9iKFt0aGlzLnNlcmlhbGl6ZWRTdmddLCB7IHR5cGU6ICdpbWFnZS9zdmcreG1sO2NoYXJzZXQ9dXRmLTgnIH0pXG4gICAgICA6IG5ldyBQcm9taXNlKHJlc29sdmUgPT4gdGhpcy5jYW52YXMudG9CbG9iKHJlc29sdmUsIHR5cGUpKVxuICB9XG5cbiAgZGlkTW91bnQgKCkge31cblxuICBtb3VudCAocGFyZW50LCBzaWJsaW5nID0gbnVsbCkge1xuICAgIGlmICghcGFyZW50IHx8IHRoaXMubW91bnRlZCkgcmV0dXJuXG5cbiAgICB0aGlzLnBhcmVudCA9IHBhcmVudFxuICAgIHRoaXMuZWwgPSB0aGlzLmNhbnZhcyB8fCB0aGlzLnN2Z1xuXG4gICAgaWYgKHNpYmxpbmcpIHRoaXMucGFyZW50Lmluc2VydEJlZm9yZSh0aGlzLmVsLCBzaWJsaW5nKVxuICAgIGVsc2UgdGhpcy5wYXJlbnQuYXBwZW5kQ2hpbGQodGhpcy5lbClcblxuICAgIHRoaXMubW91bnRlZCA9IHRydWVcbiAgICB0aGlzLmRpZE1vdW50KHRoaXMuZWwpXG4gIH1cblxuICBiYWNrZ3JvdW5kIChjb2xvcikge1xuICAgIGRyYXdCYWNrZ3JvdW5kKDAsIDAsIHRoaXMud2lkdGgsIHRoaXMuaGVpZ2h0LCB7IGNvbG9yLCBjdHg6IHRoaXMuY3R4IH0pXG4gIH1cblxuICBjb3B5IChjYW52YXMgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdjYW52YXMnKSkge1xuICAgIGlmICh0aGlzLmN0eC5pc1NWRykgdGhyb3cgbmV3IEVycm9yKCdDb3B5aW5nIGNhbnZhcyB3aXRoIFNWRyBjb250ZXh0IGlzIG5vdCBzdXBwb3J0ZWQgeWV0JylcblxuICAgIGNhbnZhcy53aWR0aCA9IHRoaXMud2lkdGhcbiAgICBjYW52YXMuaGVpZ2h0ID0gdGhpcy5oZWlnaHRcbiAgICBjb25zdCBjdHggPSBjYW52YXMuZ2V0Q29udGV4dCgnMmQnKVxuXG4gICAgY3R4LmRyYXdJbWFnZSh0aGlzLmNhbnZhcywgMCwgMClcbiAgICByZXR1cm4gY2FudmFzXG4gIH1cblxuICBjbGVhciAoKSB7XG4gICAgaWYgKCF0aGlzLmN0eC5pc1NWRykgdGhpcy5jdHguY2xlYXJSZWN0KDAsIDAsIHRoaXMud2lkdGgsIHRoaXMuaGVpZ2h0KVxuICAgIGVsc2Uge1xuICAgICAgaWYgKCF0aGlzLm1vdW50ZWQpIHJldHVyblxuICAgICAgdGhpcy5lbC5xdWVyeVNlbGVjdG9yKCdnJykuaW5uZXJIVE1MID0gJydcbiAgICB9XG4gIH1cblxuICBzdGF0aWMgZ2V0IFNVUFBPUlRFRF9NSU1FX1RZUEVTICgpIHtcbiAgICByZXR1cm4gW1xuICAgICAgJ2ltYWdlL3BuZycsXG4gICAgICAnaW1hZ2UvanBlZycsXG4gICAgICAnaW1hZ2Uvc3ZnK3htbCdcbiAgICBdXG4gIH1cblxuICBzdGF0aWMgaXNTdXBwb3J0ZWRNaW1lVHlwZSAodHlwZSkge1xuICAgIHJldHVybiBTVkdDYW52YXMuU1VQUE9SVEVEX01JTUVfVFlQRVMuaW5jbHVkZXModHlwZSlcbiAgfVxuXG4gIGFzeW5jIHNhdmUgKGZpbGVuYW1lID0gRGF0ZS5ub3coKSwgeyB0eXBlID0gJ2ltYWdlL3BuZycgfSA9IHt9KSB7XG4gICAgaWYgKCFTVkdDYW52YXMuaXNTdXBwb3J0ZWRNaW1lVHlwZSh0eXBlKSkge1xuICAgICAgdGhyb3cgbmV3IEVycm9yKGBJbnZhbGlkIG9yIHVuc3VwcG9ydGVkIG1pbWUgdHlwZS5cXG5TdXBwb3J0ZWQgbWltZSB0eXBlcyBhcmU6ICR7U1ZHQ2FudmFzLlNVUFBPUlRFRF9NSU1FX1RZUEVTfWApXG4gICAgfVxuXG4gICAgY29uc3QgYmxvYiA9IGF3YWl0IHRoaXMudG9CbG9iKHR5cGUpXG4gICAgcmV0dXJuIEZpbGVTYXZlci5zYXZlQXMoYmxvYiwgZmlsZW5hbWUpXG4gIH1cbn1cbiJdfQ==
+
+var Landscape = (function (SVGCanvas$$1) {
+    function Landscape(grounds, ref) {
+        if ( ref === void 0 ) ref = {};
+        var canvas = ref.canvas; if ( canvas === void 0 ) canvas = null;
+        var backgroundColor = ref.backgroundColor; if ( backgroundColor === void 0 ) backgroundColor = 'transparent';
+
+        SVGCanvas$$1.call(this, grounds[0].width, grounds[0].height, canvas);
+        this.backgroundColor = backgroundColor;
+        this.grounds = grounds;
+    }
+
+    if ( SVGCanvas$$1 ) Landscape.__proto__ = SVGCanvas$$1;
+    Landscape.prototype = Object.create( SVGCanvas$$1 && SVGCanvas$$1.prototype );
+    Landscape.prototype.constructor = Landscape;
+
+    var prototypeAccessors = { grounds: { configurable: true } };
+    prototypeAccessors.grounds.get = function () {
+        return this._grounds;
+    };
+    prototypeAccessors.grounds.set = function (grounds) {
+        var this$1 = this;
+
+        var foregrounds = [];
+        this._grounds = grounds.map(function (ground, index) {
+            ground.setBehind(foregrounds);
+            if (ground.isEmpty) 
+                { return null; }
+            foregrounds.push(ground);
+            if (!this$1.ctx.isSVG) {
+                ground.createSprite(this$1.ctx);
+            }
+            return ground;
+        }).filter(Boolean);
+    };
+    Landscape.prototype.render = function render (ctx) {
+        if ( ctx === void 0 ) ctx = this.ctx;
+
+        SVGCanvas$$1.prototype.background.call(this, this.backgroundColor);
+        this.grounds.forEach(function (ground, index) {
+            if (ground.sprite) 
+                { ctx.drawImage(ground.sprite, 0, 0); }
+             else 
+                { ground.render(ctx); }
+        });
+        return this;
+    };
+    Landscape.prototype.ensureSVGContext = function ensureSVGContext () {
+        return this.ctx.isSVG ? this : new Landscape(this.grounds, {
+            canvas: null,
+            backgroundColor: this.backgroundColor
+        }).render();
+    };
+    Landscape.prototype.save = function save (filename, ref) {
+        if ( ref === void 0 ) ref = {};
+        var type = ref.type;
+
+        return type === 'image/svg+xml' && !this.ctx.isSVG ? this.ensureSVGContext().save(filename, {
+            type: type
+        }) : SVGCanvas$$1.prototype.save.call(this, filename, {
+            type: type
+        });
+    };
+
+    Object.defineProperties( Landscape.prototype, prototypeAccessors );
+
+    return Landscape;
+}(SVGCanvas));
+
+
+
+
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIkxhbmRzY2FwZS5qcyhvcmlnaW5hbCkiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxlQUFlO0FBRXRCLGVBQWUsTUFBTSxrQkFBa0IsVUFBVTtJQUMvQyxZQUFhLE9BQVMsRUFBQSxDQUNwQixNQUFBLEdBQVMsTUFDVCxlQUFBLEdBQWtCLGNBRkUsR0FHbEIsSUFBSTtRQUNOLEtBQUEsQ0FBTSxPQUFBLENBQVEsRUFBUixDQUFXLE9BQU8sT0FBQSxDQUFRLEVBQVIsQ0FBVyxRQUFRO1FBRTNDLElBQUEsQ0FBSyxlQUFMLENBQUEsQ0FBQSxDQUF1QjtRQUN2QixJQUFBLENBQUssT0FBTCxDQUFBLENBQUEsQ0FBZTtJQUNuQjtJQUVFLEdBQUEsQ0FBSSxVQUFXO1FBQUUsT0FBTyxJQUFBLENBQUs7SUFBL0I7SUFDRSxHQUFBLENBQUksUUFBUyxTQUFTO1FBQ3BCLEdBQUEsQ0FBSSxjQUFjO1FBQ2xCLElBQUEsQ0FBSyxRQUFMLENBQUEsQ0FBQSxDQUFnQixPQUFBLENBQVEsR0FBUixFQUFhLE1BQVEsRUFBQSxPQUFULEdBQW1CO1lBQzdDLE1BQUEsQ0FBTyxTQUFQLENBQWlCO1lBQ2pCLElBQUksTUFBQSxDQUFPO2dCQUFTLE9BQU87WUFFM0IsV0FBQSxDQUFZLElBQVosQ0FBaUI7WUFFakIsSUFBSSxDQUFDLElBQUEsQ0FBSyxHQUFMLENBQVMsT0FBTztnQkFDbkIsTUFBQSxDQUFPLFlBQVAsQ0FBb0IsSUFBQSxDQUFLO1lBQ2pDO1lBRU0sT0FBTztRQUNiLEVBWG9CLENBV2IsTUFYYSxDQVdOO0lBQ2Q7SUFFRSxPQUFRLEdBQUEsR0FBTSxJQUFBLENBQUssS0FBSztRQUN0QixLQUFBLENBQU0sVUFBTixDQUFpQixJQUFBLENBQUs7UUFFdEIsSUFBQSxDQUFLLE9BQUwsQ0FBYSxPQUFiLEVBQXNCLE1BQVEsRUFBQSxPQUFULEdBQW1CO1lBQ3RDLElBQUksTUFBQSxDQUFPO2dCQUFRLEdBQUEsQ0FBSSxTQUFKLENBQWMsTUFBQSxDQUFPLFFBQVEsR0FBRzs7Z0JBQzlDLE1BQUEsQ0FBTyxNQUFQLENBQWM7UUFDekI7UUFFSSxPQUFPO0lBQ1g7SUFFRSxtQkFBb0I7UUFDbEIsT0FBTyxJQUFBLENBQUssR0FBTCxDQUFTLEtBQVQsR0FDSCxPQUNBLElBQUksU0FBSixDQUFjLElBQUEsQ0FBSyxTQUFTO1lBQzVCLFFBQVEsSUFEb0IsQ0FBQTtZQUU1QixpQkFBaUIsSUFBQSxDQUFLO1VBRnRCLENBR0MsTUFIRDtJQUlSO0lBRUUsS0FBTSxRQUFVLEVBQUEsQ0FBRSxLQUFGLEdBQVcsSUFBSTtRQUM3QixPQUFRLElBQUEsQ0FBQSxHQUFBLENBQVMsZUFBVCxDQUFBLEVBQUEsQ0FBNEIsQ0FBQyxJQUFBLENBQUssR0FBTCxDQUFTLEtBQXZDLEdBQ0gsSUFBQSxDQUFLLGdCQUFMLEVBQUEsQ0FBd0IsSUFBeEIsQ0FBNkIsVUFBVTtZQUFFO2FBQ3pDLEtBQUEsQ0FBTSxJQUFOLENBQVcsVUFBVTtZQUFFOztJQUMvQjtBQUNBO0FBdkRBIiwiZmlsZSI6IkxhbmRzY2FwZS5qcyhvcmlnaW5hbCkiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgU1ZHQ2FudmFzIGZyb20gJy4uL2Fic3RyYWN0aW9ucy9TVkdDYW52YXMnXG5cbmV4cG9ydCBkZWZhdWx0IGNsYXNzIExhbmRzY2FwZSBleHRlbmRzIFNWR0NhbnZhcyB7XG4gIGNvbnN0cnVjdG9yIChncm91bmRzLCB7XG4gICAgY2FudmFzID0gbnVsbCxcbiAgICBiYWNrZ3JvdW5kQ29sb3IgPSAndHJhbnNwYXJlbnQnXG4gIH0gPSB7fSkge1xuICAgIHN1cGVyKGdyb3VuZHNbMF0ud2lkdGgsIGdyb3VuZHNbMF0uaGVpZ2h0LCBjYW52YXMpXG5cbiAgICB0aGlzLmJhY2tncm91bmRDb2xvciA9IGJhY2tncm91bmRDb2xvclxuICAgIHRoaXMuZ3JvdW5kcyA9IGdyb3VuZHNcbiAgfVxuXG4gIGdldCBncm91bmRzICgpIHsgcmV0dXJuIHRoaXMuX2dyb3VuZHMgfVxuICBzZXQgZ3JvdW5kcyAoZ3JvdW5kcykge1xuICAgIGxldCBmb3JlZ3JvdW5kcyA9IFtdXG4gICAgdGhpcy5fZ3JvdW5kcyA9IGdyb3VuZHMubWFwKChncm91bmQsIGluZGV4KSA9PiB7XG4gICAgICBncm91bmQuc2V0QmVoaW5kKGZvcmVncm91bmRzKVxuICAgICAgaWYgKGdyb3VuZC5pc0VtcHR5KSByZXR1cm4gbnVsbFxuXG4gICAgICBmb3JlZ3JvdW5kcy5wdXNoKGdyb3VuZClcblxuICAgICAgaWYgKCF0aGlzLmN0eC5pc1NWRykge1xuICAgICAgICBncm91bmQuY3JlYXRlU3ByaXRlKHRoaXMuY3R4KVxuICAgICAgfVxuXG4gICAgICByZXR1cm4gZ3JvdW5kXG4gICAgfSkuZmlsdGVyKEJvb2xlYW4pXG4gIH1cblxuICByZW5kZXIgKGN0eCA9IHRoaXMuY3R4KSB7XG4gICAgc3VwZXIuYmFja2dyb3VuZCh0aGlzLmJhY2tncm91bmRDb2xvcilcblxuICAgIHRoaXMuZ3JvdW5kcy5mb3JFYWNoKChncm91bmQsIGluZGV4KSA9PiB7XG4gICAgICBpZiAoZ3JvdW5kLnNwcml0ZSkgY3R4LmRyYXdJbWFnZShncm91bmQuc3ByaXRlLCAwLCAwKVxuICAgICAgZWxzZSBncm91bmQucmVuZGVyKGN0eClcbiAgICB9KVxuXG4gICAgcmV0dXJuIHRoaXNcbiAgfVxuXG4gIGVuc3VyZVNWR0NvbnRleHQgKCkge1xuICAgIHJldHVybiB0aGlzLmN0eC5pc1NWR1xuICAgICAgPyB0aGlzXG4gICAgICA6IG5ldyBMYW5kc2NhcGUodGhpcy5ncm91bmRzLCB7XG4gICAgICAgIGNhbnZhczogbnVsbCxcbiAgICAgICAgYmFja2dyb3VuZENvbG9yOiB0aGlzLmJhY2tncm91bmRDb2xvclxuICAgICAgfSkucmVuZGVyKClcbiAgfVxuXG4gIHNhdmUgKGZpbGVuYW1lLCB7IHR5cGUgfSA9IHt9KSB7XG4gICAgcmV0dXJuICh0eXBlID09PSAnaW1hZ2Uvc3ZnK3htbCcgJiYgIXRoaXMuY3R4LmlzU1ZHKVxuICAgICAgPyB0aGlzLmVuc3VyZVNWR0NvbnRleHQoKS5zYXZlKGZpbGVuYW1lLCB7IHR5cGUgfSlcbiAgICAgIDogc3VwZXIuc2F2ZShmaWxlbmFtZSwgeyB0eXBlIH0pXG4gIH1cbn1cbiJdfQ==
+
+var Line = function Line(equation) {
+    if ( equation === void 0 ) equation = function (x) { return 0.5; };
+
+    this._equation = equation;
+    this.points = [];
+};
+Line.prototype.compute = function compute (x, ref) {
+        if ( ref === void 0 ) ref = {};
+        var force = ref.force; if ( force === void 0 ) force = false;
+
+    if (force || this.points[x] === undefined) {
+        this.points[x] = this._equation(x);
+    }
+    return this.points[x];
+};
+Line.perlin = function perlin (ref) {
+        if ( ref === void 0 ) ref = {};
+        var seed = ref.seed; if ( seed === void 0 ) seed = null;
+        var octaves = ref.octaves; if ( octaves === void 0 ) octaves = 2;
+        var lacunarity = ref.lacunarity; if ( lacunarity === void 0 ) lacunarity = 2;
+        var gain = ref.gain; if ( gain === void 0 ) gain = 0.5;
+        var resolution = ref.resolution; if ( resolution === void 0 ) resolution = 32;
+
+    var noise = new tumult.Perlin1(seed).transform(function (v) {
+        return lib_6$1(this.gen(v / resolution), -1, 1);
+    });
+    return function (x) {
+        var y = 0;
+        var amplitude = 0.5;
+        var frequency = 1.0;
+        for (var i = 0;i < octaves; i++) {
+            y += amplitude * noise(frequency * x);
+            frequency *= lacunarity;
+            amplitude *= gain;
+        }
+        return Math.sin(y);
+    };
+};
+Line.simplex = function simplex (ref) {
+        if ( ref === void 0 ) ref = {};
+        var seed = ref.seed; if ( seed === void 0 ) seed = null;
+        var octaves = ref.octaves; if ( octaves === void 0 ) octaves = 2;
+
+    var frequency = Math.pow(2, octaves);
+    return new tumult.Simplex1(seed).transform(function (v) {
+        return (Math.sin(1 / this.gen(v / frequency)) + 1) / 2;
+    });
+};
+
+
+
+
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIkxpbmUuanMob3JpZ2luYWwpIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sWUFBWTtBQUNuQixRQUFTLGdCQUFpQjtBQUUxQixlQUFlLE1BQU0sS0FBSztJQUV4QixZQUFhLFFBQUEsR0FBVyxDQUFBLElBQUssS0FBSztRQUNoQyxJQUFBLENBQUssU0FBTCxDQUFBLENBQUEsQ0FBaUI7UUFDakIsSUFBQSxDQUFLLE1BQUwsQ0FBQSxDQUFBLENBQWM7SUFDbEI7SUFFRSxRQUFTLENBQUcsRUFBQSxDQUFFLEtBQUEsR0FBUSxNQUFWLEdBQW9CLElBQUk7UUFDbEMsSUFBSSxLQUFBLENBQUEsRUFBQSxDQUFTLElBQUEsQ0FBSyxNQUFMLENBQVksRUFBWixDQUFBLEdBQUEsQ0FBbUIsV0FBVztZQUN6QyxJQUFBLENBQUssTUFBTCxDQUFZLEVBQVosQ0FBQSxDQUFBLENBQWlCLElBQUEsQ0FBSyxTQUFMLENBQWU7UUFDdEM7UUFFSSxPQUFPLElBQUEsQ0FBSyxNQUFMLENBQVk7SUFDdkI7SUFFRSxPQUFPLE9BQVEsQ0FDYixJQUFBLEdBQU8sTUFDUCxPQUFBLEdBQVUsR0FDVixVQUFBLEdBQWEsR0FDYixJQUFBLEdBQU8sS0FDUCxVQUFBLEdBQWEsR0FMQSxHQU1YLElBQUk7UUFDTixLQUFBLENBQU0sUUFBUSxJQUFJLE1BQUEsQ0FBTyxPQUFYLENBQW1CLEtBQW5CLENBQXlCLFNBQXpCLENBQW1DLFVBQVUsR0FBRztZQUM1RCxPQUFPLFNBQUEsQ0FBVSxJQUFBLENBQUssR0FBTCxDQUFTLENBQUEsQ0FBQSxDQUFBLENBQUksYUFBYSxDQUFDLEdBQUc7UUFDckQ7UUFFSSxPQUFPLENBQUEsSUFBSztZQUNWLEdBQUEsQ0FBSSxJQUFJO1lBQ1IsR0FBQSxDQUFJLFlBQVk7WUFDaEIsR0FBQSxDQUFJLFlBQVk7WUFFaEIsS0FBSyxHQUFBLENBQUksSUFBSSxFQUFHLENBQUEsQ0FBQSxDQUFBLENBQUksU0FBUyxDQUFBLElBQUs7Z0JBQ2hDLENBQUEsQ0FBQSxFQUFBLENBQUssU0FBQSxDQUFBLENBQUEsQ0FBWSxLQUFBLENBQU0sU0FBQSxDQUFBLENBQUEsQ0FBWTtnQkFDbkMsU0FBQSxDQUFBLEVBQUEsQ0FBYTtnQkFDYixTQUFBLENBQUEsRUFBQSxDQUFhO1lBQ3JCO1lBRU0sT0FBTyxJQUFBLENBQUssR0FBTCxDQUFTO1FBQ3RCO0lBQ0E7SUFFRSxPQUFPLFFBQVMsQ0FDZCxJQUFBLEdBQU8sTUFDUCxPQUFBLEdBQVUsRUFGSSxHQUdaLElBQUk7UUFDTixLQUFBLENBQU0sWUFBWSxJQUFBLENBQUssR0FBTCxDQUFTLEdBQUc7UUFDOUIsT0FBTyxJQUFJLE1BQUEsQ0FBTyxRQUFYLENBQW9CLEtBQXBCLENBQTBCLFNBQTFCLENBQW9DLFVBQVUsR0FBRztZQUN0RCxRQUFRLElBQUEsQ0FBSyxHQUFMLENBQVMsQ0FBQSxDQUFBLENBQUEsQ0FBSSxJQUFBLENBQUssR0FBTCxDQUFTLENBQUEsQ0FBQSxDQUFBLENBQUksV0FBMUIsQ0FBQSxDQUFBLENBQXdDLEVBQXpDLENBQUEsQ0FBQSxDQUE4QztRQUMzRDtJQUNBO0FBQ0E7QUFyREEiLCJmaWxlIjoiTGluZS5qcyhvcmlnaW5hbCkiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgdHVtdWx0IGZyb20gJ3R1bXVsdCdcbmltcG9ydCB7IG5vcm1hbGl6ZSB9IGZyb20gJ21pc3NpbmctbWF0aCdcblxuZXhwb3J0IGRlZmF1bHQgY2xhc3MgTGluZSB7XG4gIC8vIElNUE9SVEFOVDogZXF1YXRpb24oKSBzaG91bGQgcmV0dXJuIGEgbm9ybWFsaXplZCB2YWx1ZVxuICBjb25zdHJ1Y3RvciAoZXF1YXRpb24gPSB4ID0+IDAuNSkge1xuICAgIHRoaXMuX2VxdWF0aW9uID0gZXF1YXRpb25cbiAgICB0aGlzLnBvaW50cyA9IFtdXG4gIH1cblxuICBjb21wdXRlICh4LCB7IGZvcmNlID0gZmFsc2UgfSA9IHt9KSB7XG4gICAgaWYgKGZvcmNlIHx8IHRoaXMucG9pbnRzW3hdID09PSB1bmRlZmluZWQpIHtcbiAgICAgIHRoaXMucG9pbnRzW3hdID0gdGhpcy5fZXF1YXRpb24oeClcbiAgICB9XG5cbiAgICByZXR1cm4gdGhpcy5wb2ludHNbeF1cbiAgfVxuXG4gIHN0YXRpYyBwZXJsaW4gKHtcbiAgICBzZWVkID0gbnVsbCxcbiAgICBvY3RhdmVzID0gMixcbiAgICBsYWN1bmFyaXR5ID0gMixcbiAgICBnYWluID0gMC41LFxuICAgIHJlc29sdXRpb24gPSAzMlxuICB9ID0ge30pIHtcbiAgICBjb25zdCBub2lzZSA9IG5ldyB0dW11bHQuUGVybGluMShzZWVkKS50cmFuc2Zvcm0oZnVuY3Rpb24gKHYpIHtcbiAgICAgIHJldHVybiBub3JtYWxpemUodGhpcy5nZW4odiAvIHJlc29sdXRpb24pLCAtMSwgMSlcbiAgICB9KVxuXG4gICAgcmV0dXJuIHggPT4ge1xuICAgICAgbGV0IHkgPSAwXG4gICAgICBsZXQgYW1wbGl0dWRlID0gMC41XG4gICAgICBsZXQgZnJlcXVlbmN5ID0gMS4wXG5cbiAgICAgIGZvciAobGV0IGkgPSAwOyBpIDwgb2N0YXZlczsgaSsrKSB7XG4gICAgICAgIHkgKz0gYW1wbGl0dWRlICogbm9pc2UoZnJlcXVlbmN5ICogeClcbiAgICAgICAgZnJlcXVlbmN5ICo9IGxhY3VuYXJpdHlcbiAgICAgICAgYW1wbGl0dWRlICo9IGdhaW5cbiAgICAgIH1cblxuICAgICAgcmV0dXJuIE1hdGguc2luKHkpXG4gICAgfVxuICB9XG5cbiAgc3RhdGljIHNpbXBsZXggKHtcbiAgICBzZWVkID0gbnVsbCxcbiAgICBvY3RhdmVzID0gMlxuICB9ID0ge30pIHtcbiAgICBjb25zdCBmcmVxdWVuY3kgPSBNYXRoLnBvdygyLCBvY3RhdmVzKVxuICAgIHJldHVybiBuZXcgdHVtdWx0LlNpbXBsZXgxKHNlZWQpLnRyYW5zZm9ybShmdW5jdGlvbiAodikge1xuICAgICAgcmV0dXJuIChNYXRoLnNpbigxIC8gdGhpcy5nZW4odiAvIGZyZXF1ZW5jeSkpICsgMSkgLyAyXG4gICAgfSlcbiAgfVxufVxuIl19
+
+function randomOf (arr, rng) {
+	if ( rng === void 0 ) rng = Math.random;
+
+	return arr[Math.floor(rng() * arr.length)];
+}
+
+
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFycmF5LXJhbmRvbS5qcyhvcmlnaW5hbCkiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsZ0JBQWdCLEdBQUssRUFBQSxHQUFBLEdBQU0sSUFBQSxDQUFLLFFBQWpCLEdBQTRCLEdBQUEsQ0FBSSxJQUFBLENBQUssS0FBTCxDQUFXLEdBQUEsRUFBQSxDQUFBLENBQUEsQ0FBUSxHQUFBLENBQUk7QUFBdEUiLCJmaWxlIjoiYXJyYXktcmFuZG9tLmpzKG9yaWdpbmFsKSIsInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IChhcnIsIHJuZyA9IE1hdGgucmFuZG9tKSA9PiBhcnJbTWF0aC5mbG9vcihybmcoKSAqIGFyci5sZW5ndGgpXVxuIl19
+
+function random(seed) {
+	function _seed(s) {
+		if ((seed = (s|0) % 2147483647) <= 0) {
+			seed += 2147483646;
+		}
+	}
+
+	function _nextInt() {
+		return seed = seed * 48271 % 2147483647;
+	}
+
+	function _nextFloat() {
+		return (_nextInt() - 1) / 2147483646;
+	}
+
+	_seed(seed);
+
+	return {
+		seed: _seed,
+		nextInt: _nextInt,
+		nextFloat: _nextFloat
+	};
+}
+
+var fastRandom = random;
+
+var seed = Date.now();
+var randomizer = fastRandom(seed);
+var prng = {
+    set seed(newSeed) {
+        seed = newSeed;
+        randomizer = fastRandom(seed);
+    },
+    get seed() {
+        return seed;
+    },
+    reset: function () {
+        randomizer = fastRandom(seed);
+    },
+    random: function () { return randomizer.nextFloat(); },
+    randomOf: function (arr) { return randomOf(arr, randomizer.nextFloat); },
+    randomFloat: function (min, max) { return randomizer.nextFloat() * (max - min) + min; },
+    randomInt: function (min, max) { return Math.floor(randomizer.nextFloat() * (max - min) + min); }
+}
+
+
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInBybmcuanMob3JpZ2luYWwpIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sZ0JBQWdCO0FBQ3ZCLE9BQU8saUJBQWlCO0FBRXhCLEdBQUEsQ0FBSSxPQUFPLElBQUEsQ0FBSyxHQUFMO0FBQ1gsR0FBQSxDQUFJLGFBQWEsVUFBQSxDQUFXO0FBRTVCLGVBQWU7SUFFYixHQUFBLENBQUksS0FBTSxTQUFTO1FBQ2pCLElBQUEsQ0FBQSxDQUFBLENBQU87UUFDUCxVQUFBLENBQUEsQ0FBQSxDQUFhLFVBQUEsQ0FBVztJQUM1QixDQUxlLENBQUE7SUFPYixHQUFBLENBQUksT0FBUTtRQUNWLE9BQU87SUFDWCxDQVRlLENBQUE7SUFXYixVQUFPLEdBQU07UUFDWCxVQUFBLENBQUEsQ0FBQSxDQUFhLFVBQUEsQ0FBVztJQUM1QixDQWJlLENBQUE7SUFlYixXQUFRLEdBQU0sVUFBQSxDQUFXLFNBQVgsRUFmRCxDQUFBO0lBZ0JiLFVBQVUsR0FBQSxJQUFPLFdBQUEsQ0FBWSxLQUFLLFVBQUEsQ0FBVyxVQWhCaEMsQ0FBQTtJQWlCYixjQUFjLEdBQUssRUFBQSxLQUFOLEdBQWMsVUFBQSxDQUFXLFNBQVgsRUFBQSxDQUFBLENBQUEsRUFBMEIsR0FBQSxDQUFBLENBQUEsQ0FBTSxJQUFoQyxDQUFBLENBQUEsQ0FBdUMsR0FqQnJELENBQUE7SUFrQmIsWUFBWSxHQUFLLEVBQUEsS0FBTixHQUFjLElBQUEsQ0FBSyxLQUFMLENBQVcsVUFBQSxDQUFXLFNBQVgsRUFBQSxDQUFBLENBQUEsRUFBMEIsR0FBQSxDQUFBLENBQUEsQ0FBTSxJQUFoQyxDQUFBLENBQUEsQ0FBdUM7O0FBeEI3RSIsImZpbGUiOiJwcm5nLmpzKG9yaWdpbmFsKSIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBmYXN0UmFuZG9tIGZyb20gJ2Zhc3QtcmFuZG9tJ1xuaW1wb3J0IGFycmF5UmFuZG9tIGZyb20gJy4uL3V0aWxzL2FycmF5LXJhbmRvbSdcblxubGV0IHNlZWQgPSBEYXRlLm5vdygpXG5sZXQgcmFuZG9taXplciA9IGZhc3RSYW5kb20oc2VlZClcblxuZXhwb3J0IGRlZmF1bHQge1xuICAvLyBOT1RFOiBzZWVkIG11c3QgYmUgYW4gaW50ZWdlclxuICBzZXQgc2VlZCAobmV3U2VlZCkge1xuICAgIHNlZWQgPSBuZXdTZWVkXG4gICAgcmFuZG9taXplciA9IGZhc3RSYW5kb20oc2VlZClcbiAgfSxcblxuICBnZXQgc2VlZCAoKSB7XG4gICAgcmV0dXJuIHNlZWRcbiAgfSxcblxuICByZXNldDogKCkgPT4ge1xuICAgIHJhbmRvbWl6ZXIgPSBmYXN0UmFuZG9tKHNlZWQpXG4gIH0sXG5cbiAgcmFuZG9tOiAoKSA9PiByYW5kb21pemVyLm5leHRGbG9hdCgpLFxuICByYW5kb21PZjogYXJyID0+IGFycmF5UmFuZG9tKGFyciwgcmFuZG9taXplci5uZXh0RmxvYXQpLFxuICByYW5kb21GbG9hdDogKG1pbiwgbWF4KSA9PiByYW5kb21pemVyLm5leHRGbG9hdCgpICogKG1heCAtIG1pbikgKyBtaW4sXG4gIHJhbmRvbUludDogKG1pbiwgbWF4KSA9PiBNYXRoLmZsb29yKHJhbmRvbWl6ZXIubmV4dEZsb2F0KCkgKiAobWF4IC0gbWluKSArIG1pbilcbn1cbiJdfQ==
+
+var root = typeof window === 'undefined' ? global : window;
+var _observers = [];
+var _afterObservers = [];
+var _beforeObservers = [];
+var _rafHandler = null;
+var _lastDate = null;
+var _once = false;
+var _complex = false;
+
+/**
+ * Time elapsed between the previous and the current frame
+ * @type {number}
+ * @static
+ * @category properties
+ */
+var time;
+
+/**
+ * Current delta time
+ * @type {number}
+ * @static
+ * @category properties
+ */
+var dt;
+
+function _frame (timestamp) {
+  // compute deltatime and time
+  if (timestamp === void 0) timestamp = 0;
+  if (_lastDate === null) _lastDate = timestamp;
+  dt = timestamp - _lastDate;
+  time += dt;
+  _lastDate = timestamp;
+  // we request the frame now, allowing to cancel it from observers
+  _rafHandler = _once ? null : root.requestAnimationFrame(_frame);
+  if (_once) _once = false;
+  // call all observers
+  var i;
+  if (_complex) {
+    for (i = 0; i < _beforeObservers.length; i++) _beforeObservers[i](dt);
+    for (i = 0; i < _observers.length; i++) _observers[i](dt);
+    for (i = 0; i < _afterObservers.length; i++) _afterObservers[i](dt);
+  } else {
+    for (i = 0; i < _observers.length; i++) _observers[i](dt);
+  }
+}
+
+function _swapRunner () {
+  _complex = !!(_afterObservers.length > 0 || _beforeObservers.length > 0);
+}
+
+function _addObserver (arr, fn, prepend) {
+  if (!fn || !arr) return false
+  if (~arr.indexOf(fn)) return false
+  prepend = !!prepend;
+  prepend ? arr.unshift(fn) : arr.push(fn);
+  return true
+}
+
+function _removeObserver (arr, fn) {
+  if (!fn) return false
+  var index = arr.indexOf(fn);
+  if (!~index) return false
+  arr.splice(index, 1);
+  return !!(arr.length === 0)
+}
+
+/**
+ * Add a function for execution at the beginning of the raf call
+ * Calling addBefore will not start the raf.
+ * @param {function} fn Function to be called at the start of the raf
+ * @param {function} [prepend=false] Prepend the function to the beginning of the functions list
+ * @static
+ * @category methods
+ */
+function addBefore (fn, prepend) {
+  _addObserver(_beforeObservers, fn, prepend) && _swapRunner();
+}
+
+/**
+ * Add a function for execution at the end of the raf call
+ * Calling addAfter will not start the raf.
+ * @param {function} fn Function to be called at the end of the raf
+ * @param {function} [prepend=false] Prepend the function to the beginning of the functions list
+ * @static
+ * @category methods
+ */
+function addAfter (fn, prepend) {
+  _addObserver(_afterObservers, fn, prepend) && _swapRunner();
+}
+
+/**
+ * Add a function for execution on each frame
+ * @param {function} fn Function to be called
+ * @param {function} [prepend=false] Prepend the function to the beginning of the functions list
+ * @static
+ * @category methods
+ */
+function add (fn, prepend) {
+  _addObserver(_observers, fn, prepend) && start();
+}
+
+/**
+ * Remove a function for execution at the beginning of the raf call
+ * Calling removeBefore will not stop the raf.
+ * @param {function} fn Function to remove from the raf
+ * @static
+ * @category methods
+ */
+function removeBefore (fn) {
+  _removeObserver(_beforeObservers, fn) && _swapRunner();
+}
+
+/**
+ * Remove a function for execution at the end of the raf call
+ * Calling removeAfter will not stop the raf.
+ * @param {function} fn Function to remove from the raf
+ * @param {function} [prepend=false] Prepend the function to the beginning of the functions list
+ * @static
+ * @category methods
+ */
+function removeAfter (fn, prepend) {
+  _removeObserver(_afterObservers, fn) && _swapRunner();
+}
+
+/**
+ * Remove a function for execution on each frame
+ * @param {function} fn Function to remove from the raf
+ * @static
+ * @category methods
+ */
+function remove (fn) {
+  _removeObserver(_observers, fn) && stop();
+}
+
+/**
+ * Force start the raf. You usually don't need to use it.
+ * @param {boolean} [instant=false] Directly make a raf call without waiting for the next frame (default false)
+ * @static
+ * @category methods
+ */
+function start (instant) {
+  _once = false;
+  if (_rafHandler) return
+  instant = !!instant;
+  _lastDate = null;
+  if (instant) _frame();
+  else _rafHandler = root.requestAnimationFrame(_frame);
+}
+
+/**
+ * Request once the raf. Will not be executed if the raf is already running.
+ * @static
+ * @category methods
+ */
+function requestOnce () {
+  if (_rafHandler) return
+  _once = true;
+  _lastDate = null;
+  _rafHandler = root.requestAnimationFrame(_frame);
+}
+
+/**
+ * Force stop the raf. You usually don't need to use it.
+ * @static
+ * @category methods
+ */
+function stop () {
+  if (!_rafHandler) return
+  root.cancelAnimationFrame(_rafHandler);
+  _rafHandler = null;
+}
+
+/**
+ * Remove all observers from the raf singleton and stop the raf if it's running. Reset time.
+ * @static
+ * @category methods
+ */
+function dispose () {
+  stop();
+  _observers.length = 0;
+  _afterObservers.length = 0;
+  _beforeObservers.length = 0;
+  _complex = false;
+  _lastDate = null;
+  time = 0;
+  dt = 0;
+}
+
+var raf = {
+  add: add,
+  addAfter: addAfter,
+  addBefore: addBefore,
+  remove: remove,
+  removeAfter: removeAfter,
+  removeBefore: removeBefore,
+  start: start,
+  stop: stop,
+  time: time,
+  dt: dt,
+  requestOnce: requestOnce,
+  dispose: dispose
+}
+
+var erode = function (landscape, ref) {
+    if ( ref === void 0 ) ref = {};
+    var step = ref.step; if ( step === void 0 ) step = 24;
+    var snapToGrid = ref.snapToGrid; if ( snapToGrid === void 0 ) snapToGrid = true;
+    var autoplay = ref.autoplay; if ( autoplay === void 0 ) autoplay = true;
+
+    if (landscape.ctx.isSVG) {
+        throw new Error('Eroding canvas only works on non SVG context for now');
+    }
+    var shouldUpdate = autoplay;
+    var buffer = landscape.copy();
+    var line = new Line(function (x) { return Line.perlin({
+        seed: 1,
+        octaves: 1,
+        resolution: 32,
+        lacunarity: 2,
+        gain: 0.5
+    })((x + line.frameCount) / 10) * step * 10; });
+    line.frameCount = 0;
+    raf.add(update);
+    return {
+        play: function () {
+            shouldUpdate = true;
+        },
+        pause: function () {
+            shouldUpdate = false;
+        },
+        clear: function () {
+            raf.remove(update);
+        }
+    };
+    function update(dt) {
+        if (!shouldUpdate) 
+            { return; }
+        line.frameCount += 1;
+        landscape.background(landscape.backgroundColor);
+        for (var x = 0;x < landscape.width; x += step) {
+            var v = line.compute(x, {
+                force: true
+            });
+            var y = snapToGrid ? roundTo(v, step) : v;
+            landscape.ctx.drawImage(buffer, x, 0, step, buffer.height, x, y, step, buffer.height);
+        }
+    }
+    
+};
+
+/*
+ * anime.js v3.0.1
+ * (c) 2019 Julian Garnier
+ * Released under the MIT license
+ * animejs.com
+ */
+
+// Defaults
+
+var defaultInstanceSettings = {
+  update: null,
+  begin: null,
+  loopBegin: null,
+  changeBegin: null,
+  change: null,
+  changeComplete: null,
+  loopComplete: null,
+  complete: null,
+  loop: 1,
+  direction: 'normal',
+  autoplay: true,
+  timelineOffset: 0
+};
+
+var defaultTweenSettings = {
+  duration: 1000,
+  delay: 0,
+  endDelay: 0,
+  easing: 'easeOutElastic(1, .5)',
+  round: 0
+};
+
+var validTransforms = ['translateX', 'translateY', 'translateZ', 'rotate', 'rotateX', 'rotateY', 'rotateZ', 'scale', 'scaleX', 'scaleY', 'scaleZ', 'skew', 'skewX', 'skewY', 'perspective'];
+
+// Caching
+
+var cache = {
+  CSS: {},
+  springs: {}
+};
+
+// Utils
+
+function minMax(val, min, max) {
+  return Math.min(Math.max(val, min), max);
+}
+
+function stringContains(str, text) {
+  return str.indexOf(text) > -1;
+}
+
+function applyArguments(func, args) {
+  return func.apply(null, args);
+}
+
+var is = {
+  arr: function (a) { return Array.isArray(a); },
+  obj: function (a) { return stringContains(Object.prototype.toString.call(a), 'Object'); },
+  pth: function (a) { return is.obj(a) && a.hasOwnProperty('totalLength'); },
+  svg: function (a) { return a instanceof SVGElement; },
+  inp: function (a) { return a instanceof HTMLInputElement; },
+  dom: function (a) { return a.nodeType || is.svg(a); },
+  str: function (a) { return typeof a === 'string'; },
+  fnc: function (a) { return typeof a === 'function'; },
+  und: function (a) { return typeof a === 'undefined'; },
+  hex: function (a) { return /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(a); },
+  rgb: function (a) { return /^rgb/.test(a); },
+  hsl: function (a) { return /^hsl/.test(a); },
+  col: function (a) { return (is.hex(a) || is.rgb(a) || is.hsl(a)); },
+  key: function (a) { return !defaultInstanceSettings.hasOwnProperty(a) && !defaultTweenSettings.hasOwnProperty(a) && a !== 'targets' && a !== 'keyframes'; }
+};
+
+// Easings
+
+function parseEasingParameters(string) {
+  var match = /\(([^)]+)\)/.exec(string);
+  return match ? match[1].split(',').map(function (p) { return parseFloat(p); }) : [];
+}
+
+// Spring solver inspired by Webkit Copyright © 2016 Apple Inc. All rights reserved. https://webkit.org/demos/spring/spring.js
+
+function spring(string, duration) {
+
+  var params = parseEasingParameters(string);
+  var mass = minMax(is.und(params[0]) ? 1 : params[0], .1, 100);
+  var stiffness = minMax(is.und(params[1]) ? 100 : params[1], .1, 100);
+  var damping = minMax(is.und(params[2]) ? 10 : params[2], .1, 100);
+  var velocity =  minMax(is.und(params[3]) ? 0 : params[3], .1, 100);
+  var w0 = Math.sqrt(stiffness / mass);
+  var zeta = damping / (2 * Math.sqrt(stiffness * mass));
+  var wd = zeta < 1 ? w0 * Math.sqrt(1 - zeta * zeta) : 0;
+  var a = 1;
+  var b = zeta < 1 ? (zeta * w0 + -velocity) / wd : -velocity + w0;
+
+  function solver(t) {
+    var progress = duration ? (duration * t) / 1000 : t;
+    if (zeta < 1) {
+      progress = Math.exp(-progress * zeta * w0) * (a * Math.cos(wd * progress) + b * Math.sin(wd * progress));
+    } else {
+      progress = (a + b * progress) * Math.exp(-progress * w0);
+    }
+    if (t === 0 || t === 1) { return t; }
+    return 1 - progress;
+  }
+
+  function getDuration() {
+    var cached = cache.springs[string];
+    if (cached) { return cached; }
+    var frame = 1/6;
+    var elapsed = 0;
+    var rest = 0;
+    while(true) {
+      elapsed += frame;
+      if (solver(elapsed) === 1) {
+        rest++;
+        if (rest >= 16) { break; }
+      } else {
+        rest = 0;
+      }
+    }
+    var duration = elapsed * frame * 1000;
+    cache.springs[string] = duration;
+    return duration;
+  }
+
+  return duration ? solver : getDuration;
+
+}
+
+// Elastic easing adapted from jQueryUI http://api.jqueryui.com/easings/
+
+function elastic(amplitude, period) {
+  if ( amplitude === void 0 ) amplitude = 1;
+  if ( period === void 0 ) period = .5;
+
+  var a = minMax(amplitude, 1, 10);
+  var p = minMax(period, .1, 2);
+  return function (t) {
+    return (t === 0 || t === 1) ? t : 
+      -a * Math.pow(2, 10 * (t - 1)) * Math.sin((((t - 1) - (p / (Math.PI * 2) * Math.asin(1 / a))) * (Math.PI * 2)) / p);
+  }
+}
+
+// Basic steps easing implementation https://developer.mozilla.org/fr/docs/Web/CSS/transition-timing-function
+
+function steps$1(steps) {
+  if ( steps === void 0 ) steps = 10;
+
+  return function (t) { return Math.round(t * steps) * (1 / steps); };
+}
+
+// BezierEasing https://github.com/gre/bezier-easing
+
+var bezier = (function () {
+
+  var kSplineTableSize = 11;
+  var kSampleStepSize = 1.0 / (kSplineTableSize - 1.0);
+
+  function A(aA1, aA2) { return 1.0 - 3.0 * aA2 + 3.0 * aA1 }
+  function B(aA1, aA2) { return 3.0 * aA2 - 6.0 * aA1 }
+  function C(aA1)      { return 3.0 * aA1 }
+
+  function calcBezier(aT, aA1, aA2) { return ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT }
+  function getSlope(aT, aA1, aA2) { return 3.0 * A(aA1, aA2) * aT * aT + 2.0 * B(aA1, aA2) * aT + C(aA1) }
+
+  function binarySubdivide(aX, aA, aB, mX1, mX2) {
+    var currentX, currentT, i = 0;
+    do {
+      currentT = aA + (aB - aA) / 2.0;
+      currentX = calcBezier(currentT, mX1, mX2) - aX;
+      if (currentX > 0.0) { aB = currentT; } else { aA = currentT; }
+    } while (Math.abs(currentX) > 0.0000001 && ++i < 10);
+    return currentT;
+  }
+
+  function newtonRaphsonIterate(aX, aGuessT, mX1, mX2) {
+    for (var i = 0; i < 4; ++i) {
+      var currentSlope = getSlope(aGuessT, mX1, mX2);
+      if (currentSlope === 0.0) { return aGuessT; }
+      var currentX = calcBezier(aGuessT, mX1, mX2) - aX;
+      aGuessT -= currentX / currentSlope;
+    }
+    return aGuessT;
+  }
+
+  function bezier(mX1, mY1, mX2, mY2) {
+
+    if (!(0 <= mX1 && mX1 <= 1 && 0 <= mX2 && mX2 <= 1)) { return; }
+    var sampleValues = new Float32Array(kSplineTableSize);
+
+    if (mX1 !== mY1 || mX2 !== mY2) {
+      for (var i = 0; i < kSplineTableSize; ++i) {
+        sampleValues[i] = calcBezier(i * kSampleStepSize, mX1, mX2);
+      }
+    }
+
+    function getTForX(aX) {
+
+      var intervalStart = 0;
+      var currentSample = 1;
+      var lastSample = kSplineTableSize - 1;
+
+      for (; currentSample !== lastSample && sampleValues[currentSample] <= aX; ++currentSample) {
+        intervalStart += kSampleStepSize;
+      }
+
+      --currentSample;
+
+      var dist = (aX - sampleValues[currentSample]) / (sampleValues[currentSample + 1] - sampleValues[currentSample]);
+      var guessForT = intervalStart + dist * kSampleStepSize;
+      var initialSlope = getSlope(guessForT, mX1, mX2);
+
+      if (initialSlope >= 0.001) {
+        return newtonRaphsonIterate(aX, guessForT, mX1, mX2);
+      } else if (initialSlope === 0.0) {
+        return guessForT;
+      } else {
+        return binarySubdivide(aX, intervalStart, intervalStart + kSampleStepSize, mX1, mX2);
+      }
+
+    }
+
+    return function (x) {
+      if (mX1 === mY1 && mX2 === mY2) { return x; }
+      if (x === 0 || x === 1) { return x; }
+      return calcBezier(getTForX(x), mY1, mY2);
+    }
+
+  }
+
+  return bezier;
+
+})();
+
+var penner = (function () {
+
+  var names = ['Quad', 'Cubic', 'Quart', 'Quint', 'Sine', 'Expo', 'Circ', 'Back', 'Elastic'];
+
+  // Approximated Penner equations http://matthewlein.com/ceaser/
+
+  var curves = {
+    In: [
+      [0.550, 0.085, 0.680, 0.530], /* inQuad */
+      [0.550, 0.055, 0.675, 0.190], /* inCubic */
+      [0.895, 0.030, 0.685, 0.220], /* inQuart */
+      [0.755, 0.050, 0.855, 0.060], /* inQuint */
+      [0.470, 0.000, 0.745, 0.715], /* inSine */
+      [0.950, 0.050, 0.795, 0.035], /* inExpo */
+      [0.600, 0.040, 0.980, 0.335], /* inCirc */
+      [0.600,-0.280, 0.735, 0.045], /* inBack */
+      elastic /* inElastic */
+    ],
+    Out: [
+      [0.250, 0.460, 0.450, 0.940], /* outQuad */
+      [0.215, 0.610, 0.355, 1.000], /* outCubic */
+      [0.165, 0.840, 0.440, 1.000], /* outQuart */
+      [0.230, 1.000, 0.320, 1.000], /* outQuint */
+      [0.390, 0.575, 0.565, 1.000], /* outSine */
+      [0.190, 1.000, 0.220, 1.000], /* outExpo */
+      [0.075, 0.820, 0.165, 1.000], /* outCirc */
+      [0.175, 0.885, 0.320, 1.275], /* outBack */
+      function (a, p) { return function (t) { return 1 - elastic(a, p)(1 - t); }; } /* outElastic */
+    ],
+    InOut: [
+      [0.455, 0.030, 0.515, 0.955], /* inOutQuad */
+      [0.645, 0.045, 0.355, 1.000], /* inOutCubic */
+      [0.770, 0.000, 0.175, 1.000], /* inOutQuart */
+      [0.860, 0.000, 0.070, 1.000], /* inOutQuint */
+      [0.445, 0.050, 0.550, 0.950], /* inOutSine */
+      [1.000, 0.000, 0.000, 1.000], /* inOutExpo */
+      [0.785, 0.135, 0.150, 0.860], /* inOutCirc */
+      [0.680,-0.550, 0.265, 1.550], /* inOutBack */
+      function (a, p) { return function (t) { return t < .5 ? elastic(a, p)(t * 2) / 2 : 1 - elastic(a, p)(t * -2 + 2) / 2; }; } /* inOutElastic */
+    ]
+  };
+
+  var eases = { 
+    linear: [0.250, 0.250, 0.750, 0.750]
+  };
+
+  var loop = function ( coords ) {
+    curves[coords].forEach(function (ease, i) {
+      eases['ease'+coords+names[i]] = ease;
+    });
+  };
+
+  for (var coords in curves) loop( coords );
+
+  return eases;
+
+})();
+
+function parseEasings(easing, duration) {
+  if (is.fnc(easing)) { return easing; }
+  var name = easing.split('(')[0];
+  var ease = penner[name];
+  var args = parseEasingParameters(easing);
+  switch (name) {
+    case 'spring' : return spring(easing, duration);
+    case 'cubicBezier' : return applyArguments(bezier, args);
+    case 'steps' : return applyArguments(steps$1, args);
+    default : return is.fnc(ease) ? applyArguments(ease, args) : applyArguments(bezier, ease);
+  }
+}
+
+// Strings
+
+function selectString(str) {
+  try {
+    var nodes = document.querySelectorAll(str);
+    return nodes;
+  } catch(e) {
+    return;
+  }
+}
+
+// Arrays
+
+function filterArray(arr, callback) {
+  var len = arr.length;
+  var thisArg = arguments.length >= 2 ? arguments[1] : void 0;
+  var result = [];
+  for (var i = 0; i < len; i++) {
+    if (i in arr) {
+      var val = arr[i];
+      if (callback.call(thisArg, val, i, arr)) {
+        result.push(val);
+      }
+    }
+  }
+  return result;
+}
+
+function flattenArray(arr) {
+  return arr.reduce(function (a, b) { return a.concat(is.arr(b) ? flattenArray(b) : b); }, []);
+}
+
+function toArray(o) {
+  if (is.arr(o)) { return o; }
+  if (is.str(o)) { o = selectString(o) || o; }
+  if (o instanceof NodeList || o instanceof HTMLCollection) { return [].slice.call(o); }
+  return [o];
+}
+
+function arrayContains(arr, val) {
+  return arr.some(function (a) { return a === val; });
+}
+
+// Objects
+
+function cloneObject(o) {
+  var clone = {};
+  for (var p in o) { clone[p] = o[p]; }
+  return clone;
+}
+
+function replaceObjectProps(o1, o2) {
+  var o = cloneObject(o1);
+  for (var p in o1) { o[p] = o2.hasOwnProperty(p) ? o2[p] : o1[p]; }
+  return o;
+}
+
+function mergeObjects(o1, o2) {
+  var o = cloneObject(o1);
+  for (var p in o2) { o[p] = is.und(o1[p]) ? o2[p] : o1[p]; }
+  return o;
+}
+
+// Colors
+
+function rgbToRgba(rgbValue) {
+  var rgb = /rgb\((\d+,\s*[\d]+,\s*[\d]+)\)/g.exec(rgbValue);
+  return rgb ? ("rgba(" + (rgb[1]) + ",1)") : rgbValue;
+}
+
+function hexToRgba(hexValue) {
+  var rgx = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  var hex = hexValue.replace(rgx, function (m, r, g, b) { return r + r + g + g + b + b; } );
+  var rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  var r = parseInt(rgb[1], 16);
+  var g = parseInt(rgb[2], 16);
+  var b = parseInt(rgb[3], 16);
+  return ("rgba(" + r + "," + g + "," + b + ",1)");
+}
+
+function hslToRgba(hslValue) {
+  var hsl = /hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/g.exec(hslValue) || /hsla\((\d+),\s*([\d.]+)%,\s*([\d.]+)%,\s*([\d.]+)\)/g.exec(hslValue);
+  var h = parseInt(hsl[1], 10) / 360;
+  var s = parseInt(hsl[2], 10) / 100;
+  var l = parseInt(hsl[3], 10) / 100;
+  var a = hsl[4] || 1;
+  function hue2rgb(p, q, t) {
+    if (t < 0) { t += 1; }
+    if (t > 1) { t -= 1; }
+    if (t < 1/6) { return p + (q - p) * 6 * t; }
+    if (t < 1/2) { return q; }
+    if (t < 2/3) { return p + (q - p) * (2/3 - t) * 6; }
+    return p;
+  }
+  var r, g, b;
+  if (s == 0) {
+    r = g = b = l;
+  } else {
+    var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    var p = 2 * l - q;
+    r = hue2rgb(p, q, h + 1/3);
+    g = hue2rgb(p, q, h);
+    b = hue2rgb(p, q, h - 1/3);
+  }
+  return ("rgba(" + (r * 255) + "," + (g * 255) + "," + (b * 255) + "," + a + ")");
+}
+
+function colorToRgb(val) {
+  if (is.rgb(val)) { return rgbToRgba(val); }
+  if (is.hex(val)) { return hexToRgba(val); }
+  if (is.hsl(val)) { return hslToRgba(val); }
+}
+
+// Units
+
+function getUnit(val) {
+  var split = /([\+\-]?[0-9#\.]+)(%|px|pt|em|rem|in|cm|mm|ex|ch|pc|vw|vh|vmin|vmax|deg|rad|turn)?$/.exec(val);
+  if (split) { return split[2]; }
+}
+
+function getTransformUnit(propName) {
+  if (stringContains(propName, 'translate') || propName === 'perspective') { return 'px'; }
+  if (stringContains(propName, 'rotate') || stringContains(propName, 'skew')) { return 'deg'; }
+}
+
+// Values
+
+function getFunctionValue(val, animatable) {
+  if (!is.fnc(val)) { return val; }
+  return val(animatable.target, animatable.id, animatable.total);
+}
+
+function getAttribute(el, prop) {
+  return el.getAttribute(prop);
+}
+
+function convertPxToUnit(el, value, unit) {
+  var valueUnit = getUnit(value);
+  if (arrayContains([unit, 'deg', 'rad', 'turn'], valueUnit)) { return value; }
+  var cached = cache.CSS[value + unit];
+  if (!is.und(cached)) { return cached; }
+  var baseline = 100;
+  var tempEl = document.createElement(el.tagName);
+  var parentEl = (el.parentNode && (el.parentNode !== document)) ? el.parentNode : document.body;
+  parentEl.appendChild(tempEl);
+  tempEl.style.position = 'absolute';
+  tempEl.style.width = baseline + unit;
+  var factor = baseline / tempEl.offsetWidth;
+  parentEl.removeChild(tempEl);
+  var convertedUnit = factor * parseFloat(value);
+  cache.CSS[value + unit] = convertedUnit;
+  return convertedUnit;
+}
+
+function getCSSValue(el, prop, unit) {
+  if (prop in el.style) {
+    var uppercasePropName = prop.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+    var value = el.style[prop] || getComputedStyle(el).getPropertyValue(uppercasePropName) || '0';
+    return unit ? convertPxToUnit(el, value, unit) : value;
+  }
+}
+
+function getAnimationType(el, prop) {
+  if (is.dom(el) && !is.inp(el) && (getAttribute(el, prop) || (is.svg(el) && el[prop]))) { return 'attribute'; }
+  if (is.dom(el) && arrayContains(validTransforms, prop)) { return 'transform'; }
+  if (is.dom(el) && (prop !== 'transform' && getCSSValue(el, prop))) { return 'css'; }
+  if (el[prop] != null) { return 'object'; }
+}
+
+function getElementTransforms(el) {
+  if (!is.dom(el)) { return; }
+  var str = el.style.transform || '';
+  var reg  = /(\w+)\(([^)]*)\)/g;
+  var transforms = new Map();
+  var m; while (m = reg.exec(str)) { transforms.set(m[1], m[2]); }
+  return transforms;
+}
+
+function getTransformValue(el, propName, animatable, unit) {
+  var defaultVal = stringContains(propName, 'scale') ? 1 : 0 + getTransformUnit(propName);
+  var value = getElementTransforms(el).get(propName) || defaultVal;
+  if (animatable) {
+    animatable.transforms.list.set(propName, value);
+    animatable.transforms['last'] = propName;
+  }
+  return unit ? convertPxToUnit(el, value, unit) : value;
+}
+
+function getOriginalTargetValue(target, propName, unit, animatable) {
+  switch (getAnimationType(target, propName)) {
+    case 'transform': return getTransformValue(target, propName, animatable, unit);
+    case 'css': return getCSSValue(target, propName, unit);
+    case 'attribute': return getAttribute(target, propName);
+    default: return target[propName] || 0;
+  }
+}
+
+function getRelativeValue(to, from) {
+  var operator = /^(\*=|\+=|-=)/.exec(to);
+  if (!operator) { return to; }
+  var u = getUnit(to) || 0;
+  var x = parseFloat(from);
+  var y = parseFloat(to.replace(operator[0], ''));
+  switch (operator[0][0]) {
+    case '+': return x + y + u;
+    case '-': return x - y + u;
+    case '*': return x * y + u;
+  }
+}
+
+function validateValue(val, unit) {
+  if (is.col(val)) { return colorToRgb(val); }
+  var originalUnit = getUnit(val);
+  var unitLess = originalUnit ? val.substr(0, val.length - originalUnit.length) : val;
+  return unit && !/\s/g.test(val) ? unitLess + unit : unitLess;
+}
+
+// getTotalLength() equivalent for circle, rect, polyline, polygon and line shapes
+// adapted from https://gist.github.com/SebLambla/3e0550c496c236709744
+
+function getDistance(p1, p2) {
+  return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+}
+
+function getCircleLength(el) {
+  return Math.PI * 2 * getAttribute(el, 'r');
+}
+
+function getRectLength(el) {
+  return (getAttribute(el, 'width') * 2) + (getAttribute(el, 'height') * 2);
+}
+
+function getLineLength(el) {
+  return getDistance(
+    {x: getAttribute(el, 'x1'), y: getAttribute(el, 'y1')}, 
+    {x: getAttribute(el, 'x2'), y: getAttribute(el, 'y2')}
+  );
+}
+
+function getPolylineLength(el) {
+  var points = el.points;
+  var totalLength = 0;
+  var previousPos;
+  for (var i = 0 ; i < points.numberOfItems; i++) {
+    var currentPos = points.getItem(i);
+    if (i > 0) { totalLength += getDistance(previousPos, currentPos); }
+    previousPos = currentPos;
+  }
+  return totalLength;
+}
+
+function getPolygonLength(el) {
+  var points = el.points;
+  return getPolylineLength(el) + getDistance(points.getItem(points.numberOfItems - 1), points.getItem(0));
+}
+
+// Path animation
+
+function getTotalLength(el) {
+  if (el.getTotalLength) { return el.getTotalLength(); }
+  switch(el.tagName.toLowerCase()) {
+    case 'circle': return getCircleLength(el);
+    case 'rect': return getRectLength(el);
+    case 'line': return getLineLength(el);
+    case 'polyline': return getPolylineLength(el);
+    case 'polygon': return getPolygonLength(el);
+  }
+}
+
+function setDashoffset(el) {
+  var pathLength = getTotalLength(el);
+  el.setAttribute('stroke-dasharray', pathLength);
+  return pathLength;
+}
+
+// Motion path
+
+function getParentSvgEl(el) {
+  var parentEl = el.parentNode;
+  while (is.svg(parentEl)) {
+    parentEl = parentEl.parentNode;
+    if (!is.svg(parentEl.parentNode)) { break; }
+  }
+  return parentEl;
+}
+
+function getParentSvg(pathEl, svgData) {
+  var svg = svgData || {};
+  var parentSvgEl = svg.el || getParentSvgEl(pathEl);
+  var rect = parentSvgEl.getBoundingClientRect();
+  var viewBoxAttr = getAttribute(parentSvgEl, 'viewBox');
+  var width = rect.width;
+  var height = rect.height;
+  var viewBox = svg.viewBox || (viewBoxAttr ? viewBoxAttr.split(' ') : [0, 0, width, height]);
+  return {
+    el: parentSvgEl,
+    viewBox: viewBox,
+    x: viewBox[0] / 1,
+    y: viewBox[1] / 1,
+    w: width / viewBox[2],
+    h: height / viewBox[3]
+  }
+}
+
+function getPath(path, percent) {
+  var pathEl = is.str(path) ? selectString(path)[0] : path;
+  var p = percent || 100;
+  return function(property) {
+    return {
+      property: property,
+      el: pathEl,
+      svg: getParentSvg(pathEl),
+      totalLength: getTotalLength(pathEl) * (p / 100)
+    }
+  }
+}
+
+function getPathProgress(path, progress) {
+  function point(offset) {
+    if ( offset === void 0 ) offset = 0;
+
+    var l = progress + offset >= 1 ? progress + offset : 0;
+    return path.el.getPointAtLength(l);
+  }
+  var svg = getParentSvg(path.el, path.svg);
+  var p = point();
+  var p0 = point(-1);
+  var p1 = point(+1);
+  switch (path.property) {
+    case 'x': return (p.x - svg.x) * svg.w;
+    case 'y': return (p.y - svg.y) * svg.h;
+    case 'angle': return Math.atan2(p1.y - p0.y, p1.x - p0.x) * 180 / Math.PI;
+  }
+}
+
+// Decompose value
+
+function decomposeValue(val, unit) {
+  var rgx = /-?\d*\.?\d+/g;
+  var value = validateValue((is.pth(val) ? val.totalLength : val), unit) + '';
+  return {
+    original: value,
+    numbers: value.match(rgx) ? value.match(rgx).map(Number) : [0],
+    strings: (is.str(val) || unit) ? value.split(rgx) : []
+  }
+}
+
+// Animatables
+
+function parseTargets(targets) {
+  var targetsArray = targets ? (flattenArray(is.arr(targets) ? targets.map(toArray) : toArray(targets))) : [];
+  return filterArray(targetsArray, function (item, pos, self) { return self.indexOf(item) === pos; });
+}
+
+function getAnimatables(targets) {
+  var parsed = parseTargets(targets);
+  return parsed.map(function (t, i) {
+    return {target: t, id: i, total: parsed.length, transforms: { list: getElementTransforms(t) } };
+  });
+}
+
+// Properties
+
+function normalizePropertyTweens(prop, tweenSettings) {
+  var settings = cloneObject(tweenSettings);
+  // Override duration if easing is a spring
+  if (/^spring/.test(settings.easing)) { settings.duration = spring(settings.easing); }
+  if (is.arr(prop)) {
+    var l = prop.length;
+    var isFromTo = (l === 2 && !is.obj(prop[0]));
+    if (!isFromTo) {
+      // Duration divided by the number of tweens
+      if (!is.fnc(tweenSettings.duration)) { settings.duration = tweenSettings.duration / l; }
+    } else {
+      // Transform [from, to] values shorthand to a valid tween value
+      prop = {value: prop};
+    }
+  }
+  var propArray = is.arr(prop) ? prop : [prop];
+  return propArray.map(function (v, i) {
+    var obj = (is.obj(v) && !is.pth(v)) ? v : {value: v};
+    // Default delay value should only be applied to the first tween
+    if (is.und(obj.delay)) { obj.delay = !i ? tweenSettings.delay : 0; }
+    // Default endDelay value should only be applied to the last tween
+    if (is.und(obj.endDelay)) { obj.endDelay = i === propArray.length - 1 ? tweenSettings.endDelay : 0; }
+    return obj;
+  }).map(function (k) { return mergeObjects(k, settings); });
+}
+
+
+function flattenKeyframes(keyframes) {
+  var propertyNames = filterArray(flattenArray(keyframes.map(function (key) { return Object.keys(key); })), function (p) { return is.key(p); })
+  .reduce(function (a,b) { if (a.indexOf(b) < 0) { a.push(b); } return a; }, []);
+  var properties = {};
+  var loop = function ( i ) {
+    var propName = propertyNames[i];
+    properties[propName] = keyframes.map(function (key) {
+      var newKey = {};
+      for (var p in key) {
+        if (is.key(p)) {
+          if (p == propName) { newKey.value = key[p]; }
+        } else {
+          newKey[p] = key[p];
+        }
+      }
+      return newKey;
+    });
+  };
+
+  for (var i = 0; i < propertyNames.length; i++) loop( i );
+  return properties;
+}
+
+function getProperties(tweenSettings, params) {
+  var properties = [];
+  var keyframes = params.keyframes;
+  if (keyframes) { params = mergeObjects(flattenKeyframes(keyframes), params); }
+  for (var p in params) {
+    if (is.key(p)) {
+      properties.push({
+        name: p,
+        tweens: normalizePropertyTweens(params[p], tweenSettings)
+      });
+    }
+  }
+  return properties;
+}
+
+// Tweens
+
+function normalizeTweenValues(tween, animatable) {
+  var t = {};
+  for (var p in tween) {
+    var value = getFunctionValue(tween[p], animatable);
+    if (is.arr(value)) {
+      value = value.map(function (v) { return getFunctionValue(v, animatable); });
+      if (value.length === 1) { value = value[0]; }
+    }
+    t[p] = value;
+  }
+  t.duration = parseFloat(t.duration);
+  t.delay = parseFloat(t.delay);
+  return t;
+}
+
+function normalizeTweens(prop, animatable) {
+  var previousTween;
+  return prop.tweens.map(function (t) {
+    var tween = normalizeTweenValues(t, animatable);
+    var tweenValue = tween.value;
+    var to = is.arr(tweenValue) ? tweenValue[1] : tweenValue;
+    var toUnit = getUnit(to);
+    var originalValue = getOriginalTargetValue(animatable.target, prop.name, toUnit, animatable);
+    var previousValue = previousTween ? previousTween.to.original : originalValue;
+    var from = is.arr(tweenValue) ? tweenValue[0] : previousValue;
+    var fromUnit = getUnit(from) || getUnit(originalValue);
+    var unit = toUnit || fromUnit;
+    if (is.und(to)) { to = previousValue; }
+    tween.from = decomposeValue(from, unit);
+    tween.to = decomposeValue(getRelativeValue(to, from), unit);
+    tween.start = previousTween ? previousTween.end : 0;
+    tween.end = tween.start + tween.delay + tween.duration + tween.endDelay;
+    tween.easing = parseEasings(tween.easing, tween.duration);
+    tween.isPath = is.pth(tweenValue);
+    tween.isColor = is.col(tween.from.original);
+    if (tween.isColor) { tween.round = 1; }
+    previousTween = tween;
+    return tween;
+  });
+}
+
+// Tween progress
+
+var setProgressValue = {
+  css: function (t, p, v) { return t.style[p] = v; },
+  attribute: function (t, p, v) { return t.setAttribute(p, v); },
+  object: function (t, p, v) { return t[p] = v; },
+  transform: function (t, p, v, transforms, manual) {
+    transforms.list.set(p, v);
+    if (p === transforms.last || manual) {
+      var str = '';
+      transforms.list.forEach(function (value, prop) { str += prop + "(" + value + ") "; });
+      t.style.transform = str;
+    }
+  }
+};
+
+// Set Value helper
+
+function setTargetsValue(targets, properties) {
+  var animatables = getAnimatables(targets);
+  animatables.forEach(function (animatable) {
+    for (var property in properties) {
+      var value = getFunctionValue(properties[property], animatable);
+      var target = animatable.target;
+      var valueUnit = getUnit(value);
+      var originalValue = getOriginalTargetValue(target, property, valueUnit, animatable);
+      var unit = valueUnit || getUnit(originalValue);
+      var to = getRelativeValue(validateValue(value, unit), originalValue);
+      var animType = getAnimationType(target, property);
+      setProgressValue[animType](target, property, to, animatable.transforms, true);
+    }
+  });
+}
+
+// Animations
+
+function createAnimation(animatable, prop) {
+  var animType = getAnimationType(animatable.target, prop.name);
+  if (animType) {
+    var tweens = normalizeTweens(prop, animatable);
+    var lastTween = tweens[tweens.length - 1];
+    return {
+      type: animType,
+      property: prop.name,
+      animatable: animatable,
+      tweens: tweens,
+      duration: lastTween.end,
+      delay: tweens[0].delay,
+      endDelay: lastTween.endDelay
+    }
+  }
+}
+
+function getAnimations(animatables, properties) {
+  return filterArray(flattenArray(animatables.map(function (animatable) {
+    return properties.map(function (prop) {
+      return createAnimation(animatable, prop);
+    });
+  })), function (a) { return !is.und(a); });
+}
+
+// Create Instance
+
+function getInstanceTimings(animations, tweenSettings) {
+  var animLength = animations.length;
+  var getTlOffset = function (anim) { return anim.timelineOffset ? anim.timelineOffset : 0; };
+  var timings = {};
+  timings.duration = animLength ? Math.max.apply(Math, animations.map(function (anim) { return getTlOffset(anim) + anim.duration; })) : tweenSettings.duration;
+  timings.delay = animLength ? Math.min.apply(Math, animations.map(function (anim) { return getTlOffset(anim) + anim.delay; })) : tweenSettings.delay;
+  timings.endDelay = animLength ? timings.duration - Math.max.apply(Math, animations.map(function (anim) { return getTlOffset(anim) + anim.duration - anim.endDelay; })) : tweenSettings.endDelay;
+  return timings;
+}
+
+var instanceID = 0;
+
+function createNewInstance(params) {
+  var instanceSettings = replaceObjectProps(defaultInstanceSettings, params);
+  var tweenSettings = replaceObjectProps(defaultTweenSettings, params);
+  var properties = getProperties(tweenSettings, params);
+  var animatables = getAnimatables(params.targets);
+  var animations = getAnimations(animatables, properties);
+  var timings = getInstanceTimings(animations, tweenSettings);
+  var id = instanceID;
+  instanceID++;
+  return mergeObjects(instanceSettings, {
+    id: id,
+    children: [],
+    animatables: animatables,
+    animations: animations,
+    duration: timings.duration,
+    delay: timings.delay,
+    endDelay: timings.endDelay
+  });
+}
+
+// Core
+
+var activeInstances = [];
+var pausedInstances = [];
+var raf$2;
+
+var engine = (function () {
+  function play() { 
+    raf$2 = requestAnimationFrame(step);
+  }
+  function step(t) {
+    var activeInstancesLength = activeInstances.length;
+    if (activeInstancesLength) {
+      var i = 0;
+      while (i < activeInstancesLength) {
+        var activeInstance = activeInstances[i];
+        if (!activeInstance.paused) {
+          activeInstance.tick(t);
+        } else {
+          var instanceIndex = activeInstances.indexOf(activeInstance);
+          if (instanceIndex > -1) {
+            activeInstances.splice(instanceIndex, 1);
+            activeInstancesLength = activeInstances.length;
+          }
+        }
+        i++;
+      }
+      play();
+    } else {
+      raf$2 = cancelAnimationFrame(raf$2);
+    }
+  }
+  return play;
+})();
+
+function handleVisibilityChange() {
+  if (document.hidden) {
+    activeInstances.forEach(function (ins) { return ins.pause(); });
+    pausedInstances = activeInstances.slice(0);
+    activeInstances = [];
+  } else {
+    pausedInstances.forEach(function (ins) { return ins.play(); });
+  }
+}
+
+if (typeof document !== 'undefined') {
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+}
+
+// Public Instance
+
+function anime(params) {
+  if ( params === void 0 ) params = {};
+
+
+  var startTime = 0, lastTime = 0, now = 0;
+  var children, childrenLength = 0;
+  var resolve = null;
+
+  function makePromise(instance) {
+    var promise = window.Promise && new Promise(function (_resolve) { return resolve = _resolve; });
+    instance.finished = promise;
+    return promise;
+  }
+
+  var instance = createNewInstance(params);
+  var promise = makePromise(instance);
+
+  function toggleInstanceDirection() {
+    var direction = instance.direction;
+    if (direction !== 'alternate') {
+      instance.direction = direction !== 'normal' ? 'normal' : 'reverse';
+    }
+    instance.reversed = !instance.reversed;
+    children.forEach(function (child) { return child.reversed = instance.reversed; });
+  }
+
+  function adjustTime(time) {
+    return instance.reversed ? instance.duration - time : time;
+  }
+
+  function resetTime() {
+    startTime = 0;
+    lastTime = adjustTime(instance.currentTime) * (1 / anime.speed);
+  }
+
+  function seekCild(time, child) {
+    if (child) { child.seek(time - child.timelineOffset); }
+  }
+
+  function syncInstanceChildren(time) {
+    if (!instance.reversePlayback) {
+      for (var i = 0; i < childrenLength; i++) { seekCild(time, children[i]); }
+    } else {
+      for (var i$1 = childrenLength; i$1--;) { seekCild(time, children[i$1]); }
+    }
+  }
+
+  function setAnimationsProgress(insTime) {
+    var i = 0;
+    var animations = instance.animations;
+    var animationsLength = animations.length;
+    while (i < animationsLength) {
+      var anim = animations[i];
+      var animatable = anim.animatable;
+      var tweens = anim.tweens;
+      var tweenLength = tweens.length - 1;
+      var tween = tweens[tweenLength];
+      // Only check for keyframes if there is more than one tween
+      if (tweenLength) { tween = filterArray(tweens, function (t) { return (insTime < t.end); })[0] || tween; }
+      var elapsed = minMax(insTime - tween.start - tween.delay, 0, tween.duration) / tween.duration;
+      var eased = isNaN(elapsed) ? 1 : tween.easing(elapsed);
+      var strings = tween.to.strings;
+      var round = tween.round;
+      var numbers = [];
+      var toNumbersLength = tween.to.numbers.length;
+      var progress = (void 0);
+      for (var n = 0; n < toNumbersLength; n++) {
+        var value = (void 0);
+        var toNumber = tween.to.numbers[n];
+        var fromNumber = tween.from.numbers[n] || 0;
+        if (!tween.isPath) {
+          value = fromNumber + (eased * (toNumber - fromNumber));
+        } else {
+          value = getPathProgress(tween.value, eased * toNumber);
+        }
+        if (round) {
+          if (!(tween.isColor && n > 2)) {
+            value = Math.round(value * round) / round;
+          }
+        }
+        numbers.push(value);
+      }
+      // Manual Array.reduce for better performances
+      var stringsLength = strings.length;
+      if (!stringsLength) {
+        progress = numbers[0];
+      } else {
+        progress = strings[0];
+        for (var s = 0; s < stringsLength; s++) {
+          var a = strings[s];
+          var b = strings[s + 1];
+          var n$1 = numbers[s];
+          if (!isNaN(n$1)) {
+            if (!b) {
+              progress += n$1 + ' ';
+            } else {
+              progress += n$1 + b;
+            }
+          }
+        }
+      }
+      setProgressValue[anim.type](animatable.target, anim.property, progress, animatable.transforms);
+      anim.currentValue = progress;
+      i++;
+    }
+  }
+
+  function setCallback(cb) {
+    if (instance[cb] && !instance.passThrough) { instance[cb](instance); }
+  }
+
+  function countIteration() {
+    if (instance.remaining && instance.remaining !== true) {
+      instance.remaining--;
+    }
+  }
+
+  function setInstanceProgress(engineTime) {
+    var insDuration = instance.duration;
+    var insDelay = instance.delay;
+    var insEndDelay = insDuration - instance.endDelay;
+    var insTime = adjustTime(engineTime);
+    instance.progress = minMax((insTime / insDuration) * 100, 0, 100);
+    instance.reversePlayback = insTime < instance.currentTime;
+    if (children) { syncInstanceChildren(insTime); }
+    if (!instance.began && instance.currentTime > 0) {
+      instance.began = true;
+      setCallback('begin');
+      setCallback('loopBegin');
+    }
+    if (insTime <= insDelay && instance.currentTime !== 0) {
+      setAnimationsProgress(0);
+    }
+    if ((insTime >= insEndDelay && instance.currentTime !== insDuration) || !insDuration) {
+      setAnimationsProgress(insDuration);
+    }
+    if (insTime > insDelay && insTime < insEndDelay) {
+      if (!instance.changeBegan) {
+        instance.changeBegan = true;
+        instance.changeCompleted = false;
+        setCallback('changeBegin');
+      }
+      setCallback('change');
+      setAnimationsProgress(insTime);
+    } else {
+      if (instance.changeBegan) {
+        instance.changeCompleted = true;
+        instance.changeBegan = false;
+        setCallback('changeComplete');
+      }
+    }
+    instance.currentTime = minMax(insTime, 0, insDuration);
+    if (instance.began) { setCallback('update'); }
+    if (engineTime >= insDuration) {
+      lastTime = 0;
+      countIteration();
+      if (instance.remaining) {
+        startTime = now;
+        setCallback('loopComplete');
+        setCallback('loopBegin');
+        if (instance.direction === 'alternate') { toggleInstanceDirection(); }
+      } else {
+        instance.paused = true;
+        if (!instance.completed) {
+          instance.completed = true;
+          setCallback('loopComplete');
+          setCallback('complete');
+          if (!instance.passThrough && 'Promise' in window) {
+            resolve();
+            promise = makePromise(instance);
+          }
+        }
+      }
+    }
+  }
+
+  instance.reset = function() {
+    var direction = instance.direction;
+    instance.passThrough = false;
+    instance.currentTime = 0;
+    instance.progress = 0;
+    instance.paused = true;
+    instance.began = false;
+    instance.changeBegan = false;
+    instance.completed = false;
+    instance.changeCompleted = false;
+    instance.reversePlayback = false;
+    instance.reversed = direction === 'reverse';
+    instance.remaining = instance.loop;
+    children = instance.children;
+    childrenLength = children.length;
+    for (var i = childrenLength; i--;) { instance.children[i].reset(); }
+    if (instance.reversed && instance.loop !== true || (direction === 'alternate' && instance.loop === 1)) { instance.remaining++; }
+    setAnimationsProgress(0);
+  };
+
+  // Set Value helper
+
+  instance.set = function(targets, properties) {
+    setTargetsValue(targets, properties);
+    return instance;
+  };
+
+  instance.tick = function(t) {
+    now = t;
+    if (!startTime) { startTime = now; }
+    setInstanceProgress((now + (lastTime - startTime)) * anime.speed);
+  };
+
+  instance.seek = function(time) {
+    setInstanceProgress(adjustTime(time));
+  };
+
+  instance.pause = function() {
+    instance.paused = true;
+    resetTime();
+  };
+
+  instance.play = function() {
+    if (!instance.paused) { return; }
+    if (instance.completed) { instance.reset(); }
+    instance.paused = false;
+    activeInstances.push(instance);
+    resetTime();
+    if (!raf$2) { engine(); }
+  };
+
+  instance.reverse = function() {
+    toggleInstanceDirection();
+    resetTime();
+  };
+
+  instance.restart = function() {
+    instance.reset();
+    instance.play();
+  };
+
+  instance.reset();
+
+  if (instance.autoplay) { instance.play(); }
+
+  return instance;
+
+}
+
+// Remove targets from animation
+
+function removeTargetsFromAnimations(targetsArray, animations) {
+  for (var a = animations.length; a--;) {
+    if (arrayContains(targetsArray, animations[a].animatable.target)) {
+      animations.splice(a, 1);
+    }
+  }
+}
+
+function removeTargets(targets) {
+  var targetsArray = parseTargets(targets);
+  for (var i = activeInstances.length; i--;) {
+    var instance = activeInstances[i];
+    var animations = instance.animations;
+    var children = instance.children;
+    removeTargetsFromAnimations(targetsArray, animations);
+    for (var c = children.length; c--;) {
+      var child = children[c];
+      var childAnimations = child.animations;
+      removeTargetsFromAnimations(targetsArray, childAnimations);
+      if (!childAnimations.length && !child.children.length) { children.splice(c, 1); }
+    }
+    if (!animations.length && !children.length) { instance.pause(); }
+  }
+}
+
+// Stagger helpers
+
+function stagger(val, params) {
+  if ( params === void 0 ) params = {};
+
+  var direction = params.direction || 'normal';
+  var easing = params.easing ? parseEasings(params.easing) : null;
+  var grid = params.grid;
+  var axis = params.axis;
+  var fromIndex = params.from || 0;
+  var fromFirst = fromIndex === 'first';
+  var fromCenter = fromIndex === 'center';
+  var fromLast = fromIndex === 'last';
+  var isRange = is.arr(val);
+  var val1 = isRange ? parseFloat(val[0]) : parseFloat(val);
+  var val2 = isRange ? parseFloat(val[1]) : 0;
+  var unit = getUnit(isRange ? val[1] : val) || 0;
+  var start = params.start || 0 + (isRange ? val1 : 0);
+  var values = [];
+  var maxValue = 0;
+  return function (el, i, t) {
+    if (fromFirst) { fromIndex = 0; }
+    if (fromCenter) { fromIndex = (t - 1) / 2; }
+    if (fromLast) { fromIndex = t - 1; }
+    if (!values.length) {
+      for (var index = 0; index < t; index++) {
+        if (!grid) {
+          values.push(Math.abs(fromIndex - index));
+        } else {
+          var fromX = !fromCenter ? fromIndex%grid[0] : (grid[0]-1)/2;
+          var fromY = !fromCenter ? Math.floor(fromIndex/grid[0]) : (grid[1]-1)/2;
+          var toX = index%grid[0];
+          var toY = Math.floor(index/grid[0]);
+          var distanceX = fromX - toX;
+          var distanceY = fromY - toY;
+          var value = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+          if (axis === 'x') { value = -distanceX; }
+          if (axis === 'y') { value = -distanceY; }
+          values.push(value);
+        }
+        maxValue = Math.max.apply(Math, values);
+      }
+      if (easing) { values = values.map(function (val) { return easing(val / maxValue) * maxValue; }); }
+      if (direction === 'reverse') { values = values.map(function (val) { return axis ? (val < 0) ? val * -1 : -val : Math.abs(maxValue - val); }); }
+    }
+    var spacing = isRange ? (val2 - val1) / maxValue : val1;
+    return start + (spacing * (Math.round(values[i] * 100) / 100)) + unit;
+  }
+}
+
+// Timeline
+
+function timeline(params) {
+  if ( params === void 0 ) params = {};
+
+  var tl = anime(params);
+  tl.duration = 0;
+  tl.add = function(instanceParams, timelineOffset) {
+    var tlIndex = activeInstances.indexOf(tl);
+    var children = tl.children;
+    if (tlIndex > -1) { activeInstances.splice(tlIndex, 1); }
+    function passThrough(ins) { ins.passThrough = true; }
+    for (var i = 0; i < children.length; i++) { passThrough(children[i]); }
+    var insParams = mergeObjects(instanceParams, replaceObjectProps(defaultTweenSettings, params));
+    insParams.targets = insParams.targets || params.targets;
+    var tlDuration = tl.duration;
+    insParams.autoplay = false;
+    insParams.direction = tl.direction;
+    insParams.timelineOffset = is.und(timelineOffset) ? tlDuration : getRelativeValue(timelineOffset, tlDuration);
+    passThrough(tl);
+    tl.seek(insParams.timelineOffset);
+    var ins = anime(insParams);
+    passThrough(ins);
+    children.push(ins);
+    var timings = getInstanceTimings(children, params);
+    tl.delay = timings.delay;
+    tl.endDelay = timings.endDelay;
+    tl.duration = timings.duration;
+    tl.seek(0);
+    tl.reset();
+    if (tl.autoplay) { tl.play(); }
+    return tl;
+  };
+  return tl;
+}
+
+anime.version = '3.0.1';
+anime.speed = 1;
+anime.running = activeInstances;
+anime.remove = removeTargets;
+anime.get = getOriginalTargetValue;
+anime.set = setTargetsValue;
+anime.convertPx = convertPxToUnit;
+anime.path = getPath;
+anime.setDashoffset = setDashoffset;
+anime.stagger = stagger;
+anime.timeline = timeline;
+anime.easing = parseEasings;
+anime.penner = penner;
+anime.random = function (min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; };
+
+var hueRotate = function (landscape, ref) {
+    if ( ref === void 0 ) ref = {};
+    var autoplay = ref.autoplay; if ( autoplay === void 0 ) autoplay = true;
+    var duration = ref.duration; if ( duration === void 0 ) duration = 1000;
+    var easing = ref.easing; if ( easing === void 0 ) easing = 'linear';
+    var loop = ref.loop; if ( loop === void 0 ) loop = true;
+    var containerClass = ref.containerClass; if ( containerClass === void 0 ) containerClass = 'ffp-container';
+
+    var parent = landscape.parent || landscape.canvas.parentNode;
+    var container = document.createElement('div');
+    container.classList.add(containerClass);
+    parent.insertBefore(container, landscape.canvas.nextSibling);
+    landscape.canvas.style.display = 'none';
+    container.style.position = 'absolute';
+    container.style.width = landscape.width + 'px';
+    container.style.height = landscape.height + 'px';
+    container.style.backgroundColor = landscape.backgroundColor;
+    landscape.grounds.forEach(function (ground) {
+        var img = new Image();
+        img.src = ground.sprite.toDataURL();
+        img.style.position = 'absolute';
+        container.appendChild(img);
+    });
+    var api = anime({
+        autoplay: autoplay,
+        duration: duration,
+        easing: easing,
+        loop: loop,
+        targets: container.querySelectorAll('img'),
+        filter: function () {
+            var off = Math.floor(Math.random() * 360);
+            var dir = Math.sign(Math.sin(Math.random() * Math.PI));
+            return [("hue-rotate(" + off + "deg)"),("hue-rotate(" + (off + 360 * dir) + "deg)")];
+        }
+    });
+    api.clear = (function () {
+        container.remove();
+        landscape.canvas.style.display = '';
+    });
+    return api;
+};
+
+
+
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImh1ZS1yb3RhdGUuanMob3JpZ2luYWwpIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sV0FBVztBQUlsQixPQUFPLEtBQUEsQ0FBTSxhQUFhLFNBQVcsRUFBQSxDQUNuQyxRQUFBLEdBQVcsTUFDWCxRQUFBLEdBQVcsTUFDWCxNQUFBLEdBQVMsVUFDVCxJQUFBLEdBQU8sTUFDUCxjQUFBLEdBQWlCLGdCQUxrQixHQU1qQyxJQU5xQixHQU1kO0lBQ1QsS0FBQSxDQUFNLFNBQVMsU0FBQSxDQUFVLE1BQVYsQ0FBQSxFQUFBLENBQW9CLFNBQUEsQ0FBVSxNQUFWLENBQWlCO0lBRXBELEtBQUEsQ0FBTSxZQUFZLFFBQUEsQ0FBUyxhQUFULENBQXVCO0lBQ3pDLFNBQUEsQ0FBVSxTQUFWLENBQW9CLEdBQXBCLENBQXdCO0lBQ3hCLE1BQUEsQ0FBTyxZQUFQLENBQW9CLFdBQVcsU0FBQSxDQUFVLE1BQVYsQ0FBaUI7SUFFaEQsU0FBQSxDQUFVLE1BQVYsQ0FBaUIsS0FBakIsQ0FBdUIsT0FBdkIsQ0FBQSxDQUFBLENBQWlDO0lBRWpDLFNBQUEsQ0FBVSxLQUFWLENBQWdCLFFBQWhCLENBQUEsQ0FBQSxDQUEyQjtJQUMzQixTQUFBLENBQVUsS0FBVixDQUFnQixLQUFoQixDQUFBLENBQUEsQ0FBd0IsU0FBQSxDQUFVLEtBQVYsQ0FBQSxDQUFBLENBQWtCO0lBQzFDLFNBQUEsQ0FBVSxLQUFWLENBQWdCLE1BQWhCLENBQUEsQ0FBQSxDQUF5QixTQUFBLENBQVUsTUFBVixDQUFBLENBQUEsQ0FBbUI7SUFDNUMsU0FBQSxDQUFVLEtBQVYsQ0FBZ0IsZUFBaEIsQ0FBQSxDQUFBLENBQWtDLFNBQUEsQ0FBVTtJQUU1QyxTQUFBLENBQVUsT0FBVixDQUFrQixPQUFsQixDQUEwQixNQUFBLElBQVU7UUFDbEMsS0FBQSxDQUFNLE1BQU0sSUFBSSxLQUFKO1FBQ1osR0FBQSxDQUFJLEdBQUosQ0FBQSxDQUFBLENBQVUsTUFBQSxDQUFPLE1BQVAsQ0FBYyxTQUFkO1FBQ1YsR0FBQSxDQUFJLEtBQUosQ0FBVSxRQUFWLENBQUEsQ0FBQSxDQUFxQjtRQUNyQixTQUFBLENBQVUsV0FBVixDQUFzQjtJQUMxQjtJQUVFLEtBQUEsQ0FBTSxNQUFNLEtBQUEsQ0FBTTtRQUNoQixRQURnQixDQUFBO1FBRWhCLFFBRmdCLENBQUE7UUFHaEIsTUFIZ0IsQ0FBQTtRQUloQixJQUpnQixDQUFBO1FBS2hCLFNBQVMsU0FBQSxDQUFVLGdCQUFWLENBQTJCLE1BTHBCLENBQUE7UUFNaEIsV0FBUSxHQUFNO1lBQ1osS0FBQSxDQUFNLE1BQU0sSUFBQSxDQUFLLEtBQUwsQ0FBVyxJQUFBLENBQUssTUFBTCxFQUFBLENBQUEsQ0FBQSxDQUFnQjtZQUN2QyxLQUFBLENBQU0sTUFBTSxJQUFBLENBQUssSUFBTCxDQUFVLElBQUEsQ0FBSyxHQUFMLENBQVMsSUFBQSxDQUFLLE1BQUwsRUFBQSxDQUFBLENBQUEsQ0FBZ0IsSUFBQSxDQUFLO1lBQ3BELE9BQU8sQ0FDTCxjQUFjLFFBQWQsRUFDQSxjQUFjLEdBQUEsQ0FBQSxDQUFBLENBQU0sR0FBQSxDQUFBLENBQUEsQ0FBTSxRQUExQjtRQUVSOztJQUdFLEdBQUEsQ0FBSSxLQUFKLENBQUEsQ0FBQSxLQUFZLEdBQU07UUFDaEIsU0FBQSxDQUFVLE1BQVY7UUFDQSxTQUFBLENBQVUsTUFBVixDQUFpQixLQUFqQixDQUF1QixPQUF2QixDQUFBLENBQUEsQ0FBaUM7SUFDckM7SUFFRSxPQUFPO0FBQ1Q7QUFFQSxlQUFlO0FBdkRmIiwiZmlsZSI6Imh1ZS1yb3RhdGUuanMob3JpZ2luYWwpIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IGFuaW1lIGZyb20gJ2FuaW1lanMnXG5cbi8qIGdsb2JhbCBJbWFnZSAqL1xuXG5leHBvcnQgY29uc3QgaHVlUm90YXRlID0gKGxhbmRzY2FwZSwge1xuICBhdXRvcGxheSA9IHRydWUsXG4gIGR1cmF0aW9uID0gMTAwMCxcbiAgZWFzaW5nID0gJ2xpbmVhcicsXG4gIGxvb3AgPSB0cnVlLFxuICBjb250YWluZXJDbGFzcyA9ICdmZnAtY29udGFpbmVyJ1xufSA9IHt9KSA9PiB7XG4gIGNvbnN0IHBhcmVudCA9IGxhbmRzY2FwZS5wYXJlbnQgfHwgbGFuZHNjYXBlLmNhbnZhcy5wYXJlbnROb2RlXG5cbiAgY29uc3QgY29udGFpbmVyID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2JylcbiAgY29udGFpbmVyLmNsYXNzTGlzdC5hZGQoY29udGFpbmVyQ2xhc3MpXG4gIHBhcmVudC5pbnNlcnRCZWZvcmUoY29udGFpbmVyLCBsYW5kc2NhcGUuY2FudmFzLm5leHRTaWJsaW5nKVxuXG4gIGxhbmRzY2FwZS5jYW52YXMuc3R5bGUuZGlzcGxheSA9ICdub25lJ1xuXG4gIGNvbnRhaW5lci5zdHlsZS5wb3NpdGlvbiA9ICdhYnNvbHV0ZSdcbiAgY29udGFpbmVyLnN0eWxlLndpZHRoID0gbGFuZHNjYXBlLndpZHRoICsgJ3B4J1xuICBjb250YWluZXIuc3R5bGUuaGVpZ2h0ID0gbGFuZHNjYXBlLmhlaWdodCArICdweCdcbiAgY29udGFpbmVyLnN0eWxlLmJhY2tncm91bmRDb2xvciA9IGxhbmRzY2FwZS5iYWNrZ3JvdW5kQ29sb3JcblxuICBsYW5kc2NhcGUuZ3JvdW5kcy5mb3JFYWNoKGdyb3VuZCA9PiB7XG4gICAgY29uc3QgaW1nID0gbmV3IEltYWdlKClcbiAgICBpbWcuc3JjID0gZ3JvdW5kLnNwcml0ZS50b0RhdGFVUkwoKVxuICAgIGltZy5zdHlsZS5wb3NpdGlvbiA9ICdhYnNvbHV0ZSdcbiAgICBjb250YWluZXIuYXBwZW5kQ2hpbGQoaW1nKVxuICB9KVxuXG4gIGNvbnN0IGFwaSA9IGFuaW1lKHtcbiAgICBhdXRvcGxheSxcbiAgICBkdXJhdGlvbixcbiAgICBlYXNpbmcsXG4gICAgbG9vcCxcbiAgICB0YXJnZXRzOiBjb250YWluZXIucXVlcnlTZWxlY3RvckFsbCgnaW1nJyksXG4gICAgZmlsdGVyOiAoKSA9PiB7XG4gICAgICBjb25zdCBvZmYgPSBNYXRoLmZsb29yKE1hdGgucmFuZG9tKCkgKiAzNjApXG4gICAgICBjb25zdCBkaXIgPSBNYXRoLnNpZ24oTWF0aC5zaW4oTWF0aC5yYW5kb20oKSAqIE1hdGguUEkpKVxuICAgICAgcmV0dXJuIFtcbiAgICAgICAgYGh1ZS1yb3RhdGUoJHtvZmZ9ZGVnKWAsXG4gICAgICAgIGBodWUtcm90YXRlKCR7b2ZmICsgMzYwICogZGlyfWRlZylgXG4gICAgICBdXG4gICAgfVxuICB9KVxuXG4gIGFwaS5jbGVhciA9ICgpID0+IHtcbiAgICBjb250YWluZXIucmVtb3ZlKClcbiAgICBsYW5kc2NhcGUuY2FudmFzLnN0eWxlLmRpc3BsYXkgPSAnJ1xuICB9XG5cbiAgcmV0dXJuIGFwaVxufVxuXG5leHBvcnQgZGVmYXVsdCBodWVSb3RhdGVcbiJdfQ==
+
+var swatches = {
+    1: ['rgb(120,0,100)','rgb(160,15,150)','rgb(200,30,200)','rgb(255,50,255)','rgb(255,90,190)',
+        'rgb(255,120,140)','rgb(255,165,165)','rgb(255,215,235)'],
+    2: ['rgb(80,20,100)','rgb(110,30,130)','rgb(140,35,160)','rgb(170,40,190)','rgb(180,60,255)',
+        'rgb(190,100,255)','rgb(200,150,255)','rgb(210,200,255)'],
+    3: ['rgb(0,0,90)','rgb(0,0,160)','rgb(0,0,255)','rgb(0,120,255)','rgb(60,185,255)',
+        'rgb(0,200,255)','rgb(60,255,255)','rgb(220,255,255)'],
+    4: ['rgb(0,60,39)','rgb(0,90,59)','rgb(0,120,90)','rgb(0,151,120)','rgb(0,181,150)',
+        'rgb(52,231,200)','rgb(116,246,210)','rgb(179,254,225)'],
+    5: ['rgb(39,75,0)','rgb(27,95,15)','rgb(14,116,36)','rgb(0,170,43)','rgb(0,210,63)',
+        'rgb(0,252,29)','rgb(85,253,127)','rgb(178,253,157)'],
+    6: ['rgb(140,114,0)','rgb(180,139,0)','rgb(221,179,0)','rgb(255,218,0)','rgb(255,253,0)',
+        'rgb(255,249,88)','rgb(255,245,155)','rgb(255,254,218)'],
+    7: ['rgb(101,44,80)','rgb(141,58,57)','rgb(181,72,30)','rgb(201,88,0)','rgb(226,113,0)',
+        'rgb(255,137,0)','rgb(255,168,64)','rgb(255,199,147)'],
+    8: ['rgb(91,4,38)','rgb(151,11,57)','rgb(197,15,43)','rgb(222,18,27)','rgb(255,22,6)',
+        'rgb(255,53,49)','rgb(255,118,116)','rgb(255,189,189)'],
+    9: ['rgb(40,19,0)','rgb(71,39,17)','rgb(101,59,42)','rgb(136,115,99)','rgb(175,145,128)',
+        'rgb(210,179,158)','rgb(220,200,179)','rgb(236,220,199)'],
+    10: ['rgb(28,61,91)','rgb(59,100,131)','rgb(78,130,161)','rgb(98,161,181)','rgb(119,170,191)',
+        'rgb(150,180,201)','rgb(169,200,210)','rgb(199,220,230)'],
+    11: ['rgb(44,18,153)','rgb(85,28,202)','rgb(109,45,255)','rgb(130,82,255)','rgb(150,122,255)',
+        'rgb(160,171,255)','rgb(180,206,255)','rgb(194,235,255)'],
+    12: ['rgb(121,0,100)','rgb(161,12,151)','rgb(80,20,101)','rgb(110,30,131)','rgb(90,0,39)',
+        'rgb(151,0,58)'],
+    13: ['rgb(0,3,91)','rgb(0,9,162)','rgb(45,7,152)','rgb(85,26,203)','rgb(29,60,91)',
+        'rgb(59,100,131)'],
+    14: ['rgb(0,60,40)','rgb(0,90,60)','rgb(39,75,0)','rgb(28,95,15)','rgb(40,19,0)',
+        'rgb(70,39,17)'],
+    15: ['rgb(100,44,80)','rgb(141,58,58)','rgb(90,0,39)','rgb(151,0,58)','rgb(140,114,0)',
+        'rgb(181,139,0)'],
+    16: ['rgb(255,164,163)','rgb(255,215,235)','rgb(200,150,255)','rgb(210,200,255)',
+        'rgb(255,117,116)','rgb(255,189,189)'],
+    17: ['rgb(48,255,255)','rgb(219,255,255)','rgb(179,206,255)','rgb(194,236,255)',
+        'rgb(169,200,211)','rgb(200,220,231)'],
+    18: ['rgb(116,246,210)','rgb(178,255,225)','rgb(84,255,126)','rgb(179,255,157)',
+        'rgb(220,200,179)','rgb(235,220,199)'],
+    19: ['rgb(255,117,116)','rgb(255,189,189)','rgb(255,168,63)','rgb(255,199,146)',
+        'rgb(255,244,155)','rgb(255,255,219)'],
+    20: ['rgb(255,215,235)','rgb(210,200,255)','rgb(194,236,255)','rgb(219,255,255)',
+        'rgb(200,220,231)','rgb(178,255,225)'],
+    21: ['rgb(255,48,255)','rgb(181,62,255)','rgb(181,62,255)','rgb(0,21,255)','rgb(98,160,181)',
+        'rgb(51,231,200)'],
+    22: ['rgb(121,0,100)','rgb(80,20,101)','rgb(45,7,152)','rgb(0,3,91)','rgb(29,60,91)',
+        'rgb(0,60,40)'],
+    23: ['rgb(178,255,225)','rgb(179,255,157)','rgb(255,255,219)','rgb(255,199,146)',
+        'rgb(255,189,189)','rgb(235,220,199)'],
+    24: ['rgb(51,231,200)','rgb(0,255,28)','rgb(255,254,0)','rgb(255,137,0)','rgb(255,0,0)',
+        'rgb(100,59,43)'],
+    25: ['rgb(0,60,40)','rgb(39,75,0)','rgb(140,114,0)','rgb(100,44,80)','rgb(90,0,39)',
+        'rgb(40,19,0)'],
+    26: ['rgb(15,115,37)','rgb(0,170,43)','rgb(0,210,63)','rgb(255,117,138)','rgb(255,164,163)',
+        'rgb(255,215,235)'],
+    27: ['rgb(78,130,161)','rgb(98,160,181)','rgb(119,170,191)','rgb(190,101,255)',
+        'rgb(200,150,255)','rgb(210,200,255)'],
+    28: ['rgb(181,73,31)','rgb(201,87,0)','rgb(226,112,0)','rgb(0,221,255)','rgb(48,255,255)',
+        'rgb(219,255,255)'],
+    29: ['rgb(100,59,43)','rgb(135,114,99)','rgb(175,144,129)','rgb(8,239,34)','rgb(84,255,126)',
+        'rgb(179,255,157)'],
+    30: ['rgb(201,28,202)','rgb(255,48,255)','rgb(255,87,190)','rgb(159,171,255)',
+        'rgb(179,206,255)','rgb(194,236,255)'],
+    31: ['rgb(0,120,90)','rgb(0,150,120)','rgb(0,181,150)','rgb(255,53,50)','rgb(255,117,116)',
+        'rgb(255,189,189)'],
+    32: ['rgb(221,179,0)','rgb(255,219,0)','rgb(255,254,0)','rgb(51,231,200)','rgb(116,246,210)',
+        'rgb(178,255,225)'],
+    33: ['rgb(0,21,255)','rgb(0,122,255)','rgb(54,186,255)','rgb(210,179,158)','rgb(220,200,179)',
+        'rgb(235,220,199)'],
+    34: ['rgb(141,35,162)','rgb(171,40,192)','rgb(181,62,255)','rgb(255,137,0)','rgb(255,168,63)',
+        'rgb(255,199,146)'],
+    35: ['rgb(196,0,44)','rgb(222,0,28)','rgb(255,0,0)','rgb(149,180,201)','rgb(169,200,211)',
+        'rgb(200,220,231)'],
+    36: ['rgb(110,46,255)','rgb(130,82,255)','rgb(150,121,255)','rgb(255,249,88)',
+        'rgb(255,244,155)','rgb(255,255,219)'],
+    37: ['rgb(181,73,31)','rgb(223,20,42)','rgb(227,116,0)','rgb(254,65,61)','rgb(255,170,69)',
+        'rgb(255,191,189)'],
+    38: ['rgb(221,179,0)','rgb(202,91,12)','rgb(254,254,0)','rgb(255,139,0)','rgb(255,244,155)',
+        'rgb(255,200,149)'],
+    39: ['rgb(142,44,163)','rgb(130,89,255)','rgb(181,73,255)','rgb(157,172,255)',
+        'rgb(200,153,255)','rgb(193,236,255)'],
+    40: ['rgb(77,130,162)','rgb(0,149,119)','rgb(118,170,191)','rgb(44,229,198)',
+        'rgb(170,200,210)','rgb(178,254,224)'],
+    41: ['rgb(202,47,203)','rgb(172,50,193)','rgb(255,96,194)','rgb(191,107,255)',
+        'rgb(255,166,166)','rgb(210,201,255)'],
+    42: ['rgb(11,114,33)','rgb(254,218,0)','rgb(0,207,54)','rgb(255,248,87)','rgb(82,253,121)',
+        'rgb(255,253,218)'],
+    43: ['rgb(108,58,254)','rgb(0,125,254)','rgb(148,125,255)','rgb(0,220,255)','rgb(180,206,255)',
+        'rgb(219,255,255)'],
+    44: ['rgb(198,17,52)','rgb(254,68,255)','rgb(255,24,24)','rgb(255,122,141)','rgb(255,122,121)',
+        'rgb(255,216,235)'],
+    45: ['rgb(101,59,43)','rgb(98,160,181)','rgb(177,145,130)','rgb(149,180,201)',
+        'rgb(221,200,179)','rgb(200,220,229)'],
+    46: ['rgb(1,37,255)','rgb(1,168,36)','rgb(45,186,255)','rgb(1,252,1)','rgb(35,254,255)',
+        'rgb(178,252,153)'],
+    47: ['rgb(0,119,87)','rgb(136,114,100)','rgb(1,180,151)','rgb(211,180,159)','rgb(114,246,207)',
+        'rgb(236,219,199)'],
+    48: ['rgb(141,114,1)','rgb(71,40,19)','rgb(222,180,0)','rgb(136,114,100)','rgb(255,253,0)',
+        'rgb(211,180,159)'],
+    49: ['rgb(91,3,41)','rgb(28,94,7)','rgb(198,17,52)','rgb(1,168,36)','rgb(255,23,23)',
+        'rgb(0,251,0)'],
+    50: ['rgb(0,6,92)','rgb(57,101,130)','rgb(1,37,255)','rgb(96,161,181)','rgb(45,186,255)',
+        'rgb(149,180,200)'],
+    51: ['rgb(122,13,102)','rgb(1,19,163)','rgb(202,47,203)','rgb(0,125,254)','rgb(255,97,194)',
+        'rgb(0,220,255)'],
+    52: ['rgb(41,20,0)','rgb(142,61,60)','rgb(101,59,43)','rgb(202,91,12)','rgb(176,144,129)',
+        'rgb(255,139,0)'],
+    53: ['rgb(40,74,0)','rgb(84,37,203)','rgb(11,114,33)','rgb(130,89,255)','rgb(0,208,54)',
+        'rgb(157,172,255)'],
+    54: ['rgb(82,25,102)','rgb(152,11,63)','rgb(142,44,163)','rgb(223,20,42)','rgb(181,73,255)',
+        'rgb(254,65,61)'],
+    55: ['rgb(0,59,39)','rgb(181,140,0)','rgb(0,119,89)','rgb(254,218,0)','rgb(0,179,149)',
+        'rgb(255,248,87)'],
+    56: ['rgb(28,61,92)','rgb(111,37,132)','rgb(77,130,162)','rgb(172,50,193)','rgb(118,170,191)',
+        'rgb(191,107,255)'],
+    57: ['rgb(101,47,81)','rgb(0,89,57)','rgb(183,76,40)','rgb(0,149,119)','rgb(229,115,0)',
+        'rgb(44,229,198)'],
+    58: ['rgb(44,18,153)','rgb(163,31,153)','rgb(108,58,254)','rgb(254,68,255)','rgb(148,125,255)',
+        'rgb(255,122,141)'],
+    59: ['rgb(198,17,52)','rgb(223,20,42)','rgb(255,96,192)','rgb(255,122,141)','rgb(255,170,69)',
+        'rgb(255,199,148)'],
+    60: ['rgb(202,47,203)','rgb(254,68,255)','rgb(181,73,255)','rgb(191,107,255)',
+        'rgb(255,244,155)','rgb(254,254,218)'],
+    61: ['rgb(221,179,0)','rgb(254,218,0)','rgb(0,207,54)','rgb(1,252,1)','rgb(35,254,255)',
+        'rgb(219,255,255)'],
+    62: ['rgb(108,58,254)','rgb(128,90,255)','rgb(118,170,191)','rgb(149,180,201)',
+        'rgb(82,253,121)','rgb(178,252,153)'],
+    63: ['rgb(101,59,43)','rgb(137,115,101)','rgb(229,115,0)','rgb(255,139,0)','rgb(169,202,211)',
+        'rgb(200,220,231)'],
+    64: ['rgb(0,119,89)','rgb(0,149,119)','rgb(150,125,255)','rgb(157,172,255)','rgb(114,244,208)',
+        'rgb(178,254,224)'],
+    65: ['rgb(182,75,39)','rgb(202,91,12)','rgb(255,253,0)','rgb(255,248,87)','rgb(200,153,255)',
+        'rgb(210,201,254)'],
+    66: ['rgb(77,130,162)','rgb(98,160,181)','rgb(255,24,24)','rgb(254,65,61)','rgb(255,166,166)',
+        'rgb(255,216,235)'],
+    67: ['rgb(142,44,163)','rgb(172,50,193)','rgb(45,186,255)','rgb(0,220,255)','rgb(221,200,179)',
+        'rgb(236,219,199)'],
+    68: ['rgb(11,114,33)','rgb(1,168,36)','rgb(0,179,149)','rgb(44,229,198)','rgb(180,206,255)',
+        'rgb(193,236,255)'],
+    69: ['rgb(1,37,255)','rgb(0,125,254)','rgb(177,145,130)','rgb(211,180,159)','rgb(254,122,120)',
+        'rgb(255,191,191)'],
+    70: ['rgb(122,13,102)','rgb(163,31,153)','rgb(1,37,255)','rgb(0,125,254)','rgb(0,207,54)',
+        'rgb(1,252,1)','rgb(255,170,69)','rgb(255,200,149)'],
+    71: ['rgb(142,44,163)','rgb(172,50,193)','rgb(0,179,149)','rgb(44,229,198)','rgb(255,244,155)',
+        'rgb(254,254,218)','rgb(91,3,41)','rgb(152,11,63)'],
+    72: ['rgb(45,186,255)','rgb(0,220,255)','rgb(82,253,121)','rgb(178,252,153)',
+        'rgb(101,47,81)','rgb(142,61,60)','rgb(101,59,43)','rgb(136,114,100)'],
+    73: ['rgb(114,244,208)','rgb(178,254,224)','rgb(141,114,1)','rgb(181,140,0)',
+        'rgb(255,23,23)','rgb(254,65,61)','rgb(170,200,210)','rgb(200,220,231)'],
+    74: ['rgb(40,74,0)','rgb(28,94,7)','rgb(183,76,40)','rgb(202,91,12)','rgb(177,145,130)',
+        'rgb(211,180,159)','rgb(180,206,255)','rgb(194,235,255)'],
+    75: ['rgb(202,47,203)','rgb(254,68,255)','rgb(222,180,0)','rgb(254,218,0)','rgb(255,122,121)',
+        'rgb(255,191,191)','rgb(28,61,92)','rgb(59,100,132)'],
+    76: ['rgb(181,73,255)','rgb(191,107,255)','rgb(227,116,0)','rgb(255,139,0)','rgb(221,200,179)',
+        'rgb(236,219,199)','rgb(44,18,153)','rgb(84,37,203)'],
+    77: ['rgb(200,153,255)','rgb(210,201,255)','rgb(0,59,39)','rgb(0,89,59)','rgb(41,20,1)',
+        'rgb(71,40,19)','rgb(108,58,254)','rgb(130,89,255)'],
+    78: ['rgb(255,96,194)','rgb(255,122,141)','rgb(35,254,255)','rgb(219,255,255)',
+        'rgb(11,114,33)','rgb(1,168,36)','rgb(198,17,52)','rgb(222,19,41)'],
+    79: ['rgb(82,25,102)','rgb(111,37,132)','rgb(0,119,89)','rgb(0,149,117)','rgb(255,253,0)',
+        'rgb(77,130,162)','rgb(77,130,162)','rgb(98,160,181)'],
+    80: ['rgb(255,166,165)','rgb(255,216,235)','rgb(0,6,92)','rgb(1,19,163)','rgb(118,170,191)',
+        'rgb(148,180,201)','rgb(150,125,255)','rgb(157,172,255)'],
+    81: ['rgb(41,20,1)','rgb(71,40,19)','rgb(108,58,254)','rgb(130,89,255)','rgb(255,96,194)',
+        'rgb(255,122,141)'],
+    82: ['rgb(82,25,102)','rgb(111,37,132)','rgb(0,119,89)','rgb(43,121,107)','rgb(255,253,0)',
+        'rgb(255,248,87)'],
+    83: ['rgb(76,129,160)','rgb(98,160,181)','rgb(255,166,166)','rgb(255,216,235)',
+        'rgb(0,6,92)','rgb(1,19,163)'],
+    84: ['rgb(181,73,255)','rgb(191,107,255)','rgb(227,116,0)','rgb(255,140,1)','rgb(221,200,179)',
+        'rgb(235,220,199)'],
+    85: ['rgb(114,244,208)','rgb(179,254,224)','rgb(141,114,1)','rgb(181,140,0)',
+        'rgb(255,24,24)','rgb(254,65,61)'],
+    86: ['rgb(177,145,130)','rgb(211,180,159)','rgb(180,206,255)','rgb(193,236,255)',
+        'rgb(202,47,203)','rgb(254,68,255)'],
+    87: ['rgb(255,244,155)','rgb(254,254,218)','rgb(91,3,41)','rgb(152,11,63)','rgb(45,186,255)',
+        'rgb(0,220,255)'],
+    88: ['rgb(170,200,210)','rgb(200,220,231)','rgb(38,74,0)','rgb(28,94,7)','rgb(183,76,40)',
+        'rgb(202,91,12)'],
+    89: ['rgb(121,12,101)','rgb(163,31,153)','rgb(1,37,255)','rgb(0,125,254)','rgb(0,207,54)',
+        'rgb(1,252,0)'],
+    90: ['rgb(255,170,67)','rgb(255,200,149)','rgb(142,44,163)','rgb(172,50,193)',
+        'rgb(0,179,147)','rgb(44,229,198)'],
+    91: ['rgb(35,255,255)','rgb(219,255,255)','rgb(11,114,33)','rgb(1,168,36)','rgb(198,16,54)',
+        'rgb(223,20,42)'],
+    92: ['rgb(222,180,0)','rgb(254,218,0)','rgb(255,121,118)','rgb(255,191,191)',
+        'rgb(28,61,92)','rgb(57,101,130)'],
+    93: ['rgb(44,18,153)','rgb(84,37,203)','rgb(200,153,255)','rgb(210,201,255)',
+        'rgb(0,59,39)','rgb(0,89,59)'],
+    94: ['rgb(82,253,121)','rgb(178,252,153)','rgb(101,47,81)','rgb(93,93,93)','rgb(101,59,43)',
+        'rgb(137,115,101)'],
+    95: ['rgb(118,170,191)','rgb(93,93,93)','rgb(150,125,255)','rgb(157,172,255)',
+        'rgb(122,13,102)','rgb(163,31,153)'],
+    96: ['rgb(40,74,0)','rgb(27,95,10)','rgb(142,44,163)','rgb(172,50,193)','rgb(255,96,194)',
+        'rgb(255,122,141)'],
+    97: ['rgb(0,6,92)','rgb(0,21,163)','rgb(222,180,0)','rgb(254,218,0)','rgb(0,207,54)',
+        'rgb(1,252,1)'],
+    98: ['rgb(93,69,82)','rgb(152,11,63)','rgb(1,37,255)','rgb(0,125,254)','rgb(181,73,255)',
+        'rgb(191,107,255)'],
+    99: ['rgb(141,114,1)','rgb(181,140,0)','rgb(77,130,162)','rgb(98,160,181)','rgb(148,125,255)',
+        'rgb(157,172,255)'],
+    100: ['rgb(44,18,153)','rgb(84,37,203)','rgb(0,119,89)','rgb(0,149,119)','rgb(174,145,129)',
+        'rgb(212,180,159)'],
+    101: ['rgb(28,61,92)','rgb(59,100,132)','rgb(202,47,203)','rgb(254,68,255)','rgb(227,116,0)',
+        'rgb(255,139,0)'],
+    102: ['rgb(122,13,102)','rgb(163,31,153)','rgb(101,59,43)','rgb(137,115,101)',
+        'rgb(255,24,24)','rgb(254,65,61)'],
+    103: ['rgb(101,47,81)','rgb(142,61,60)','rgb(198,17,52)','rgb(223,20,42)','rgb(45,186,255)',
+        'rgb(0,220,255)'],
+    104: ['rgb(0,59,39)','rgb(0,89,59)','rgb(183,76,40)','rgb(202,90,14)','rgb(255,253,0)',
+        'rgb(255,248,87)'],
+    105: ['rgb(82,25,102)','rgb(111,37,132)','rgb(108,58,254)','rgb(130,89,255)',
+        'rgb(118,170,191)','rgb(149,180,201)'],
+    106: ['rgb(41,20,1)','rgb(71,40,19)','rgb(11,114,33)','rgb(11,114,33)','rgb(1,168,36)',
+        'rgb(44,229,198)']
+};
+
+
+
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,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LFNBQVMsUUFBQSxDQUFTO0lBQ3hCLE9BQU87UUFBRSxLQUFGLENBQUE7UUFBUzs7QUFDbEI7QUF2SEEiLCJmaWxlIjoic3dhdGNoZXMuanMob3JpZ2luYWwpIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHJhbmRvbU9mIGZyb20gJy4uL3V0aWxzL2FycmF5LXJhbmRvbSdcblxuLyogZXNsaW50LWRpc2FibGUgY29tbWEtc3BhY2luZywgaW5kZW50ICovXG5cbmV4cG9ydCBjb25zdCBzd2F0Y2hlcyA9IHtcbiAgICAxOiBbJ3JnYigxMjAsMCwxMDApJywncmdiKDE2MCwxNSwxNTApJywncmdiKDIwMCwzMCwyMDApJywncmdiKDI1NSw1MCwyNTUpJywncmdiKDI1NSw5MCwxOTApJywncmdiKDI1NSwxMjAsMTQwKScsJ3JnYigyNTUsMTY1LDE2NSknLCdyZ2IoMjU1LDIxNSwyMzUpJ10sXG4gICAgMjogWydyZ2IoODAsMjAsMTAwKScsJ3JnYigxMTAsMzAsMTMwKScsJ3JnYigxNDAsMzUsMTYwKScsJ3JnYigxNzAsNDAsMTkwKScsJ3JnYigxODAsNjAsMjU1KScsJ3JnYigxOTAsMTAwLDI1NSknLCdyZ2IoMjAwLDE1MCwyNTUpJywncmdiKDIxMCwyMDAsMjU1KSddLFxuICAgIDM6IFsncmdiKDAsMCw5MCknLCdyZ2IoMCwwLDE2MCknLCdyZ2IoMCwwLDI1NSknLCdyZ2IoMCwxMjAsMjU1KScsJ3JnYig2MCwxODUsMjU1KScsJ3JnYigwLDIwMCwyNTUpJywncmdiKDYwLDI1NSwyNTUpJywncmdiKDIyMCwyNTUsMjU1KSddLFxuICAgIDQ6IFsncmdiKDAsNjAsMzkpJywncmdiKDAsOTAsNTkpJywncmdiKDAsMTIwLDkwKScsJ3JnYigwLDE1MSwxMjApJywncmdiKDAsMTgxLDE1MCknLCdyZ2IoNTIsMjMxLDIwMCknLCdyZ2IoMTE2LDI0NiwyMTApJywncmdiKDE3OSwyNTQsMjI1KSddLFxuICAgIDU6IFsncmdiKDM5LDc1LDApJywncmdiKDI3LDk1LDE1KScsJ3JnYigxNCwxMTYsMzYpJywncmdiKDAsMTcwLDQzKScsJ3JnYigwLDIxMCw2MyknLCdyZ2IoMCwyNTIsMjkpJywncmdiKDg1LDI1MywxMjcpJywncmdiKDE3OCwyNTMsMTU3KSddLFxuICAgIDY6IFsncmdiKDE0MCwxMTQsMCknLCdyZ2IoMTgwLDEzOSwwKScsJ3JnYigyMjEsMTc5LDApJywncmdiKDI1NSwyMTgsMCknLCdyZ2IoMjU1LDI1MywwKScsJ3JnYigyNTUsMjQ5LDg4KScsJ3JnYigyNTUsMjQ1LDE1NSknLCdyZ2IoMjU1LDI1NCwyMTgpJ10sXG4gICAgNzogWydyZ2IoMTAxLDQ0LDgwKScsJ3JnYigxNDEsNTgsNTcpJywncmdiKDE4MSw3MiwzMCknLCdyZ2IoMjAxLDg4LDApJywncmdiKDIyNiwxMTMsMCknLCdyZ2IoMjU1LDEzNywwKScsJ3JnYigyNTUsMTY4LDY0KScsJ3JnYigyNTUsMTk5LDE0NyknXSxcbiAgICA4OiBbJ3JnYig5MSw0LDM4KScsJ3JnYigxNTEsMTEsNTcpJywncmdiKDE5NywxNSw0MyknLCdyZ2IoMjIyLDE4LDI3KScsJ3JnYigyNTUsMjIsNiknLCdyZ2IoMjU1LDUzLDQ5KScsJ3JnYigyNTUsMTE4LDExNiknLCdyZ2IoMjU1LDE4OSwxODkpJ10sXG4gICAgOTogWydyZ2IoNDAsMTksMCknLCdyZ2IoNzEsMzksMTcpJywncmdiKDEwMSw1OSw0MiknLCdyZ2IoMTM2LDExNSw5OSknLCdyZ2IoMTc1LDE0NSwxMjgpJywncmdiKDIxMCwxNzksMTU4KScsJ3JnYigyMjAsMjAwLDE3OSknLCdyZ2IoMjM2LDIyMCwxOTkpJ10sXG4gICAxMDogWydyZ2IoMjgsNjEsOTEpJywncmdiKDU5LDEwMCwxMzEpJywncmdiKDc4LDEzMCwxNjEpJywncmdiKDk4LDE2MSwxODEpJywncmdiKDExOSwxNzAsMTkxKScsJ3JnYigxNTAsMTgwLDIwMSknLCdyZ2IoMTY5LDIwMCwyMTApJywncmdiKDE5OSwyMjAsMjMwKSddLFxuICAgMTE6IFsncmdiKDQ0LDE4LDE1MyknLCdyZ2IoODUsMjgsMjAyKScsJ3JnYigxMDksNDUsMjU1KScsJ3JnYigxMzAsODIsMjU1KScsJ3JnYigxNTAsMTIyLDI1NSknLCdyZ2IoMTYwLDE3MSwyNTUpJywncmdiKDE4MCwyMDYsMjU1KScsJ3JnYigxOTQsMjM1LDI1NSknXSxcbiAgIDEyOiBbJ3JnYigxMjEsMCwxMDApJywncmdiKDE2MSwxMiwxNTEpJywncmdiKDgwLDIwLDEwMSknLCdyZ2IoMTEwLDMwLDEzMSknLCdyZ2IoOTAsMCwzOSknLCdyZ2IoMTUxLDAsNTgpJ10sXG4gICAxMzogWydyZ2IoMCwzLDkxKScsJ3JnYigwLDksMTYyKScsJ3JnYig0NSw3LDE1MiknLCdyZ2IoODUsMjYsMjAzKScsJ3JnYigyOSw2MCw5MSknLCdyZ2IoNTksMTAwLDEzMSknXSxcbiAgIDE0OiBbJ3JnYigwLDYwLDQwKScsJ3JnYigwLDkwLDYwKScsJ3JnYigzOSw3NSwwKScsJ3JnYigyOCw5NSwxNSknLCdyZ2IoNDAsMTksMCknLCdyZ2IoNzAsMzksMTcpJ10sXG4gICAxNTogWydyZ2IoMTAwLDQ0LDgwKScsJ3JnYigxNDEsNTgsNTgpJywncmdiKDkwLDAsMzkpJywncmdiKDE1MSwwLDU4KScsJ3JnYigxNDAsMTE0LDApJywncmdiKDE4MSwxMzksMCknXSxcbiAgIDE2OiBbJ3JnYigyNTUsMTY0LDE2MyknLCdyZ2IoMjU1LDIxNSwyMzUpJywncmdiKDIwMCwxNTAsMjU1KScsJ3JnYigyMTAsMjAwLDI1NSknLCdyZ2IoMjU1LDExNywxMTYpJywncmdiKDI1NSwxODksMTg5KSddLFxuICAgMTc6IFsncmdiKDQ4LDI1NSwyNTUpJywncmdiKDIxOSwyNTUsMjU1KScsJ3JnYigxNzksMjA2LDI1NSknLCdyZ2IoMTk0LDIzNiwyNTUpJywncmdiKDE2OSwyMDAsMjExKScsJ3JnYigyMDAsMjIwLDIzMSknXSxcbiAgIDE4OiBbJ3JnYigxMTYsMjQ2LDIxMCknLCdyZ2IoMTc4LDI1NSwyMjUpJywncmdiKDg0LDI1NSwxMjYpJywncmdiKDE3OSwyNTUsMTU3KScsJ3JnYigyMjAsMjAwLDE3OSknLCdyZ2IoMjM1LDIyMCwxOTkpJ10sXG4gICAxOTogWydyZ2IoMjU1LDExNywxMTYpJywncmdiKDI1NSwxODksMTg5KScsJ3JnYigyNTUsMTY4LDYzKScsJ3JnYigyNTUsMTk5LDE0NiknLCdyZ2IoMjU1LDI0NCwxNTUpJywncmdiKDI1NSwyNTUsMjE5KSddLFxuICAgMjA6IFsncmdiKDI1NSwyMTUsMjM1KScsJ3JnYigyMTAsMjAwLDI1NSknLCdyZ2IoMTk0LDIzNiwyNTUpJywncmdiKDIxOSwyNTUsMjU1KScsJ3JnYigyMDAsMjIwLDIzMSknLCdyZ2IoMTc4LDI1NSwyMjUpJ10sXG4gICAyMTogWydyZ2IoMjU1LDQ4LDI1NSknLCdyZ2IoMTgxLDYyLDI1NSknLCdyZ2IoMTgxLDYyLDI1NSknLCdyZ2IoMCwyMSwyNTUpJywncmdiKDk4LDE2MCwxODEpJywncmdiKDUxLDIzMSwyMDApJ10sXG4gICAyMjogWydyZ2IoMTIxLDAsMTAwKScsJ3JnYig4MCwyMCwxMDEpJywncmdiKDQ1LDcsMTUyKScsJ3JnYigwLDMsOTEpJywncmdiKDI5LDYwLDkxKScsJ3JnYigwLDYwLDQwKSddLFxuICAgMjM6IFsncmdiKDE3OCwyNTUsMjI1KScsJ3JnYigxNzksMjU1LDE1NyknLCdyZ2IoMjU1LDI1NSwyMTkpJywncmdiKDI1NSwxOTksMTQ2KScsJ3JnYigyNTUsMTg5LDE4OSknLCdyZ2IoMjM1LDIyMCwxOTkpJ10sXG4gICAyNDogWydyZ2IoNTEsMjMxLDIwMCknLCdyZ2IoMCwyNTUsMjgpJywncmdiKDI1NSwyNTQsMCknLCdyZ2IoMjU1LDEzNywwKScsJ3JnYigyNTUsMCwwKScsJ3JnYigxMDAsNTksNDMpJ10sXG4gICAyNTogWydyZ2IoMCw2MCw0MCknLCdyZ2IoMzksNzUsMCknLCdyZ2IoMTQwLDExNCwwKScsJ3JnYigxMDAsNDQsODApJywncmdiKDkwLDAsMzkpJywncmdiKDQwLDE5LDApJ10sXG4gICAyNjogWydyZ2IoMTUsMTE1LDM3KScsJ3JnYigwLDE3MCw0MyknLCdyZ2IoMCwyMTAsNjMpJywncmdiKDI1NSwxMTcsMTM4KScsJ3JnYigyNTUsMTY0LDE2MyknLCdyZ2IoMjU1LDIxNSwyMzUpJ10sXG4gICAyNzogWydyZ2IoNzgsMTMwLDE2MSknLCdyZ2IoOTgsMTYwLDE4MSknLCdyZ2IoMTE5LDE3MCwxOTEpJywncmdiKDE5MCwxMDEsMjU1KScsJ3JnYigyMDAsMTUwLDI1NSknLCdyZ2IoMjEwLDIwMCwyNTUpJ10sXG4gICAyODogWydyZ2IoMTgxLDczLDMxKScsJ3JnYigyMDEsODcsMCknLCdyZ2IoMjI2LDExMiwwKScsJ3JnYigwLDIyMSwyNTUpJywncmdiKDQ4LDI1NSwyNTUpJywncmdiKDIxOSwyNTUsMjU1KSddLFxuICAgMjk6IFsncmdiKDEwMCw1OSw0MyknLCdyZ2IoMTM1LDExNCw5OSknLCdyZ2IoMTc1LDE0NCwxMjkpJywncmdiKDgsMjM5LDM0KScsJ3JnYig4NCwyNTUsMTI2KScsJ3JnYigxNzksMjU1LDE1NyknXSxcbiAgIDMwOiBbJ3JnYigyMDEsMjgsMjAyKScsJ3JnYigyNTUsNDgsMjU1KScsJ3JnYigyNTUsODcsMTkwKScsJ3JnYigxNTksMTcxLDI1NSknLCdyZ2IoMTc5LDIwNiwyNTUpJywncmdiKDE5NCwyMzYsMjU1KSddLFxuICAgMzE6IFsncmdiKDAsMTIwLDkwKScsJ3JnYigwLDE1MCwxMjApJywncmdiKDAsMTgxLDE1MCknLCdyZ2IoMjU1LDUzLDUwKScsJ3JnYigyNTUsMTE3LDExNiknLCdyZ2IoMjU1LDE4OSwxODkpJ10sXG4gICAzMjogWydyZ2IoMjIxLDE3OSwwKScsJ3JnYigyNTUsMjE5LDApJywncmdiKDI1NSwyNTQsMCknLCdyZ2IoNTEsMjMxLDIwMCknLCdyZ2IoMTE2LDI0NiwyMTApJywncmdiKDE3OCwyNTUsMjI1KSddLFxuICAgMzM6IFsncmdiKDAsMjEsMjU1KScsJ3JnYigwLDEyMiwyNTUpJywncmdiKDU0LDE4NiwyNTUpJywncmdiKDIxMCwxNzksMTU4KScsJ3JnYigyMjAsMjAwLDE3OSknLCdyZ2IoMjM1LDIyMCwxOTkpJ10sXG4gICAzNDogWydyZ2IoMTQxLDM1LDE2MiknLCdyZ2IoMTcxLDQwLDE5MiknLCdyZ2IoMTgxLDYyLDI1NSknLCdyZ2IoMjU1LDEzNywwKScsJ3JnYigyNTUsMTY4LDYzKScsJ3JnYigyNTUsMTk5LDE0NiknXSxcbiAgIDM1OiBbJ3JnYigxOTYsMCw0NCknLCdyZ2IoMjIyLDAsMjgpJywncmdiKDI1NSwwLDApJywncmdiKDE0OSwxODAsMjAxKScsJ3JnYigxNjksMjAwLDIxMSknLCdyZ2IoMjAwLDIyMCwyMzEpJ10sXG4gICAzNjogWydyZ2IoMTEwLDQ2LDI1NSknLCdyZ2IoMTMwLDgyLDI1NSknLCdyZ2IoMTUwLDEyMSwyNTUpJywncmdiKDI1NSwyNDksODgpJywncmdiKDI1NSwyNDQsMTU1KScsJ3JnYigyNTUsMjU1LDIxOSknXSxcbiAgIDM3OiBbJ3JnYigxODEsNzMsMzEpJywncmdiKDIyMywyMCw0MiknLCdyZ2IoMjI3LDExNiwwKScsJ3JnYigyNTQsNjUsNjEpJywncmdiKDI1NSwxNzAsNjkpJywncmdiKDI1NSwxOTEsMTg5KSddLFxuICAgMzg6IFsncmdiKDIyMSwxNzksMCknLCdyZ2IoMjAyLDkxLDEyKScsJ3JnYigyNTQsMjU0LDApJywncmdiKDI1NSwxMzksMCknLCdyZ2IoMjU1LDI0NCwxNTUpJywncmdiKDI1NSwyMDAsMTQ5KSddLFxuICAgMzk6IFsncmdiKDE0Miw0NCwxNjMpJywncmdiKDEzMCw4OSwyNTUpJywncmdiKDE4MSw3MywyNTUpJywncmdiKDE1NywxNzIsMjU1KScsJ3JnYigyMDAsMTUzLDI1NSknLCdyZ2IoMTkzLDIzNiwyNTUpJ10sXG4gICA0MDogWydyZ2IoNzcsMTMwLDE2MiknLCdyZ2IoMCwxNDksMTE5KScsJ3JnYigxMTgsMTcwLDE5MSknLCdyZ2IoNDQsMjI5LDE5OCknLCdyZ2IoMTcwLDIwMCwyMTApJywncmdiKDE3OCwyNTQsMjI0KSddLFxuICAgNDE6IFsncmdiKDIwMiw0NywyMDMpJywncmdiKDE3Miw1MCwxOTMpJywncmdiKDI1NSw5NiwxOTQpJywncmdiKDE5MSwxMDcsMjU1KScsJ3JnYigyNTUsMTY2LDE2NiknLCdyZ2IoMjEwLDIwMSwyNTUpJ10sXG4gICA0MjogWydyZ2IoMTEsMTE0LDMzKScsJ3JnYigyNTQsMjE4LDApJywncmdiKDAsMjA3LDU0KScsJ3JnYigyNTUsMjQ4LDg3KScsJ3JnYig4MiwyNTMsMTIxKScsJ3JnYigyNTUsMjUzLDIxOCknXSxcbiAgIDQzOiBbJ3JnYigxMDgsNTgsMjU0KScsJ3JnYigwLDEyNSwyNTQpJywncmdiKDE0OCwxMjUsMjU1KScsJ3JnYigwLDIyMCwyNTUpJywncmdiKDE4MCwyMDYsMjU1KScsJ3JnYigyMTksMjU1LDI1NSknXSxcbiAgIDQ0OiBbJ3JnYigxOTgsMTcsNTIpJywncmdiKDI1NCw2OCwyNTUpJywncmdiKDI1NSwyNCwyNCknLCdyZ2IoMjU1LDEyMiwxNDEpJywncmdiKDI1NSwxMjIsMTIxKScsJ3JnYigyNTUsMjE2LDIzNSknXSxcbiAgIDQ1OiBbJ3JnYigxMDEsNTksNDMpJywncmdiKDk4LDE2MCwxODEpJywncmdiKDE3NywxNDUsMTMwKScsJ3JnYigxNDksMTgwLDIwMSknLCdyZ2IoMjIxLDIwMCwxNzkpJywncmdiKDIwMCwyMjAsMjI5KSddLFxuICAgNDY6IFsncmdiKDEsMzcsMjU1KScsJ3JnYigxLDE2OCwzNiknLCdyZ2IoNDUsMTg2LDI1NSknLCdyZ2IoMSwyNTIsMSknLCdyZ2IoMzUsMjU0LDI1NSknLCdyZ2IoMTc4LDI1MiwxNTMpJ10sXG4gICA0NzogWydyZ2IoMCwxMTksODcpJywncmdiKDEzNiwxMTQsMTAwKScsJ3JnYigxLDE4MCwxNTEpJywncmdiKDIxMSwxODAsMTU5KScsJ3JnYigxMTQsMjQ2LDIwNyknLCdyZ2IoMjM2LDIxOSwxOTkpJ10sXG4gICA0ODogWydyZ2IoMTQxLDExNCwxKScsJ3JnYig3MSw0MCwxOSknLCdyZ2IoMjIyLDE4MCwwKScsJ3JnYigxMzYsMTE0LDEwMCknLCdyZ2IoMjU1LDI1MywwKScsJ3JnYigyMTEsMTgwLDE1OSknXSxcbiAgIDQ5OiBbJ3JnYig5MSwzLDQxKScsJ3JnYigyOCw5NCw3KScsJ3JnYigxOTgsMTcsNTIpJywncmdiKDEsMTY4LDM2KScsJ3JnYigyNTUsMjMsMjMpJywncmdiKDAsMjUxLDApJ10sXG4gICA1MDogWydyZ2IoMCw2LDkyKScsJ3JnYig1NywxMDEsMTMwKScsJ3JnYigxLDM3LDI1NSknLCdyZ2IoOTYsMTYxLDE4MSknLCdyZ2IoNDUsMTg2LDI1NSknLCdyZ2IoMTQ5LDE4MCwyMDApJ10sXG4gICA1MTogWydyZ2IoMTIyLDEzLDEwMiknLCdyZ2IoMSwxOSwxNjMpJywncmdiKDIwMiw0NywyMDMpJywncmdiKDAsMTI1LDI1NCknLCdyZ2IoMjU1LDk3LDE5NCknLCdyZ2IoMCwyMjAsMjU1KSddLFxuICAgNTI6IFsncmdiKDQxLDIwLDApJywncmdiKDE0Miw2MSw2MCknLCdyZ2IoMTAxLDU5LDQzKScsJ3JnYigyMDIsOTEsMTIpJywncmdiKDE3NiwxNDQsMTI5KScsJ3JnYigyNTUsMTM5LDApJ10sXG4gICA1MzogWydyZ2IoNDAsNzQsMCknLCdyZ2IoODQsMzcsMjAzKScsJ3JnYigxMSwxMTQsMzMpJywncmdiKDEzMCw4OSwyNTUpJywncmdiKDAsMjA4LDU0KScsJ3JnYigxNTcsMTcyLDI1NSknXSxcbiAgIDU0OiBbJ3JnYig4MiwyNSwxMDIpJywncmdiKDE1MiwxMSw2MyknLCdyZ2IoMTQyLDQ0LDE2MyknLCdyZ2IoMjIzLDIwLDQyKScsJ3JnYigxODEsNzMsMjU1KScsJ3JnYigyNTQsNjUsNjEpJ10sXG4gICA1NTogWydyZ2IoMCw1OSwzOSknLCdyZ2IoMTgxLDE0MCwwKScsJ3JnYigwLDExOSw4OSknLCdyZ2IoMjU0LDIxOCwwKScsJ3JnYigwLDE3OSwxNDkpJywncmdiKDI1NSwyNDgsODcpJ10sXG4gICA1NjogWydyZ2IoMjgsNjEsOTIpJywncmdiKDExMSwzNywxMzIpJywncmdiKDc3LDEzMCwxNjIpJywncmdiKDE3Miw1MCwxOTMpJywncmdiKDExOCwxNzAsMTkxKScsJ3JnYigxOTEsMTA3LDI1NSknXSxcbiAgIDU3OiBbJ3JnYigxMDEsNDcsODEpJywncmdiKDAsODksNTcpJywncmdiKDE4Myw3Niw0MCknLCdyZ2IoMCwxNDksMTE5KScsJ3JnYigyMjksMTE1LDApJywncmdiKDQ0LDIyOSwxOTgpJ10sXG4gICA1ODogWydyZ2IoNDQsMTgsMTUzKScsJ3JnYigxNjMsMzEsMTUzKScsJ3JnYigxMDgsNTgsMjU0KScsJ3JnYigyNTQsNjgsMjU1KScsJ3JnYigxNDgsMTI1LDI1NSknLCdyZ2IoMjU1LDEyMiwxNDEpJ10sXG4gICA1OTogWydyZ2IoMTk4LDE3LDUyKScsJ3JnYigyMjMsMjAsNDIpJywncmdiKDI1NSw5NiwxOTIpJywncmdiKDI1NSwxMjIsMTQxKScsJ3JnYigyNTUsMTcwLDY5KScsJ3JnYigyNTUsMTk5LDE0OCknXSxcbiAgIDYwOiBbJ3JnYigyMDIsNDcsMjAzKScsJ3JnYigyNTQsNjgsMjU1KScsJ3JnYigxODEsNzMsMjU1KScsJ3JnYigxOTEsMTA3LDI1NSknLCdyZ2IoMjU1LDI0NCwxNTUpJywncmdiKDI1NCwyNTQsMjE4KSddLFxuICAgNjE6IFsncmdiKDIyMSwxNzksMCknLCdyZ2IoMjU0LDIxOCwwKScsJ3JnYigwLDIwNyw1NCknLCdyZ2IoMSwyNTIsMSknLCdyZ2IoMzUsMjU0LDI1NSknLCdyZ2IoMjE5LDI1NSwyNTUpJ10sXG4gICA2MjogWydyZ2IoMTA4LDU4LDI1NCknLCdyZ2IoMTI4LDkwLDI1NSknLCdyZ2IoMTE4LDE3MCwxOTEpJywncmdiKDE0OSwxODAsMjAxKScsJ3JnYig4MiwyNTMsMTIxKScsJ3JnYigxNzgsMjUyLDE1MyknXSxcbiAgIDYzOiBbJ3JnYigxMDEsNTksNDMpJywncmdiKDEzNywxMTUsMTAxKScsJ3JnYigyMjksMTE1LDApJywncmdiKDI1NSwxMzksMCknLCdyZ2IoMTY5LDIwMiwyMTEpJywncmdiKDIwMCwyMjAsMjMxKSddLFxuICAgNjQ6IFsncmdiKDAsMTE5LDg5KScsJ3JnYigwLDE0OSwxMTkpJywncmdiKDE1MCwxMjUsMjU1KScsJ3JnYigxNTcsMTcyLDI1NSknLCdyZ2IoMTE0LDI0NCwyMDgpJywncmdiKDE3OCwyNTQsMjI0KSddLFxuICAgNjU6IFsncmdiKDE4Miw3NSwzOSknLCdyZ2IoMjAyLDkxLDEyKScsJ3JnYigyNTUsMjUzLDApJywncmdiKDI1NSwyNDgsODcpJywncmdiKDIwMCwxNTMsMjU1KScsJ3JnYigyMTAsMjAxLDI1NCknXSxcbiAgIDY2OiBbJ3JnYig3NywxMzAsMTYyKScsJ3JnYig5OCwxNjAsMTgxKScsJ3JnYigyNTUsMjQsMjQpJywncmdiKDI1NCw2NSw2MSknLCdyZ2IoMjU1LDE2NiwxNjYpJywncmdiKDI1NSwyMTYsMjM1KSddLFxuICAgNjc6IFsncmdiKDE0Miw0NCwxNjMpJywncmdiKDE3Miw1MCwxOTMpJywncmdiKDQ1LDE4NiwyNTUpJywncmdiKDAsMjIwLDI1NSknLCdyZ2IoMjIxLDIwMCwxNzkpJywncmdiKDIzNiwyMTksMTk5KSddLFxuICAgNjg6IFsncmdiKDExLDExNCwzMyknLCdyZ2IoMSwxNjgsMzYpJywncmdiKDAsMTc5LDE0OSknLCdyZ2IoNDQsMjI5LDE5OCknLCdyZ2IoMTgwLDIwNiwyNTUpJywncmdiKDE5MywyMzYsMjU1KSddLFxuICAgNjk6IFsncmdiKDEsMzcsMjU1KScsJ3JnYigwLDEyNSwyNTQpJywncmdiKDE3NywxNDUsMTMwKScsJ3JnYigyMTEsMTgwLDE1OSknLCdyZ2IoMjU0LDEyMiwxMjApJywncmdiKDI1NSwxOTEsMTkxKSddLFxuICAgNzA6IFsncmdiKDEyMiwxMywxMDIpJywncmdiKDE2MywzMSwxNTMpJywncmdiKDEsMzcsMjU1KScsJ3JnYigwLDEyNSwyNTQpJywncmdiKDAsMjA3LDU0KScsJ3JnYigxLDI1MiwxKScsJ3JnYigyNTUsMTcwLDY5KScsJ3JnYigyNTUsMjAwLDE0OSknXSxcbiAgIDcxOiBbJ3JnYigxNDIsNDQsMTYzKScsJ3JnYigxNzIsNTAsMTkzKScsJ3JnYigwLDE3OSwxNDkpJywncmdiKDQ0LDIyOSwxOTgpJywncmdiKDI1NSwyNDQsMTU1KScsJ3JnYigyNTQsMjU0LDIxOCknLCdyZ2IoOTEsMyw0MSknLCdyZ2IoMTUyLDExLDYzKSddLFxuICAgNzI6IFsncmdiKDQ1LDE4NiwyNTUpJywncmdiKDAsMjIwLDI1NSknLCdyZ2IoODIsMjUzLDEyMSknLCdyZ2IoMTc4LDI1MiwxNTMpJywncmdiKDEwMSw0Nyw4MSknLCdyZ2IoMTQyLDYxLDYwKScsJ3JnYigxMDEsNTksNDMpJywncmdiKDEzNiwxMTQsMTAwKSddLFxuICAgNzM6IFsncmdiKDExNCwyNDQsMjA4KScsJ3JnYigxNzgsMjU0LDIyNCknLCdyZ2IoMTQxLDExNCwxKScsJ3JnYigxODEsMTQwLDApJywncmdiKDI1NSwyMywyMyknLCdyZ2IoMjU0LDY1LDYxKScsJ3JnYigxNzAsMjAwLDIxMCknLCdyZ2IoMjAwLDIyMCwyMzEpJ10sXG4gICA3NDogWydyZ2IoNDAsNzQsMCknLCdyZ2IoMjgsOTQsNyknLCdyZ2IoMTgzLDc2LDQwKScsJ3JnYigyMDIsOTEsMTIpJywncmdiKDE3NywxNDUsMTMwKScsJ3JnYigyMTEsMTgwLDE1OSknLCdyZ2IoMTgwLDIwNiwyNTUpJywncmdiKDE5NCwyMzUsMjU1KSddLFxuICAgNzU6IFsncmdiKDIwMiw0NywyMDMpJywncmdiKDI1NCw2OCwyNTUpJywncmdiKDIyMiwxODAsMCknLCdyZ2IoMjU0LDIxOCwwKScsJ3JnYigyNTUsMTIyLDEyMSknLCdyZ2IoMjU1LDE5MSwxOTEpJywncmdiKDI4LDYxLDkyKScsJ3JnYig1OSwxMDAsMTMyKSddLFxuICAgNzY6IFsncmdiKDE4MSw3MywyNTUpJywncmdiKDE5MSwxMDcsMjU1KScsJ3JnYigyMjcsMTE2LDApJywncmdiKDI1NSwxMzksMCknLCdyZ2IoMjIxLDIwMCwxNzkpJywncmdiKDIzNiwyMTksMTk5KScsJ3JnYig0NCwxOCwxNTMpJywncmdiKDg0LDM3LDIwMyknXSxcbiAgIDc3OiBbJ3JnYigyMDAsMTUzLDI1NSknLCdyZ2IoMjEwLDIwMSwyNTUpJywncmdiKDAsNTksMzkpJywncmdiKDAsODksNTkpJywncmdiKDQxLDIwLDEpJywncmdiKDcxLDQwLDE5KScsJ3JnYigxMDgsNTgsMjU0KScsJ3JnYigxMzAsODksMjU1KSddLFxuICAgNzg6IFsncmdiKDI1NSw5NiwxOTQpJywncmdiKDI1NSwxMjIsMTQxKScsJ3JnYigzNSwyNTQsMjU1KScsJ3JnYigyMTksMjU1LDI1NSknLCdyZ2IoMTEsMTE0LDMzKScsJ3JnYigxLDE2OCwzNiknLCdyZ2IoMTk4LDE3LDUyKScsJ3JnYigyMjIsMTksNDEpJ10sXG4gICA3OTogWydyZ2IoODIsMjUsMTAyKScsJ3JnYigxMTEsMzcsMTMyKScsJ3JnYigwLDExOSw4OSknLCdyZ2IoMCwxNDksMTE3KScsJ3JnYigyNTUsMjUzLDApJywncmdiKDc3LDEzMCwxNjIpJywncmdiKDc3LDEzMCwxNjIpJywncmdiKDk4LDE2MCwxODEpJ10sXG4gICA4MDogWydyZ2IoMjU1LDE2NiwxNjUpJywncmdiKDI1NSwyMTYsMjM1KScsJ3JnYigwLDYsOTIpJywncmdiKDEsMTksMTYzKScsJ3JnYigxMTgsMTcwLDE5MSknLCdyZ2IoMTQ4LDE4MCwyMDEpJywncmdiKDE1MCwxMjUsMjU1KScsJ3JnYigxNTcsMTcyLDI1NSknXSxcbiAgIDgxOiBbJ3JnYig0MSwyMCwxKScsJ3JnYig3MSw0MCwxOSknLCdyZ2IoMTA4LDU4LDI1NCknLCdyZ2IoMTMwLDg5LDI1NSknLCdyZ2IoMjU1LDk2LDE5NCknLCdyZ2IoMjU1LDEyMiwxNDEpJ10sXG4gICA4MjogWydyZ2IoODIsMjUsMTAyKScsJ3JnYigxMTEsMzcsMTMyKScsJ3JnYigwLDExOSw4OSknLCdyZ2IoNDMsMTIxLDEwNyknLCdyZ2IoMjU1LDI1MywwKScsJ3JnYigyNTUsMjQ4LDg3KSddLFxuICAgODM6IFsncmdiKDc2LDEyOSwxNjApJywncmdiKDk4LDE2MCwxODEpJywncmdiKDI1NSwxNjYsMTY2KScsJ3JnYigyNTUsMjE2LDIzNSknLCdyZ2IoMCw2LDkyKScsJ3JnYigxLDE5LDE2MyknXSxcbiAgIDg0OiBbJ3JnYigxODEsNzMsMjU1KScsJ3JnYigxOTEsMTA3LDI1NSknLCdyZ2IoMjI3LDExNiwwKScsJ3JnYigyNTUsMTQwLDEpJywncmdiKDIyMSwyMDAsMTc5KScsJ3JnYigyMzUsMjIwLDE5OSknXSxcbiAgIDg1OiBbJ3JnYigxMTQsMjQ0LDIwOCknLCdyZ2IoMTc5LDI1NCwyMjQpJywncmdiKDE0MSwxMTQsMSknLCdyZ2IoMTgxLDE0MCwwKScsJ3JnYigyNTUsMjQsMjQpJywncmdiKDI1NCw2NSw2MSknXSxcbiAgIDg2OiBbJ3JnYigxNzcsMTQ1LDEzMCknLCdyZ2IoMjExLDE4MCwxNTkpJywncmdiKDE4MCwyMDYsMjU1KScsJ3JnYigxOTMsMjM2LDI1NSknLCdyZ2IoMjAyLDQ3LDIwMyknLCdyZ2IoMjU0LDY4LDI1NSknXSxcbiAgIDg3OiBbJ3JnYigyNTUsMjQ0LDE1NSknLCdyZ2IoMjU0LDI1NCwyMTgpJywncmdiKDkxLDMsNDEpJywncmdiKDE1MiwxMSw2MyknLCdyZ2IoNDUsMTg2LDI1NSknLCdyZ2IoMCwyMjAsMjU1KSddLFxuICAgODg6IFsncmdiKDE3MCwyMDAsMjEwKScsJ3JnYigyMDAsMjIwLDIzMSknLCdyZ2IoMzgsNzQsMCknLCdyZ2IoMjgsOTQsNyknLCdyZ2IoMTgzLDc2LDQwKScsJ3JnYigyMDIsOTEsMTIpJ10sXG4gICA4OTogWydyZ2IoMTIxLDEyLDEwMSknLCdyZ2IoMTYzLDMxLDE1MyknLCdyZ2IoMSwzNywyNTUpJywncmdiKDAsMTI1LDI1NCknLCdyZ2IoMCwyMDcsNTQpJywncmdiKDEsMjUyLDApJ10sXG4gICA5MDogWydyZ2IoMjU1LDE3MCw2NyknLCdyZ2IoMjU1LDIwMCwxNDkpJywncmdiKDE0Miw0NCwxNjMpJywncmdiKDE3Miw1MCwxOTMpJywncmdiKDAsMTc5LDE0NyknLCdyZ2IoNDQsMjI5LDE5OCknXSxcbiAgIDkxOiBbJ3JnYigzNSwyNTUsMjU1KScsJ3JnYigyMTksMjU1LDI1NSknLCdyZ2IoMTEsMTE0LDMzKScsJ3JnYigxLDE2OCwzNiknLCdyZ2IoMTk4LDE2LDU0KScsJ3JnYigyMjMsMjAsNDIpJ10sXG4gICA5MjogWydyZ2IoMjIyLDE4MCwwKScsJ3JnYigyNTQsMjE4LDApJywncmdiKDI1NSwxMjEsMTE4KScsJ3JnYigyNTUsMTkxLDE5MSknLCdyZ2IoMjgsNjEsOTIpJywncmdiKDU3LDEwMSwxMzApJ10sXG4gICA5MzogWydyZ2IoNDQsMTgsMTUzKScsJ3JnYig4NCwzNywyMDMpJywncmdiKDIwMCwxNTMsMjU1KScsJ3JnYigyMTAsMjAxLDI1NSknLCdyZ2IoMCw1OSwzOSknLCdyZ2IoMCw4OSw1OSknXSxcbiAgIDk0OiBbJ3JnYig4MiwyNTMsMTIxKScsJ3JnYigxNzgsMjUyLDE1MyknLCdyZ2IoMTAxLDQ3LDgxKScsJ3JnYig5Myw5Myw5MyknLCdyZ2IoMTAxLDU5LDQzKScsJ3JnYigxMzcsMTE1LDEwMSknXSxcbiAgIDk1OiBbJ3JnYigxMTgsMTcwLDE5MSknLCdyZ2IoOTMsOTMsOTMpJywncmdiKDE1MCwxMjUsMjU1KScsJ3JnYigxNTcsMTcyLDI1NSknLCdyZ2IoMTIyLDEzLDEwMiknLCdyZ2IoMTYzLDMxLDE1MyknXSxcbiAgIDk2OiBbJ3JnYig0MCw3NCwwKScsJ3JnYigyNyw5NSwxMCknLCdyZ2IoMTQyLDQ0LDE2MyknLCdyZ2IoMTcyLDUwLDE5MyknLCdyZ2IoMjU1LDk2LDE5NCknLCdyZ2IoMjU1LDEyMiwxNDEpJ10sXG4gICA5NzogWydyZ2IoMCw2LDkyKScsJ3JnYigwLDIxLDE2MyknLCdyZ2IoMjIyLDE4MCwwKScsJ3JnYigyNTQsMjE4LDApJywncmdiKDAsMjA3LDU0KScsJ3JnYigxLDI1MiwxKSddLFxuICAgOTg6IFsncmdiKDkzLDY5LDgyKScsJ3JnYigxNTIsMTEsNjMpJywncmdiKDEsMzcsMjU1KScsJ3JnYigwLDEyNSwyNTQpJywncmdiKDE4MSw3MywyNTUpJywncmdiKDE5MSwxMDcsMjU1KSddLFxuICAgOTk6IFsncmdiKDE0MSwxMTQsMSknLCdyZ2IoMTgxLDE0MCwwKScsJ3JnYig3NywxMzAsMTYyKScsJ3JnYig5OCwxNjAsMTgxKScsJ3JnYigxNDgsMTI1LDI1NSknLCdyZ2IoMTU3LDE3MiwyNTUpJ10sXG4gIDEwMDogWydyZ2IoNDQsMTgsMTUzKScsJ3JnYig4NCwzNywyMDMpJywncmdiKDAsMTE5LDg5KScsJ3JnYigwLDE0OSwxMTkpJywncmdiKDE3NCwxNDUsMTI5KScsJ3JnYigyMTIsMTgwLDE1OSknXSxcbiAgMTAxOiBbJ3JnYigyOCw2MSw5MiknLCdyZ2IoNTksMTAwLDEzMiknLCdyZ2IoMjAyLDQ3LDIwMyknLCdyZ2IoMjU0LDY4LDI1NSknLCdyZ2IoMjI3LDExNiwwKScsJ3JnYigyNTUsMTM5LDApJ10sXG4gIDEwMjogWydyZ2IoMTIyLDEzLDEwMiknLCdyZ2IoMTYzLDMxLDE1MyknLCdyZ2IoMTAxLDU5LDQzKScsJ3JnYigxMzcsMTE1LDEwMSknLCdyZ2IoMjU1LDI0LDI0KScsJ3JnYigyNTQsNjUsNjEpJ10sXG4gIDEwMzogWydyZ2IoMTAxLDQ3LDgxKScsJ3JnYigxNDIsNjEsNjApJywncmdiKDE5OCwxNyw1MiknLCdyZ2IoMjIzLDIwLDQyKScsJ3JnYig0NSwxODYsMjU1KScsJ3JnYigwLDIyMCwyNTUpJ10sXG4gIDEwNDogWydyZ2IoMCw1OSwzOSknLCdyZ2IoMCw4OSw1OSknLCdyZ2IoMTgzLDc2LDQwKScsJ3JnYigyMDIsOTAsMTQpJywncmdiKDI1NSwyNTMsMCknLCdyZ2IoMjU1LDI0OCw4NyknXSxcbiAgMTA1OiBbJ3JnYig4MiwyNSwxMDIpJywncmdiKDExMSwzNywxMzIpJywncmdiKDEwOCw1OCwyNTQpJywncmdiKDEzMCw4OSwyNTUpJywncmdiKDExOCwxNzAsMTkxKScsJ3JnYigxNDksMTgwLDIwMSknXSxcbiAgMTA2OiBbJ3JnYig0MSwyMCwxKScsJ3JnYig3MSw0MCwxOSknLCdyZ2IoMTEsMTE0LDMzKScsJ3JnYigxMSwxMTQsMzMpJywncmdiKDEsMTY4LDM2KScsJ3JnYig0NCwyMjksMTk4KSddXG59XG5cbmV4cG9ydCBkZWZhdWx0IHN3YXRjaGVzXG5cbmV4cG9ydCBjb25zdCByYW5kb20gPSAocHJuZyA9IE1hdGgucmFuZG9tKSA9PiB7XG4gIGNvbnN0IGluZGV4ID0gcmFuZG9tT2YoT2JqZWN0LmtleXMoc3dhdGNoZXMpLCBwcm5nKVxuICBjb25zdCBzd2F0Y2ggPSBzd2F0Y2hlc1tpbmRleF1cbiAgcmV0dXJuIHsgaW5kZXgsIHN3YXRjaCB9XG59XG4iXX0=
+
+var generate = function (ref) {
+    if ( ref === void 0 ) ref = {};
+    var units = ref.units; if ( units === void 0 ) units = [24];
+    var width = ref.width; if ( width === void 0 ) width = 240;
+    var height = ref.height; if ( height === void 0 ) height = 240;
+    var groundsLength = ref.groundsLength; if ( groundsLength === void 0 ) groundsLength = 2;
+    var percentOfStraightLines = ref.percentOfStraightLines; if ( percentOfStraightLines === void 0 ) percentOfStraightLines = 0.5;
+    var percentOfGradients = ref.percentOfGradients; if ( percentOfGradients === void 0 ) percentOfGradients = 0.5;
+    var percentOfSimplexGradients = ref.percentOfSimplexGradients; if ( percentOfSimplexGradients === void 0 ) percentOfSimplexGradients = 0.1;
+    var swatch = ref.swatch; if ( swatch === void 0 ) swatch = ['rgb(0, 0, 0)'];
+    var backgroundColor = ref.backgroundColor; if ( backgroundColor === void 0 ) backgroundColor = 'rgb(255, 255, 255)';
+    var symbols$$1 = ref.symbols; if ( symbols$$1 === void 0 ) symbols$$1 = ['debug'];
+    var canvas = ref.canvas; if ( canvas === void 0 ) canvas = null;
+    var random = ref.random; if ( random === void 0 ) random = prng.random;
+
+    var patterns = symbols$$1.map(function (symbolName) { return makePattern(symbols[symbolName]); });
+    var grounds = new Array(groundsLength).fill(true).map(function (_, index, grounds) {
+        var rnd = random() * 100;
+        var unit = randomOf(units, random);
+        var foregroundColor = randomOf(swatch, random);
+        var pattern = randomOf(patterns, random);
+        var gradient = rnd > percentOfGradients * 100 ? Gradient.fix(random()) : rnd < percentOfSimplexGradients * 100 ? Gradient.simplex({
+            seed: rnd
+        }) : Gradient.linear(rnd);
+        var offy = height * (Math.pow( (1 - index / grounds.length), (random() * 3) ));
+        var line = new Line(function (x) {
+            if (rnd < percentOfStraightLines * 100) {
+                return offy / height;
+            } else {
+                var n = Line.perlin({
+                    seed: rnd,
+                    octaves: 3,
+                    resolution: 64,
+                    lacunarity: 2,
+                    gain: 0.5
+                })(x / (2 + rnd / 100 * 3));
+                return offy / height / 2 + n;
+            }
+        });
+        return new Ground({
+            unit: unit,
+            line: line,
+            gradient: gradient,
+            width: width,
+            height: height,
+            foregroundColor: foregroundColor,
+            backgroundColor: backgroundColor,
+            pattern: pattern
+        });
+    });
+    return new Landscape(grounds, {
+        canvas: canvas,
+        backgroundColor: backgroundColor
+    });
+};
+
+
+
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,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YyxTQUFTO1FBQzVCLE1BRDRCLENBQUE7UUFFNUI7O0FBRUo7QUFFQSxPQUFBLENBQVM7QUFDVCxPQUFBLENBQVMsTUFBYSxNQUFBO0FBQ3RCLE9BQUEsQ0FBUyxVQUFpQixNQUFBO0FBQzFCLE9BQUEsQ0FBUyxTQUFnQixNQUFBO0FBdkV6QiIsImZpbGUiOiJpbmRleC5qcyhvcmlnaW5hbCkiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgR3JhZGllbnQgZnJvbSAnLi9hYnN0cmFjdGlvbnMvR3JhZGllbnQnXG5pbXBvcnQgR3JvdW5kIGZyb20gJy4vYWJzdHJhY3Rpb25zL0dyb3VuZCdcbmltcG9ydCBMYW5kc2NhcGUgZnJvbSAnLi9hYnN0cmFjdGlvbnMvTGFuZHNjYXBlJ1xuaW1wb3J0IExpbmUgZnJvbSAnLi9hYnN0cmFjdGlvbnMvTGluZSdcbmltcG9ydCBtYWtlUGF0dGVybiBmcm9tICcuL2NvbnRyb2xsZXJzL21ha2UtcGF0dGVybidcbmltcG9ydCBTWU1CT0xTIGZyb20gJy4vY29udHJvbGxlcnMvc3ltYm9scydcbmltcG9ydCByYW5kb21PZiBmcm9tICcuL3V0aWxzL2FycmF5LXJhbmRvbSdcbmltcG9ydCBwcm5nIGZyb20gJy4vdXRpbHMvcHJuZydcblxuZXhwb3J0IGNvbnN0IGdlbmVyYXRlID0gKHtcbiAgdW5pdHMgPSBbMjRdLFxuICB3aWR0aCA9IDI0MCxcbiAgaGVpZ2h0ID0gMjQwLFxuICBncm91bmRzTGVuZ3RoID0gMixcblxuICBwZXJjZW50T2ZTdHJhaWdodExpbmVzID0gMC41LFxuICBwZXJjZW50T2ZHcmFkaWVudHMgPSAwLjUsXG4gIHBlcmNlbnRPZlNpbXBsZXhHcmFkaWVudHMgPSAwLjEsXG5cbiAgc3dhdGNoID0gWydyZ2IoMCwgMCwgMCknXSxcbiAgYmFja2dyb3VuZENvbG9yID0gJ3JnYigyNTUsIDI1NSwgMjU1KScsXG4gIHN5bWJvbHMgPSBbJ2RlYnVnJ10sXG5cbiAgY2FudmFzID0gbnVsbCxcbiAgcmFuZG9tID0gcHJuZy5yYW5kb21cbn0gPSB7fSkgPT4ge1xuICBjb25zdCBwYXR0ZXJucyA9IHN5bWJvbHMubWFwKHN5bWJvbE5hbWUgPT4gbWFrZVBhdHRlcm4oU1lNQk9MU1tzeW1ib2xOYW1lXSkpXG5cbiAgY29uc3QgZ3JvdW5kcyA9IG5ldyBBcnJheShncm91bmRzTGVuZ3RoKS5maWxsKHRydWUpLm1hcCgoXywgaW5kZXgsIGdyb3VuZHMpID0+IHtcbiAgICBjb25zdCBybmQgPSByYW5kb20oKSAqIDEwMFxuICAgIGNvbnN0IHVuaXQgPSByYW5kb21PZih1bml0cywgcmFuZG9tKVxuXG4gICAgY29uc3QgZm9yZWdyb3VuZENvbG9yID0gcmFuZG9tT2Yoc3dhdGNoLCByYW5kb20pXG4gICAgY29uc3QgcGF0dGVybiA9IHJhbmRvbU9mKHBhdHRlcm5zLCByYW5kb20pXG5cbiAgICBjb25zdCBncmFkaWVudCA9IHJuZCA+IHBlcmNlbnRPZkdyYWRpZW50cyAqIDEwMFxuICAgICAgPyBHcmFkaWVudC5maXgocmFuZG9tKCkpXG4gICAgICA6IHJuZCA8IHBlcmNlbnRPZlNpbXBsZXhHcmFkaWVudHMgKiAxMDBcbiAgICAgICAgPyBHcmFkaWVudC5zaW1wbGV4KHsgc2VlZDogcm5kIH0pXG4gICAgICAgIDogR3JhZGllbnQubGluZWFyKHJuZClcblxuICAgIGNvbnN0IG9mZnkgPSBoZWlnaHQgKiAoMSAtIChpbmRleCAvIChncm91bmRzLmxlbmd0aCkpKSAqKiAocmFuZG9tKCkgKiAzKVxuICAgIGNvbnN0IGxpbmUgPSBuZXcgTGluZSh4ID0+IHtcbiAgICAgIGlmIChybmQgPCBwZXJjZW50T2ZTdHJhaWdodExpbmVzICogMTAwKSB7XG4gICAgICAgIHJldHVybiBvZmZ5IC8gaGVpZ2h0XG4gICAgICB9IGVsc2Uge1xuICAgICAgICBjb25zdCBuID0gTGluZS5wZXJsaW4oe1xuICAgICAgICAgIHNlZWQ6IHJuZCxcbiAgICAgICAgICBvY3RhdmVzOiAzLFxuICAgICAgICAgIHJlc29sdXRpb246IDY0LFxuICAgICAgICAgIGxhY3VuYXJpdHk6IDIsXG4gICAgICAgICAgZ2FpbjogMC41XG4gICAgICAgIH0pKHggLyAoMiArIChybmQgLyAxMDApICogMykpXG4gICAgICAgIHJldHVybiAob2ZmeSAvIGhlaWdodCkgLyAyICsgblxuICAgICAgfVxuICAgIH0pXG5cbiAgICByZXR1cm4gbmV3IEdyb3VuZCh7XG4gICAgICB1bml0LCBsaW5lLCBncmFkaWVudCwgd2lkdGgsIGhlaWdodCwgZm9yZWdyb3VuZENvbG9yLCBiYWNrZ3JvdW5kQ29sb3IsIHBhdHRlcm5cbiAgICB9KVxuICB9KVxuXG4gIHJldHVybiBuZXcgTGFuZHNjYXBlKGdyb3VuZHMsIHtcbiAgICBjYW52YXMsXG4gICAgYmFja2dyb3VuZENvbG9yXG4gIH0pXG59XG5cbmV4cG9ydCB7IHBybmcgfVxuZXhwb3J0IHsgZXJvZGUgfSBmcm9tICcuL2NvbnRyb2xsZXJzL2Vyb2RlJ1xuZXhwb3J0IHsgaHVlUm90YXRlIH0gZnJvbSAnLi9jb250cm9sbGVycy9odWUtcm90YXRlJ1xuZXhwb3J0IHsgc3dhdGNoZXMgfSBmcm9tICcuL2NvbnRyb2xsZXJzL3N3YXRjaGVzJ1xuIl19
+
+exports.generate = generate;
+exports.prng = prng;
+exports.erode = erode;
+exports.hueRotate = hueRotate;
+exports.swatches = swatches;
+
+})));
 //# sourceMappingURL=ffp-generator.umd.js.map

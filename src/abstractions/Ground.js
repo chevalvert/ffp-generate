@@ -1,6 +1,8 @@
 import makePattern from '../controllers/make-pattern'
 import symbols from '../controllers/symbols'
 
+import createCanvasFromContext from '../utils/create-canvas-from-context'
+
 export default class Ground {
   constructor ({
     width,
@@ -63,7 +65,7 @@ export default class Ground {
     return this.hasCell(i, j)
   }
 
-  behind (grounds) {
+  setBehind (grounds) {
     this.grid.forEach(column => {
       column.forEach(cell => {
         if (!cell || !cell.shouldRender) return
@@ -72,6 +74,10 @@ export default class Ground {
         })
       })
     })
+  }
+
+  get isEmpty () {
+    return !this.cells.find(cell => cell.shouldRender)
   }
 
   render (ctx) {
@@ -86,5 +92,12 @@ export default class Ground {
         scale: this.gradient.compute(cell.x, cell.y, this.width, this.height)
       })
     })
+  }
+
+  createSprite (ctx) {
+    if (ctx.isSVG) throw new Error('Sprite rendering only works on non-SVG context')
+
+    this.sprite = createCanvasFromContext(ctx)
+    this.render(this.sprite.getContext('2d'))
   }
 }

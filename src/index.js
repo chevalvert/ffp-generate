@@ -60,7 +60,7 @@ export const generate = ({
     })
   })
 
-  return Landscape.from(grounds, {
+  return new Landscape(grounds, {
     canvas,
     backgroundColor
   })
@@ -68,4 +68,5 @@ export const generate = ({
 
 export { prng }
 export { erode } from './controllers/erode'
+export { hueRotate } from './controllers/hue-rotate'
 export { swatches } from './controllers/swatches'

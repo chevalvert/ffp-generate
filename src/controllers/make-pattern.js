@@ -8,13 +8,13 @@ export default symbol => {
     foregroundColor = 'black',
     backgroundColor = 'white'
   } = {}) => {
-    ctx.beginSVGGroup()
+    ctx.isSVG && ctx.beginSVGGroup()
 
     background(x, y, unit, unit, { ctx, color: backgroundColor })
 
     ctx.fillStyle = foregroundColor
     symbol(x, y, { ctx, unit, scale })
 
-    ctx.endSVGGroup()
+    ctx.isSVG && ctx.endSVGGroup()
   }
 }

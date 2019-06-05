@@ -77,12 +77,13 @@
       landscape.parent.style.width = landscape.width + 'px'
       landscape.parent.style.height = landscape.height + 'px'
 
+      var erode = ffp.erode(landscape, {
+        autoplay: false,
+        step: 24
+      })
+
       landscape.parent.addEventListener('click', function () {
-        ffp.erode(landscape, {
-          step: 96,
-          easing: 0.01,
-          snapToGrid: true
-        })
+        erode.play()
       })
 
       window.addEventListener('keyup', function (e) {

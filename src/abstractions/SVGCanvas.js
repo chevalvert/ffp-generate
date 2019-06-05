@@ -25,30 +25,32 @@ export default class SVGCanvas {
     this.ctx = this.canvas
       ? this.canvas.getContext('2d')
       : new Canvas(width, height)
-    this.ctx.isSVGCompatible = !this.canvas
+    this.ctx.isSVG = !this.canvas
 
     // NOTE: canvas2svg uses context[save|restore] to handle svg grouping
     // Theses aliases are designed to improve code readability
     this.ctx.beginSVGGroup = this.ctx.save
     this.ctx.endSVGGroup = this.ctx.restore
     this.ctx.group = fn => {
-      this.ctx.beginSVGGroup()
+      this.ctx.isSVG && this.ctx.beginSVGGroup()
       fn()
-      this.ctx.endSVGGroup()
+      this.ctx.isSVG && this.ctx.endSVGGroup()
     }
   }
+
+  get context () { return this.ctx }
 
   get svg () { return this.ctx.getSvg() }
   get serializedSvg () { return this.ctx.getSerializedSvg(true) }
 
   async toBlob (type) {
-    if (!type) type = this.ctx.isSVGCompatible ? 'image/svg+xml' : 'image/png'
+    if (!type) type = this.ctx.isSVG ? 'image/svg+xml' : 'image/png'
 
     if (!SVGCanvas.isSupportedMimeType(type)) {
       throw new Error(`Invalid or unsupported mime type.\nSupported mime types are: ${SVGCanvas.SUPPORTED_MIME_TYPES}`)
     }
 
-    if (type === 'image/svg+xml' && !this.ctx.isSVGCompatible) {
+    if (type === 'image/svg+xml' && !this.ctx.isSVG) {
       throw new Error(`image/svg+xml mime type is not compatible with the current context.`)
     }
 
@@ -76,15 +78,9 @@ export default class SVGCanvas {
     drawBackground(0, 0, this.width, this.height, { color, ctx: this.ctx })
   }
 
-  update () {
-    if (!this.mounted) return
-
-    this.prevEl = this.el
-    this.el = this.svg
-    this.parent.replaceChild(this.el, this.prevEl)
-  }
-
   copy (canvas = document.createElement('canvas')) {
+    if (this.ctx.isSVG) throw new Error('Copying canvas with SVG context is not supported yet')
+
     canvas.width = this.width
     canvas.height = this.height
     const ctx = canvas.getContext('2d')
@@ -94,8 +90,11 @@ export default class SVGCanvas {
   }
 
   clear () {
-    if (!this.mounted) return
-    this.el.querySelector('g').innerHTML = ''
+    if (!this.ctx.isSVG) this.ctx.clearRect(0, 0, this.width, this.height)
+    else {
+      if (!this.mounted) return
+      this.el.querySelector('g').innerHTML = ''
+    }
   }
 
   static get SUPPORTED_MIME_TYPES () {

@@ -1,70 +1,55 @@
-import Ground from '../abstractions/Ground'
 import SVGCanvas from '../abstractions/SVGCanvas'
 
 export default class Landscape extends SVGCanvas {
-  constructor ({
-    width,
-    height,
-    canvas,
-    groupGroundTogether = true,
+  constructor (grounds, {
+    canvas = null,
     backgroundColor = 'transparent'
   } = {}) {
-    super(width, height, canvas)
+    super(grounds[0].width, grounds[0].height, canvas)
+
     this.backgroundColor = backgroundColor
-    this.groupGroundTogether = groupGroundTogether
-    this.grounds = []
+    this.grounds = grounds
   }
 
-  static from (grounds, { backgroundColor, canvas, groupGroundTogether } = {}) {
-    const landscape = new Landscape({
-      width: grounds[0].width,
-      height: grounds[0].height,
-      backgroundColor,
-      groupGroundTogether,
-      canvas
-    })
+  get grounds () { return this._grounds }
+  set grounds (grounds) {
+    let foregrounds = []
+    this._grounds = grounds.map((ground, index) => {
+      ground.setBehind(foregrounds)
+      if (ground.isEmpty) return null
 
-    landscape.grounds = grounds
+      foregrounds.push(ground)
 
-    return landscape
+      if (!this.ctx.isSVG) {
+        ground.createSprite(this.ctx)
+      }
+
+      return ground
+    }).filter(Boolean)
   }
 
   render (ctx = this.ctx) {
     super.background(this.backgroundColor)
 
-    let renderedGrounds = []
-    this.grounds.forEach(ground => {
-      ground.behind(renderedGrounds)
-
-      ground.render(ctx)
-      renderedGrounds.push(ground)
+    this.grounds.forEach((ground, index) => {
+      if (ground.sprite) ctx.drawImage(ground.sprite, 0, 0)
+      else ground.render(ctx)
     })
 
     return this
   }
 
-  makeGround ({ line, gradient, pattern }) {
-    this.grounds.push(new Ground({
-      width: this.width,
-      height: this.height,
-      unit: this.unit,
-      line,
-      gradient,
-      pattern
-    }))
-  }
-
   ensureSVGContext () {
-    return this.ctx.isSVGCompatible
+    return this.ctx.isSVG
       ? this
-      : Landscape.from(this.grounds, {
-        backgroundColor: this.backgroundColor,
-        groupGroundTogether: this.groupGroundTogether
+      : new Landscape(this.grounds, {
+        canvas: null,
+        backgroundColor: this.backgroundColor
       }).render()
   }
 
   save (filename, { type } = {}) {
-    return (type === 'image/svg+xml' && !this.ctx.isSVGCompatible)
+    return (type === 'image/svg+xml' && !this.ctx.isSVG)
       ? this.ensureSVGContext().save(filename, { type })
       : super.save(filename, { type })
   }

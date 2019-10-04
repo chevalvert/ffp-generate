@@ -30,8 +30,10 @@
       <canvas/>
     </main>
 
-    <script src="ffp-generator.umd.js"></script>
+    <script src="ffp-generate.umd.js"></script>
     <script>
+      console.log(ffp)
+
       var prng = ffp.prng
       prng.seed = window.location.hash.substring(1) || Date.now()
       document.title += ' | ' + prng.seed

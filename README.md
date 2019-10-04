@@ -1,4 +1,4 @@
-# `ffp-generator` [<img src="https://github.com/chevalvert.png?size=100" align="right">](http://chevalvert.fr/)
+# `ffp-generate` [<img src="https://github.com/chevalvert.png?size=100" align="right">](http://chevalvert.fr/)
 > JavaScript browser module to generate `ffp` landscapes
 
 <br>
@@ -6,7 +6,7 @@
 ## Installation
 
 ```sh
-npm install --save chevalvert/ffp-generator
+npm install --save chevalvert/ffp-generate
 ```
 
 ## Usage
@@ -16,25 +16,22 @@ npm install --save chevalvert/ffp-generator
 ###### in a module bundler
 
 ```js
-import ffp from 'ffp-generator'
-ffp.generator(opts)
+import ffp from 'ffp-generate'
+ffp.generate(opts)
 ```
 
 ###### in a browser
 
 ```html
-<script src="https://unpkg.com/ffp-generator"></script>
+<script src="https://unpkg.com/ffp-generate"></script>
 <script>
-  window.ffp.generator(opts)
+  window.ffp.generate(opts)
 </script>
 ```
 
 ### How to use
 
 See [`example/`](example/index.html).
-
-### Helpers
-
 
 ## Development
 ```console

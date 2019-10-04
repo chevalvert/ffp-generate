@@ -1,12 +1,12 @@
 {
-  "name": "ffp-generator",
+  "name": "ffp-generate",
   "amdName": "ffp",
   "version": "0.1.2",
   "description": "JavaScript browser module to generate `ffp` landscapes",
   "source": "src/index.js",
-  "main": "dist/ffp-generator.js",
-  "module": "dist/ffp-generator.m.js",
-  "unpkg": "dist/ffp-generator.umd.js",
+  "main": "dist/ffp-generate.js",
+  "module": "dist/ffp-generate.m.js",
+  "unpkg": "dist/ffp-generate.umd.js",
   "files": [
     "dist"
   ],
@@ -20,14 +20,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+git@github.com:chevalvert/ffp-generator.git"
+    "url": "git+git@github.com:chevalvert/ffp-generate.git"
   },
   "author": "Arnaud Juracek <arnaud@chevalvert.fr>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/chevalvert/ffp-generator/issues"
+    "url": "https://github.com/chevalvert/ffp-generate/issues"
   },
-  "homepage": "https://github.com/chevalvert/ffp-generator#readme",
+  "homepage": "https://github.com/chevalvert/ffp-generate#readme",
   "dependencies": {
     "@internet/raf": "^0.2.1",
     "animejs": "^3.0.1",

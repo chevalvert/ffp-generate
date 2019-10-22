@@ -41,6 +41,7 @@
 
       var swatch = prng.randomOf(Object.values(ffp.swatches))
 
+      beginPerfCapture('generate')
       var landscape = ffp.generate({
         units: [24, 48, 96],
         width: 2000,
@@ -72,9 +73,15 @@
         canvas: document.querySelector('canvas'),
         random: prng.random
       })
+      endPerfCapture('generate')
 
+      beginPerfCapture('render')
       landscape.render()
+      endPerfCapture('render')
+
+      beginPerfCapture('mount')
       landscape.mount(document.querySelector('main'))
+      endPerfCapture('mount')
 
       landscape.parent.style.width = landscape.width + 'px'
       landscape.parent.style.height = landscape.height + 'px'
@@ -93,6 +100,17 @@
         if (e.key === 's') return landscape.save(prng.seed, { type: 'image/png' })
         if (e.key === 'p') return landscape.save(prng.seed, { type: 'image/svg+xml' })
       })
+
+      function beginPerfCapture (name) {
+        window.captures = window.captures || {}
+        window.captures[name] = performance.now()
+      }
+
+      function endPerfCapture (name)  {
+        var end = performance.now()
+        console.warn(`[${name}] ${(end - window.captures[name]).toFixed(0)}ms`)
+        delete window.captures[name]
+      }
     </script>
   </body>
 </html>

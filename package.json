@@ -14,9 +14,9 @@
     "start": "microbundle watch -f umd -o example --target browser --compress false & light-server -s example -p 8080 -w example/**/*",
     "build": "microbundle -f es,cjs --external all && microbundle -f umd --target browser",
     "test": "eslint src/**",
-    "deploy": "ghp example",
+    "deploy": "microbundle -f umd -o example --target browser --compress false && ghp example --force",
     "preversion": "npm run build && git add dist",
-    "postversion": "git push && git push --tags && yarn deploy --force"
+    "postversion": "git push && git push --tags && yarn deploy"
   },
   "repository": {
     "type": "git",

@@ -28,12 +28,28 @@ export default class Landscape extends SVGCanvas {
     }).filter(Boolean)
   }
 
+  _updateAABB ({ xmin, xmax, ymin, ymax }) {
+    this.aabb = this.aabb || {
+      xmin: Number.POSITIVE_INFINITY,
+      ymin: Number.POSITIVE_INFINITY,
+      xmax: Number.NEGATIVE_INFINITY,
+      ymax: Number.NEGATIVE_INFINITY
+    }
+
+    if (xmin < this.aabb.xmin) this.aabb.xmin = xmin
+    if (ymin < this.aabb.ymin) this.aabb.ymin = ymin
+    if (xmax > this.aabb.xmax) this.aabb.xmax = xmax
+    if (ymax > this.aabb.ymax) this.aabb.ymax = ymax
+  }
+
   render (ctx = this.ctx) {
     super.background(this.backgroundColor)
 
     this.grounds.forEach((ground, index) => {
       if (ground.sprite) ctx.drawImage(ground.sprite, 0, 0)
       else ground.render(ctx)
+
+      this._updateAABB(ground.aabb)
     })
 
     return this

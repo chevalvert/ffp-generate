@@ -80,10 +80,24 @@ export default class Ground {
     return !this.cells.find(cell => cell.shouldRender)
   }
 
+  _updateAABB (x, y) {
+    this.aabb = this.aabb || {
+      xmin: Number.POSITIVE_INFINITY,
+      ymin: Number.POSITIVE_INFINITY,
+      xmax: Number.NEGATIVE_INFINITY,
+      ymax: Number.NEGATIVE_INFINITY
+    }
+
+    if (x < this.aabb.xmin) this.aabb.xmin = x
+    if (y < this.aabb.ymin) this.aabb.ymin = y
+    if (x > this.aabb.xmax) this.aabb.xmax = x
+    if (y > this.aabb.ymax) this.aabb.ymax = y
+  }
+
   render (ctx) {
     this.cells.forEach(cell => {
       if (!cell.shouldRender) return
-
+      this._updateAABB(cell.x, cell.y)
       this.pattern(cell.x, cell.y, {
         ctx,
         unit: this.unit,

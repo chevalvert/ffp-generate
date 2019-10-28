@@ -1554,12 +1554,29 @@ Ground.prototype.setBehind = function setBehind (grounds) {
 prototypeAccessors.isEmpty.get = function () {
     return !this.cells.find(function (cell) { return cell.shouldRender; });
 };
+Ground.prototype._updateAABB = function _updateAABB (x, y) {
+    this.aabb = this.aabb || {
+        xmin: Number.POSITIVE_INFINITY,
+        ymin: Number.POSITIVE_INFINITY,
+        xmax: Number.NEGATIVE_INFINITY,
+        ymax: Number.NEGATIVE_INFINITY
+    };
+    if (x < this.aabb.xmin) 
+        { this.aabb.xmin = x; }
+    if (y < this.aabb.ymin) 
+        { this.aabb.ymin = y; }
+    if (x > this.aabb.xmax) 
+        { this.aabb.xmax = x; }
+    if (y > this.aabb.ymax) 
+        { this.aabb.ymax = y; }
+};
 Ground.prototype.render = function render (ctx) {
         var this$1 = this;
 
     this.cells.forEach(function (cell) {
         if (!cell.shouldRender) 
             { return; }
+        this$1._updateAABB(cell.x, cell.y);
         this$1.pattern(cell.x, cell.y, {
             ctx: ctx,
             unit: this$1.unit,
@@ -2866,7 +2883,29 @@ var Landscape = (function (SVGCanvas$$1) {
             return ground;
         }).filter(Boolean);
     };
+    Landscape.prototype._updateAABB = function _updateAABB (ref) {
+        var xmin = ref.xmin;
+        var xmax = ref.xmax;
+        var ymin = ref.ymin;
+        var ymax = ref.ymax;
+
+        this.aabb = this.aabb || {
+            xmin: Number.POSITIVE_INFINITY,
+            ymin: Number.POSITIVE_INFINITY,
+            xmax: Number.NEGATIVE_INFINITY,
+            ymax: Number.NEGATIVE_INFINITY
+        };
+        if (xmin < this.aabb.xmin) 
+            { this.aabb.xmin = xmin; }
+        if (ymin < this.aabb.ymin) 
+            { this.aabb.ymin = ymin; }
+        if (xmax > this.aabb.xmax) 
+            { this.aabb.xmax = xmax; }
+        if (ymax > this.aabb.ymax) 
+            { this.aabb.ymax = ymax; }
+    };
     Landscape.prototype.render = function render (ctx) {
+        var this$1 = this;
         if ( ctx === void 0 ) ctx = this.ctx;
 
         SVGCanvas$$1.prototype.background.call(this, this.backgroundColor);
@@ -2875,6 +2914,7 @@ var Landscape = (function (SVGCanvas$$1) {
                 { ctx.drawImage(ground.sprite, 0, 0); }
              else 
                 { ground.render(ctx); }
+            this$1._updateAABB(ground.aabb);
         });
         return this;
     };
@@ -3217,55 +3257,119 @@ var raf = {
   dispose: dispose
 }
 
+function shuffle (a, prng) {
+    if ( prng === void 0 ) prng = Math.random;
+
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(prng() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
+}
+
+function median (arr, ref) {
+    if ( arr === void 0 ) arr = [];
+    if ( ref === void 0 ) ref = {};
+    var alreadySorted = ref.alreadySorted; if ( alreadySorted === void 0 ) alreadySorted = false;
+    var alreadyCloned = ref.alreadyCloned; if ( alreadyCloned === void 0 ) alreadyCloned = false;
+
+    var values = alreadyCloned ? arr : arr.slice(0);
+    var numbers = alreadySorted ? values : values.sort(function (a, b) { return a - b; });
+    var middle = Math.floor(numbers.length / 2);
+    var isEven = numbers.length % 2 === 0;
+    return isEven ? (numbers[middle] + numbers[middle - 1]) / 2 : numbers[middle];
+}
+
 var erode = function (landscape, ref) {
     if ( ref === void 0 ) ref = {};
-    var step = ref.step; if ( step === void 0 ) step = 24;
-    var snapToGrid = ref.snapToGrid; if ( snapToGrid === void 0 ) snapToGrid = true;
     var autoplay = ref.autoplay; if ( autoplay === void 0 ) autoplay = true;
+    var easing = ref.easing; if ( easing === void 0 ) easing = 0.09;
+    var noUpdateThreshold = ref.noUpdateThreshold; if ( noUpdateThreshold === void 0 ) noUpdateThreshold = 1;
+    var columnWidth = ref.columnWidth; if ( columnWidth === void 0 ) columnWidth = 16;
+    var snapToGrid = ref.snapToGrid; if ( snapToGrid === void 0 ) snapToGrid = 8;
+    var round = ref.round; if ( round === void 0 ) round = true;
+    var breaks = ref.breaks; if ( breaks === void 0 ) breaks = 2;
+    var amplitude = ref.amplitude; if ( amplitude === void 0 ) amplitude = [0,
+    200];
+    var scaleFactor = ref.scaleFactor; if ( scaleFactor === void 0 ) scaleFactor = 1;
 
     if (landscape.ctx.isSVG) {
         throw new Error('Eroding canvas only works on non SVG context for now');
     }
-    var shouldUpdate = autoplay;
+    var length = Math.ceil(landscape.width / columnWidth);
     var buffer = landscape.copy();
-    var line = new Line(function (x) { return Line.perlin({
-        seed: 1,
-        octaves: 1,
-        resolution: 32,
-        lacunarity: 2,
-        gain: 0.5
-    })((x + line.frameCount) / 10) * step * 10; });
-    line.frameCount = 0;
+    var points = [];
+    var shouldUpdate = autoplay;
+    build();
     raf.add(update);
     return {
+        rebuild: build,
+        toggle: function () {
+            shouldUpdate = !shouldUpdate;
+        },
         play: function () {
             shouldUpdate = true;
         },
         pause: function () {
             shouldUpdate = false;
         },
-        clear: function () {
-            raf.remove(update);
-        }
+        destroy: function () { return raf.remove(update); }
     };
+    function build() {
+        var breakpoints = [];
+        for (var i = 0;i < breaks; i++) 
+            { breakpoints.push(prng.randomInt(0, length)); }
+        breakpoints.push(length);
+        var linesIndexes = [];
+        breakpoints.sort(function (a, b) { return a - b; }).forEach(function (breakpoint, index) {
+            linesIndexes = linesIndexes.concat(new Array(breakpoint - linesIndexes.length).fill(index));
+        });
+        var lines = shuffle(landscape.grounds).slice(0, breaks + 1).map(function (g) { return g.line; });
+        points = linesIndexes.map(function (lineIndex, index) { return ({
+            t: 1 - lines[lineIndex].compute(index * columnWidth * scaleFactor),
+            v: points[index] ? points[index].v : 0
+        }); });
+        var values = points.map(function (ref) {
+            var t = ref.t;
+
+            return t;
+        }).sort(function (a, b) { return a - b; });
+        var m = median(values, {
+            alreadyCloned: true,
+            alreadySorted: true
+        });
+        var min = values[0];
+        var max = values[values.length - 1];
+        points.forEach(function (p) {
+            p.t = lib_8(p.t - m, min - m, max - m, amplitude[0], amplitude[1]);
+            if (snapToGrid && snapToGrid > 0) 
+                { p.t = roundTo(p.t, snapToGrid); }
+        });
+    }
+    
     function update(dt) {
         if (!shouldUpdate) 
             { return; }
-        line.frameCount += 1;
+        shouldUpdate = false;
         landscape.background(landscape.backgroundColor);
-        for (var x = 0;x < landscape.width; x += step) {
-            var v = line.compute(x, {
-                force: true
-            });
-            var y = snapToGrid ? roundTo(v, step) : v;
-            landscape.ctx.drawImage(buffer, x, 0, step, buffer.height, x, y, step, buffer.height);
-        }
+        points.forEach(function (p, index) {
+            p.v += (p.t - p.v) * easing;
+            if (Math.abs(p.t - p.v) > noUpdateThreshold) {
+                shouldUpdate = true;
+            }
+            var x = index * columnWidth;
+            var y = round ? Math.floor(p.v) : p.v;
+            landscape.ctx.drawImage(buffer, x, 0, columnWidth, buffer.height - 2, x, y, columnWidth, buffer.height - 2);
+        });
     }
     
 };
 
 /*
- * anime.js v3.0.1
+ * anime.js v3.1.0
  * (c) 2019 Julian Garnier
  * Released under the MIT license
  * animejs.com
@@ -3393,20 +3497,6 @@ function spring(string, duration) {
 
 }
 
-// Elastic easing adapted from jQueryUI http://api.jqueryui.com/easings/
-
-function elastic(amplitude, period) {
-  if ( amplitude === void 0 ) amplitude = 1;
-  if ( period === void 0 ) period = .5;
-
-  var a = minMax(amplitude, 1, 10);
-  var p = minMax(period, .1, 2);
-  return function (t) {
-    return (t === 0 || t === 1) ? t : 
-      -a * Math.pow(2, 10 * (t - 1)) * Math.sin((((t - 1) - (p / (Math.PI * 2) * Math.asin(1 / a))) * (Math.PI * 2)) / p);
-  }
-}
-
 // Basic steps easing implementation https://developer.mozilla.org/fr/docs/Web/CSS/transition-timing-function
 
 function steps$1(steps) {
@@ -3500,57 +3590,45 @@ var bezier = (function () {
 
 var penner = (function () {
 
-  var names = ['Quad', 'Cubic', 'Quart', 'Quint', 'Sine', 'Expo', 'Circ', 'Back', 'Elastic'];
+  // Based on jQuery UI's implemenation of easing equations from Robert Penner (http://www.robertpenner.com/easing)
 
-  // Approximated Penner equations http://matthewlein.com/ceaser/
+  var eases = { linear: function () { return function (t) { return t; }; } };
 
-  var curves = {
-    In: [
-      [0.550, 0.085, 0.680, 0.530], /* inQuad */
-      [0.550, 0.055, 0.675, 0.190], /* inCubic */
-      [0.895, 0.030, 0.685, 0.220], /* inQuart */
-      [0.755, 0.050, 0.855, 0.060], /* inQuint */
-      [0.470, 0.000, 0.745, 0.715], /* inSine */
-      [0.950, 0.050, 0.795, 0.035], /* inExpo */
-      [0.600, 0.040, 0.980, 0.335], /* inCirc */
-      [0.600,-0.280, 0.735, 0.045], /* inBack */
-      elastic /* inElastic */
-    ],
-    Out: [
-      [0.250, 0.460, 0.450, 0.940], /* outQuad */
-      [0.215, 0.610, 0.355, 1.000], /* outCubic */
-      [0.165, 0.840, 0.440, 1.000], /* outQuart */
-      [0.230, 1.000, 0.320, 1.000], /* outQuint */
-      [0.390, 0.575, 0.565, 1.000], /* outSine */
-      [0.190, 1.000, 0.220, 1.000], /* outExpo */
-      [0.075, 0.820, 0.165, 1.000], /* outCirc */
-      [0.175, 0.885, 0.320, 1.275], /* outBack */
-      function (a, p) { return function (t) { return 1 - elastic(a, p)(1 - t); }; } /* outElastic */
-    ],
-    InOut: [
-      [0.455, 0.030, 0.515, 0.955], /* inOutQuad */
-      [0.645, 0.045, 0.355, 1.000], /* inOutCubic */
-      [0.770, 0.000, 0.175, 1.000], /* inOutQuart */
-      [0.860, 0.000, 0.070, 1.000], /* inOutQuint */
-      [0.445, 0.050, 0.550, 0.950], /* inOutSine */
-      [1.000, 0.000, 0.000, 1.000], /* inOutExpo */
-      [0.785, 0.135, 0.150, 0.860], /* inOutCirc */
-      [0.680,-0.550, 0.265, 1.550], /* inOutBack */
-      function (a, p) { return function (t) { return t < .5 ? elastic(a, p)(t * 2) / 2 : 1 - elastic(a, p)(t * -2 + 2) / 2; }; } /* inOutElastic */
-    ]
+  var functionEasings = {
+    Sine: function () { return function (t) { return 1 - Math.cos(t * Math.PI / 2); }; },
+    Circ: function () { return function (t) { return 1 - Math.sqrt(1 - t * t); }; },
+    Back: function () { return function (t) { return t * t * (3 * t - 2); }; },
+    Bounce: function () { return function (t) {
+      var pow2, b = 4;
+      while (t < (( pow2 = Math.pow(2, --b)) - 1) / 11) {}
+      return 1 / Math.pow(4, 3 - b) - 7.5625 * Math.pow(( pow2 * 3 - 2 ) / 22 - t, 2)
+    }; },
+    Elastic: function (amplitude, period) {
+      if ( amplitude === void 0 ) amplitude = 1;
+      if ( period === void 0 ) period = .5;
+
+      var a = minMax(amplitude, 1, 10);
+      var p = minMax(period, .1, 2);
+      return function (t) {
+        return (t === 0 || t === 1) ? t : 
+          -a * Math.pow(2, 10 * (t - 1)) * Math.sin((((t - 1) - (p / (Math.PI * 2) * Math.asin(1 / a))) * (Math.PI * 2)) / p);
+      }
+    }
   };
 
-  var eases = { 
-    linear: [0.250, 0.250, 0.750, 0.750]
-  };
+  var baseEasings = ['Quad', 'Cubic', 'Quart', 'Quint', 'Expo'];
 
-  var loop = function ( coords ) {
-    curves[coords].forEach(function (ease, i) {
-      eases['ease'+coords+names[i]] = ease;
-    });
-  };
+  baseEasings.forEach(function (name, i) {
+    functionEasings[name] = function () { return function (t) { return Math.pow(t, i + 2); }; };
+  });
 
-  for (var coords in curves) loop( coords );
+  Object.keys(functionEasings).forEach(function (name) {
+    var easeIn = functionEasings[name];
+    eases['easeIn' + name] = easeIn;
+    eases['easeOut' + name] = function (a, b) { return function (t) { return 1 - easeIn(a, b)(1 - t); }; };
+    eases['easeInOut' + name] = function (a, b) { return function (t) { return t < 0.5 ? easeIn(a, b)(t * 2) / 2 : 
+      1 - easeIn(a, b)(t * -2 + 2) / 2; }; };
+  });
 
   return eases;
 
@@ -3565,7 +3643,7 @@ function parseEasings(easing, duration) {
     case 'spring' : return spring(easing, duration);
     case 'cubicBezier' : return applyArguments(bezier, args);
     case 'steps' : return applyArguments(steps$1, args);
-    default : return is.fnc(ease) ? applyArguments(ease, args) : applyArguments(bezier, ease);
+    default : return applyArguments(ease, args);
   }
 }
 
@@ -3685,8 +3763,8 @@ function colorToRgb(val) {
 // Units
 
 function getUnit(val) {
-  var split = /([\+\-]?[0-9#\.]+)(%|px|pt|em|rem|in|cm|mm|ex|ch|pc|vw|vh|vmin|vmax|deg|rad|turn)?$/.exec(val);
-  if (split) { return split[2]; }
+  var split = /[+-]?\d*\.?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?(%|px|pt|em|rem|in|cm|mm|ex|ch|pc|vw|vh|vmin|vmax|deg|rad|turn)?$/.exec(val);
+  if (split) { return split[1]; }
 }
 
 function getTransformUnit(propName) {
@@ -3781,9 +3859,11 @@ function getRelativeValue(to, from) {
 
 function validateValue(val, unit) {
   if (is.col(val)) { return colorToRgb(val); }
+  if (/\s/g.test(val)) { return val; }
   var originalUnit = getUnit(val);
   var unitLess = originalUnit ? val.substr(0, val.length - originalUnit.length) : val;
-  return unit && !/\s/g.test(val) ? unitLess + unit : unitLess;
+  if (unit) { return unitLess + unit; }
+  return unitLess;
 }
 
 // getTotalLength() equivalent for circle, rect, polyline, polygon and line shapes
@@ -3849,8 +3929,8 @@ function setDashoffset(el) {
 function getParentSvgEl(el) {
   var parentEl = el.parentNode;
   while (is.svg(parentEl)) {
-    parentEl = parentEl.parentNode;
     if (!is.svg(parentEl.parentNode)) { break; }
+    parentEl = parentEl.parentNode;
   }
   return parentEl;
 }
@@ -3907,7 +3987,9 @@ function getPathProgress(path, progress) {
 // Decompose value
 
 function decomposeValue(val, unit) {
-  var rgx = /-?\d*\.?\d+/g;
+  // const rgx = /-?\d*\.?\d+/g; // handles basic numbers
+  // const rgx = /[+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g; // handles exponents notation
+  var rgx = /[+-]?\d*\.?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g; // handles exponents notation
   var value = validateValue((is.pth(val) ? val.totalLength : val), unit) + '';
   return {
     original: value,
@@ -4174,7 +4256,7 @@ function handleVisibilityChange() {
   if (document.hidden) {
     activeInstances.forEach(function (ins) { return ins.pause(); });
     pausedInstances = activeInstances.slice(0);
-    activeInstances = [];
+    anime.running = activeInstances = [];
   } else {
     pausedInstances.forEach(function (ins) { return ins.play(); });
   }
@@ -4221,15 +4303,15 @@ function anime(params) {
     lastTime = adjustTime(instance.currentTime) * (1 / anime.speed);
   }
 
-  function seekCild(time, child) {
+  function seekChild(time, child) {
     if (child) { child.seek(time - child.timelineOffset); }
   }
 
   function syncInstanceChildren(time) {
     if (!instance.reversePlayback) {
-      for (var i = 0; i < childrenLength; i++) { seekCild(time, children[i]); }
+      for (var i = 0; i < childrenLength; i++) { seekChild(time, children[i]); }
     } else {
-      for (var i$1 = childrenLength; i$1--;) { seekCild(time, children[i$1]); }
+      for (var i$1 = childrenLength; i$1--;) { seekChild(time, children[i$1]); }
     }
   }
 
@@ -4314,6 +4396,9 @@ function anime(params) {
     if (!instance.began && instance.currentTime > 0) {
       instance.began = true;
       setCallback('begin');
+    }
+    if (!instance.loopBegan && instance.currentTime > 0) {
+      instance.loopBegan = true;
       setCallback('loopBegin');
     }
     if (insTime <= insDelay && instance.currentTime !== 0) {
@@ -4342,12 +4427,7 @@ function anime(params) {
     if (engineTime >= insDuration) {
       lastTime = 0;
       countIteration();
-      if (instance.remaining) {
-        startTime = now;
-        setCallback('loopComplete');
-        setCallback('loopBegin');
-        if (instance.direction === 'alternate') { toggleInstanceDirection(); }
-      } else {
+      if (!instance.remaining) {
         instance.paused = true;
         if (!instance.completed) {
           instance.completed = true;
@@ -4357,6 +4437,13 @@ function anime(params) {
             resolve();
             promise = makePromise(instance);
           }
+        }
+      } else {
+        startTime = now;
+        setCallback('loopComplete');
+        instance.loopBegan = false;
+        if (instance.direction === 'alternate') {
+          toggleInstanceDirection();
         }
       }
     }
@@ -4369,6 +4456,7 @@ function anime(params) {
     instance.progress = 0;
     instance.paused = true;
     instance.began = false;
+    instance.loopBegan = false;
     instance.changeBegan = false;
     instance.completed = false;
     instance.changeCompleted = false;
@@ -4379,7 +4467,7 @@ function anime(params) {
     childrenLength = children.length;
     for (var i = childrenLength; i--;) { instance.children[i].reset(); }
     if (instance.reversed && instance.loop !== true || (direction === 'alternate' && instance.loop === 1)) { instance.remaining++; }
-    setAnimationsProgress(0);
+    setAnimationsProgress(instance.reversed ? instance.duration : 0);
   };
 
   // Set Value helper
@@ -4544,7 +4632,7 @@ function timeline(params) {
   return tl;
 }
 
-anime.version = '3.0.1';
+anime.version = '3.1.0';
 anime.speed = 1;
 anime.running = activeInstances;
 anime.remove = removeTargets;

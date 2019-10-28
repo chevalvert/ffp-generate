@@ -1,83 +1,95 @@
 import raf from '@internet/raf'
-import Line from '../abstractions/Line'
+import { map } from 'missing-math'
 import roundTo from '../utils/round-to'
-
-// let buffer
-// let shouldUpdate = false
-// const erosion = {}
-
-// const EASING = {
-//   values: [],
-//   targets: [],
-//   coef: 0.001,
-//   tolerance: 0.1,
-
-//   init: function (length = this.targets.length) {
-//     this.values = new Array(length).fill(0)
-//   },
-
-//   update: function () {
-//     if (!this.values || !this.values.length) this.init()
-
-//     shouldUpdate = false
-//     for (let i = 0; i < this.targets.length; i++) {
-//       const d = (this.targets[i] - this.values[i])
-//       if (Math.abs(d) > this.tolerance) {
-//         shouldUpdate = true
-//         this.values[i] += d * this.coef
-//       }
-//     }
-//   }
-// }
-
-// raf.add(update)
+import shuffle from '../utils/array-shuffle'
+import median from '../utils/array-median'
+import prng from '../utils/prng'
 
 export const erode = (landscape, {
-  step = 24,
-  // easing = 0.001,
-  snapToGrid = true,
-  autoplay = true
+  autoplay = true,
+
+  easing = 0.09,
+  noUpdateThreshold = 1,
+
+  columnWidth = 16,
+  snapToGrid = 8,
+  round = true,
+  breaks = 2,
+  amplitude = [0, 200],
+  scaleFactor = 1
 } = {}) => {
   if (landscape.ctx.isSVG) {
     throw new Error('Eroding canvas only works on non SVG context for now')
   }
 
-  let shouldUpdate = autoplay
+  const length = Math.ceil(landscape.width / columnWidth)
   const buffer = landscape.copy()
 
-  // const line = new Line(x => Math.sin((x * 0.01) + line.frameCount) * 2)
-  const line = new Line(x => Line.perlin({
-    seed: 1,
-    octaves: 1,
-    resolution: 32,
-    lacunarity: 2,
-    gain: 0.5
-  })((x + line.frameCount) / 10) * step * 10)
+  let points = []
+  let shouldUpdate = autoplay
 
-  line.frameCount = 0
-
+  build()
   raf.add(update)
 
   return {
+    rebuild: build,
+    toggle: () => { shouldUpdate = !shouldUpdate },
     play: () => { shouldUpdate = true },
     pause: () => { shouldUpdate = false },
-    clear: () => {
-      raf.remove(update)
-    }
+    destroy: () => raf.remove(update)
+  }
+
+  function build () {
+    // Compute breakpoints at which a line will be swaped with the next
+    const breakpoints = []
+    for (let i = 0; i < breaks; i++) breakpoints.push(prng.randomInt(0, length))
+    breakpoints.push(length)
+
+    // Create a model of the future lines sections
+    let linesIndexes = []
+    breakpoints.sort((a, b) => a - b).forEach((breakpoint, index) => {
+      linesIndexes = linesIndexes.concat(new Array(breakpoint - linesIndexes.length).fill(index))
+    })
+
+    // Reassign points array with new values computed from corresponding lines
+    const lines = shuffle(landscape.grounds).slice(0, breaks + 1).map(g => g.line)
+    points = linesIndexes.map((lineIndex, index) => {
+      return {
+        t: 1 - lines[lineIndex].compute(index * columnWidth * scaleFactor),
+        v: points[index] ? points[index].v : 0
+      }
+    })
+
+    // Minimize global up/down shift by cancelling the median movement
+    // Scale up vertically according to the amplitude argument
+    // If snapToGrid, round the target to the nearest on-grid value
+    const values = points.map(({t}) => t).sort((a, b) => a - b)
+    const m = median(values, { alreadyCloned: true, alreadySorted: true })
+    const min = values[0]
+    const max = values[values.length - 1]
+    points.forEach(p => {
+      p.t = map(p.t - m, min - m, max - m, amplitude[0], amplitude[1])
+      if (snapToGrid && snapToGrid > 0) p.t = roundTo(p.t, snapToGrid)
+    })
   }
 
   function update (dt) {
     if (!shouldUpdate) return
-
-    line.frameCount += 1
+    shouldUpdate = false
 
     landscape.background(landscape.backgroundColor)
+    points.forEach((p, index) => {
+      p.v += (p.t - p.v) * easing
 
-    for (let x = 0; x < landscape.width; x += step) {
-      const v = line.compute(x, { force: true })
-      const y = snapToGrid ? roundTo(v, step) : v
-      landscape.ctx.drawImage(buffer, x, 0, step, buffer.height, x, y, step, buffer.height)
-    }
+      // Continue updating if there are still relevant movements
+      if (Math.abs(p.t - p.v) > noUpdateThreshold) {
+        shouldUpdate = true
+      }
+
+      const x = index * columnWidth
+      const y = round ? Math.floor(p.v) : p.v
+      landscape.ctx.drawImage(buffer, x, 0, columnWidth, (buffer.height - 2), x, y, columnWidth, (buffer.height - 2))
+    })
   }
 }
 

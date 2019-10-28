@@ -18,7 +18,7 @@
 
         transform-origin: 0 0;
         transform:
-          scale(0.25)
+          scale(1)
           translate(-50%, -50%);
 
         box-shadow: 0 0 100px rgba(black, 0.2);
@@ -43,9 +43,9 @@
 
       beginPerfCapture('generate')
       var landscape = ffp.generate({
-        units: [24, 48, 96],
-        width: 2000,
-        height: 2000 * (4 / 3),
+        units: [8, 16],
+        width: window.innerWidth - 100,
+        height: window.innerHeight - 100,
         groundsLength: 30,
 
         percentOfStraightLines: 0.125,
@@ -73,6 +73,7 @@
         canvas: document.querySelector('canvas'),
         random: prng.random
       })
+      console.log(landscape)
       endPerfCapture('generate')
 
       beginPerfCapture('render')
@@ -88,10 +89,17 @@
 
       var erode = ffp.erode(landscape, {
         autoplay: false,
-        step: 24
+        easing: 0.09,
+        noUpdateThreshold: 0.1,
+        columnWidth: 16,
+        snapToGrid: 8,
+        breaks: 2,
+        amplitude: [0, 100],
+        scaleFactor: 1
       })
 
-      landscape.parent.addEventListener('click', function () {
+      landscape.parent.addEventListener('click', function (e) {
+        erode.rebuild()
         erode.play()
       })
 

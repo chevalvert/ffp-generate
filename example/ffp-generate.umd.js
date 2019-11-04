@@ -3292,6 +3292,7 @@ var erode = function (landscape, ref) {
     var snapToGrid = ref.snapToGrid; if ( snapToGrid === void 0 ) snapToGrid = 8;
     var round = ref.round; if ( round === void 0 ) round = true;
     var breaks = ref.breaks; if ( breaks === void 0 ) breaks = 2;
+    var minimizeVisualBreaks = ref.minimizeVisualBreaks; if ( minimizeVisualBreaks === void 0 ) minimizeVisualBreaks = false;
     var amplitude = ref.amplitude; if ( amplitude === void 0 ) amplitude = [0,
     200];
     var scaleFactor = ref.scaleFactor; if ( scaleFactor === void 0 ) scaleFactor = 1;
@@ -3328,10 +3329,26 @@ var erode = function (landscape, ref) {
             linesIndexes = linesIndexes.concat(new Array(breakpoint - linesIndexes.length).fill(index));
         });
         var lines = shuffle(landscape.grounds).slice(0, breaks + 1).map(function (g) { return g.line; });
-        points = linesIndexes.map(function (lineIndex, index) { return ({
-            t: 1 - lines[lineIndex].compute(index * columnWidth * scaleFactor),
-            v: points[index] ? points[index].v : 0
-        }); });
+        points = linesIndexes.map(function (lineIndex, index) {
+            var value = lines[lineIndex].compute(index * columnWidth * scaleFactor);
+            return {
+                t: 1 - value,
+                v: points[index] ? points[index].v : 0,
+                lineIndex: lineIndex
+            };
+        });
+        if (minimizeVisualBreaks) {
+            var offset = 0;
+            points.forEach(function (point, index) {
+                var previous = points[index - 1];
+                if (!previous) 
+                    { return; }
+                if (previous.lineIndex !== point.lineIndex) {
+                    offset = previous.t - point.t;
+                }
+                point.t += offset;
+            });
+        }
         var values = points.map(function (ref) {
             var t = ref.t;
 

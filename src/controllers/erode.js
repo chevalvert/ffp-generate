@@ -15,6 +15,7 @@ export const erode = (landscape, {
   snapToGrid = 8,
   round = true,
   breaks = 2,
+  minimizeVisualBreaks = false,
   amplitude = [0, 200],
   scaleFactor = 1
 } = {}) => {
@@ -54,11 +55,30 @@ export const erode = (landscape, {
     // Reassign points array with new values computed from corresponding lines
     const lines = shuffle(landscape.grounds).slice(0, breaks + 1).map(g => g.line)
     points = linesIndexes.map((lineIndex, index) => {
+      const value = lines[lineIndex].compute(index * columnWidth * scaleFactor)
       return {
-        t: 1 - lines[lineIndex].compute(index * columnWidth * scaleFactor),
-        v: points[index] ? points[index].v : 0
+        t: 1 - value,
+        v: points[index] ? points[index].v : 0,
+        lineIndex
       }
     })
+
+    // When options.minimizeVisualBreaks is set to true, make sure that each
+    // section starts where the previous one ends, to avoid creating vertical
+    // breaks
+    if (minimizeVisualBreaks) {
+      let offset = 0
+      points.forEach((point, index) => {
+        const previous = points[index - 1]
+        if (!previous) return
+
+        if (previous.lineIndex !== point.lineIndex) {
+          offset = previous.t - point.t
+        }
+
+        point.t += offset
+      })
+    }
 
     // Minimize global up/down shift by cancelling the median movement
     // Scale up vertically according to the amplitude argument

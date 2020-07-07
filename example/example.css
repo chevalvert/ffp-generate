@@ -1,0 +1,36 @@
+body {
+  background-color: #333;
+}
+
+main {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  transform-origin: 0 0;
+  transform:
+    scale(1)
+    translate(-50%, -50%);
+
+  box-shadow: 0 0 100px rgba(black, 0.2);
+}
+
+main canvas {
+  clip-path: polygon(
+    0 0,
+    calc(50% - 5px) 0,
+    calc(50% - 5px) 100%,
+    0 100%
+  );
+}
+
+main svg {
+  position: absolute;
+  left: 0;
+  clip-path: polygon(
+    calc(50% + 5px) 0,
+    100% 0,
+    100% 100%,
+    calc(50% + 5px) 100%
+  );
+}

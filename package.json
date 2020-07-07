@@ -15,7 +15,7 @@
     "example:serve": "npm run example -- -w --compress false & light-server -s example -p 8080 -w example/**/*",
     "example:deploy": "npm run example && ghp example -f",
     "preversion": "npm run example && git add example",
-    "postversion": "git push && git push --tags && npm run deploy"
+    "postversion": "git push && git push --tags && npm run example:deploy"
   },
   "repository": {
     "type": "git",

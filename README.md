@@ -11,36 +11,30 @@ npm install --save chevalvert/ffp-generate
 
 ## Usage
 
-### How to import 
-
-###### in a module bundler
-
 ```js
-import ffp from 'ffp-generate'
-ffp.generate(opts)
+import { Landscape, SWATCHES, prng } from 'ffp-generate'
+import render from 'ffp-generate/render'
+
+const landscape = new Landscape(options)
+
+// Render inside a canvas
+const canvas = document.getElementById('myCanvas')
+render.canvas(landscape, canvas)
+
+// Render as SVG
+const svgElement = render.svg(landscape)
+document.body.appendChild(svgElement)
+
 ```
-
-###### in a browser
-
-```html
-<script src="https://unpkg.com/ffp-generate"></script>
-<script>
-  window.ffp.generate(opts)
-</script>
-```
-
-### How to use
-
-See [`example/`](example/index.html).
+<sup>See [`example/`](example/index.html) for a complete usage.</sup>
 
 ## Development
 ```console
-$ npm install     # install all npm dependencies
-$ npm run start   # start the dev server with livereload on the example folder
-$ npm run build   # bundle your library in CJS / UMD / ESM
-$ npm run deploy  # deploy your example folder on a gh-page branch
-$ npm run test    # lint your js inside the src folder
-``` 
+$ npm install             # install all npm dependencies
+$ npm run example:serve   # start the dev server with livereload on the example folder
+$ npm run example:deploy  # deploy your example folder on a gh-page branch
+$ npm run test            # lint your js inside the lib folder
+```
 
 ## License
 [MIT.](https://tldrlegal.com/license/mit-license)

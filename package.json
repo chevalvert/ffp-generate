@@ -3,20 +3,19 @@
   "amdName": "ffp",
   "version": "0.1.5",
   "description": "JavaScript browser module to generate `ffp` landscapes",
-  "source": "src/index.js",
-  "main": "dist/ffp-generate.js",
-  "module": "dist/ffp-generate.m.js",
-  "unpkg": "dist/ffp-generate.umd.js",
+  "source": "lib/index.js",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
   "files": [
-    "dist"
+    "lib"
   ],
   "scripts": {
-    "start": "microbundle watch -f umd -o example --target browser --compress false & light-server -s example -p 8080 -w example/**/*",
-    "build": "microbundle -f es,cjs --external all && microbundle -f umd --target browser",
-    "test": "eslint src/**",
-    "deploy": "microbundle -f umd -o example --target browser --compress false && ghp example --force",
-    "preversion": "npm run build && git add dist",
-    "postversion": "git push && git push --tags && yarn deploy"
+    "test": "eslint lib/**",
+    "example": "microbundle -i example/example.js -f umd -o example --target browser --external all",
+    "example:serve": "npm run example -- -w --compress false & light-server -s example -p 8080 -w example/**/*",
+    "example:deploy": "npm run example && ghp example -f",
+    "preversion": "npm run example && git add example",
+    "postversion": "git push && git push --tags && npm run deploy"
   },
   "repository": {
     "type": "git",
@@ -31,11 +30,9 @@
   "dependencies": {
     "@internet/raf": "^0.2.1",
     "animejs": "^3.0.1",
-    "canvas2svg": "^1.0.16",
     "fast-random": "^2.0.4",
-    "file-saver": "^2.0.1",
     "lineclip": "^1.1.5",
-    "missing-math": "^2.0.1",
+    "missing-math": "^3.2.0",
     "tumult": "^3.0.11"
   },
   "devDependencies": {
@@ -47,7 +44,7 @@
     "eslint-plugin-standard": "^3.0.1",
     "ghp": "^1.1.4",
     "light-server": "^2.4.0",
-    "microbundle": "^0.4.3"
+    "microbundle": "^0.12.2"
   },
   "private": true
 }

@@ -1,7 +1,7 @@
 {
   "name": "ffp-generate",
   "amdName": "ffp",
-  "version": "0.1.5",
+  "version": "1.0.0",
   "description": "JavaScript browser module to generate `ffp` landscapes",
   "source": "lib/index.js",
   "main": "lib/index.js",

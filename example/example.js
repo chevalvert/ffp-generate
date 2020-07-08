@@ -12,7 +12,7 @@ perf('generate', () => {
     width: window.innerWidth - 20,
     height: window.innerHeight - 20,
 
-    groundsLength: 30,
+    groundsLength: 10,
     percentOfStraightLines: 0.125,
     percentOfGradients: 0.5,
     percentOfSimplexGradients: 0.1,

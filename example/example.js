@@ -1,13 +1,15 @@
-import { Landscape, prng, SWATCHES } from '../'
+import { Landscape, prng, SWATCHES } from '..'
+import { erode } from '../post-processing'
 import render from '../render'
 
 prng.seed = window.location.hash.substring(1) || Date.now()
 console.log(+prng.seed)
 document.title += ' | ' + prng.seed
 
-perf('generate', () => {
+// Landscape generation, agnostic of any rendering context
+const landscape = perf('generate', () => {
   const swatch = prng.randomOf(Object.values(SWATCHES))
-  window.landscape = new Landscape({
+  return new Landscape({
     sizes: [8, 16],
     width: window.innerWidth - 20,
     height: window.innerHeight - 20,
@@ -24,17 +26,23 @@ perf('generate', () => {
   })
 })
 
-perf('render.canvas', () => {
-  render.canvas(window.landscape, document.querySelector('canvas'))
+// Canvas rendering, and post-processing/erode implementation
+const canvas = document.querySelector('canvas')
+perf('render.canvas', () => render.canvas(landscape, canvas))
+const eroder = erode(landscape, canvas)
+canvas.addEventListener('click', () => {
+  eroder.rebuild()
+  eroder.play()
 })
 
-perf('render.svg', () => {
-  const svg = render.svg(window.landscape)
-  document.querySelector('main').appendChild(svg)
-})
+// SVG rendering
+const svg = perf('render.svg', () => render.svg(landscape))
+document.querySelector('main').appendChild(svg)
 
+// Helper
 function perf (name, callback) {
   const start = performance.now()
-  callback()
+  const rtrn = callback()
   console.warn(`[${name}] ${(performance.now() - start).toFixed(0)}ms`)
+  return rtrn
 }

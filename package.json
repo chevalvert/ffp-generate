@@ -3,12 +3,9 @@
   "amdName": "ffp",
   "version": "1.3.0",
   "description": "JavaScript browser module to generate `ffp` landscapes",
-  "source": "lib/index.js",
-  "main": "lib/index.js",
-  "module": "lib/index.js",
-  "files": [
-    "lib"
-  ],
+  "source": "index.js",
+  "main": "index.js",
+  "module": "index.js",
   "scripts": {
     "test": "eslint lib/**",
     "example": "microbundle -i example/example.js -f umd -o example --target browser --external all",
@@ -29,7 +26,6 @@
   "homepage": "https://github.com/chevalvert/ffp-generate#readme",
   "dependencies": {
     "@internet/raf": "^0.2.1",
-    "animejs": "^3.0.1",
     "fast-random": "^2.0.4",
     "lineclip": "^1.1.5",
     "missing-math": "^3.2.0",

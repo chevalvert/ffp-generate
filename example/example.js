@@ -1,5 +1,5 @@
-import { Landscape, prng, SWATCHES } from '../lib'
-import render from '../lib/render'
+import { Landscape, prng, SWATCHES } from '../'
+import render from '../render'
 
 prng.seed = window.location.hash.substring(1) || Date.now()
 console.log(+prng.seed)

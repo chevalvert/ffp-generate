@@ -1,26 +1,29 @@
-import { Landscape, prng, SWATCHES } from '..'
+import { Landscape, Colors, prng } from '..'
 import { erode } from '../post-processing'
 import render from '../render'
 
 prng.seed = window.location.hash.substring(1) || Date.now()
-console.log(+prng.seed)
+console.log('seed', +prng.seed)
 document.title += ' | ' + prng.seed
+
+Colors.log(Colors.toArray(), 8)
 
 // Landscape generation, agnostic of any rendering context
 const landscape = perf('generate', () => {
-  const swatch = prng.randomOf(Object.values(SWATCHES))
+  const colors = new Colors.swatch({ colorSpace: 'css' })
+  Colors.log(colors, colors.length)
   return new Landscape({
     sizes: [8, 16],
     width: window.innerWidth - 20,
     height: window.innerHeight - 20,
 
-    groundsLength: 10,
+    groundsLength: 30,
     percentOfStraightLines: 0.125,
     percentOfGradients: 0.5,
     percentOfSimplexGradients: 0.1,
 
-    swatch,
-    background: prng.randomOf(swatch),
+    colors,
+    background: prng.randomOf(colors),
 
     random: prng.random
   })

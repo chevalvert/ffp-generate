@@ -3,9 +3,8 @@
   "amdName": "ffp",
   "version": "1.4.0",
   "description": "JavaScript browser module to generate `ffp` landscapes",
-  "source": "index.js",
-  "main": "index.js",
-  "module": "index.js",
+  "main": "lib/index.js",
+  "browser": "lib/index.js",
   "scripts": {
     "test": "eslint lib/**",
     "example": "microbundle -i example/example.js -f umd -o example --target browser --external all",

@@ -12,8 +12,9 @@ npm install --save chevalvert/ffp-generate
 ## Usage
 
 ```js
-import { Landscape, SWATCHES, prng } from 'ffp-generate'
+import { Landscape, Colors, prng } from 'ffp-generate'
 import render from 'ffp-generate/render'
+import { erode } from 'ffp-generate/post-processing'
 
 const landscape = new Landscape(options)
 

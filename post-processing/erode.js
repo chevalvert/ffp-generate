@@ -1,8 +1,8 @@
 import raf from '@internet/raf'
 import { map, roundTo } from 'missing-math'
-import shuffle from '../utils/array-shuffle'
-import median from '../utils/array-median'
-import prng from '../utils/prng'
+import shuffle from '../lib/utils/array-shuffle'
+import median from '../lib/utils/array-median'
+import prng from '../lib/utils/prng'
 
 function cloneCanvas (canvas, clone = document.createElement('canvas')) {
   clone.width = canvas.width

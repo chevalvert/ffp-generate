@@ -185,68 +185,64 @@
 
   function n(n,t,r){return Math.max(t,Math.min(n,r))}function t(n,t,o,u){return void 0===u&&(u=!1),r(n,t,o,0,1,u)}function r(t,r,o,u,i,a){void 0===a&&(a=!1);var e=(t-r)*(i-u)/(o-r)+u;return a?n(e,u,i):e}function o(n,t,r){return n+r*(t-n)}function e(n){return n*Math.PI/180}function f(n,t){return Math.ceil(n/t)*t}//# sourceMappingURL=missing-math.m.js.map
 
-  var steps = function steps(size, step) {
-    return size / step;
-  };
-
   var SYMBOLS = {
     empty: function empty() {
       return null;
     },
     square: function square(cell) {
-      var thickness = f(cell.size * cell.value, steps(cell.size, 24));
-      if (thickness < 0) return;
+      var thickness = cell.size * cell.value;
+      if (thickness <= 0) return;
       var ht = thickness / 2;
       var hs = cell.size / 2;
       return [[cell.x + hs - ht, cell.y + hs - ht], [cell.x + hs - ht, cell.y + hs + ht], [cell.x + hs + ht, cell.y + hs + ht], [cell.x + hs + ht, cell.y + hs - ht]];
     },
     square_offset: function square_offset(cell) {
-      var thickness = f(cell.size * cell.value, steps(cell.size, 24)) - 10;
-      if (thickness < 0) return;
+      var thickness = cell.size * cell.value - 10;
+      if (thickness <= 0) return;
       var ht = thickness / 2;
       var hs = cell.size / 2;
       return [[cell.x + hs - ht, cell.y + hs - ht], [cell.x + hs - ht, cell.y + hs + ht], [cell.x + hs + ht, cell.y + hs + ht], [cell.x + hs + ht, cell.y + hs - ht]];
     },
     vertical_line: function vertical_line(cell) {
-      var thickness = f(cell.size * cell.value, steps(cell.size, 24));
-      if (thickness < 0) return;
+      var thickness = cell.size * cell.value;
+      if (thickness <= 0) return;
       var ht = thickness / 2;
       var hs = cell.size / 2;
       return [[cell.x + hs - ht, cell.y], [cell.x + hs - ht, cell.y + cell.size], [cell.x + hs + ht, cell.y + cell.size], [cell.x + hs + ht, cell.y]];
     },
     vertical_line_offset: function vertical_line_offset(cell) {
-      var thickness = f(cell.size * cell.value, steps(cell.size, 24)) - 10;
-      if (thickness < 0) return;
+      var thickness = cell.size * cell.value;
+      if (thickness <= 0) return;
       var ht = thickness / 2;
       var hs = cell.size / 2;
       return [[cell.x + hs - ht, cell.y], [cell.x + hs - ht, cell.y + cell.size], [cell.x + hs + ht, cell.y + cell.size], [cell.x + hs + ht, cell.y]];
     },
     horizontal_line: function horizontal_line(cell) {
-      var thickness = f(cell.size * cell.value, steps(cell.size, 24));
-      if (thickness < 0) return;
+      var thickness = cell.size * cell.value;
+      if (thickness <= 0) return;
       var ht = thickness / 2;
       var hs = cell.size / 2;
       return [[cell.x, cell.y + hs - ht], [cell.x, cell.y + hs + ht], [cell.x + cell.size, cell.y + hs + ht], [cell.x + cell.size, cell.y + hs - ht]];
     },
     horizontal_line_offset: function horizontal_line_offset(cell) {
-      var thickness = f(cell.size * cell.value, steps(cell.size, 24)) - 10;
-      if (thickness < 0) return;
+      var thickness = cell.size * cell.value - 10;
+      if (thickness <= 0) return;
       var ht = thickness / 2;
       var hs = cell.size / 2;
       return [[cell.x, cell.y + hs - ht], [cell.x, cell.y + hs + ht], [cell.x + cell.size, cell.y + hs + ht], [cell.x + cell.size, cell.y + hs - ht]];
     },
     diagonal: function diagonal(cell) {
-      var thickness = f(cell.size * cell.value, steps(cell.size, 24));
-      if (thickness < 0) return;
+      var thickness = cell.size * cell.value;
+      if (thickness <= 0) return;
       return [[cell.x + cell.size - thickness, cell.y], [cell.x + cell.size, cell.y], [cell.x + thickness, cell.y + cell.size], [cell.x, cell.y + cell.size]];
     },
     diamond: function diamond(cell) {
-      var thickness = f(cell.size * cell.value, steps(cell.size, 24)) - 1;
-      if (thickness < 0) return;
+      var thickness = cell.size * cell.value - 1;
+      if (thickness <= 0) return;
       return lineclip_1.polygon([[cell.x + cell.size / 2, cell.y + thickness], [cell.x + cell.size - thickness, cell.y + cell.size / 2], [cell.x + cell.size / 2, cell.y + cell.size - thickness], [cell.x + thickness, cell.y + cell.size / 2]], [cell.x, cell.y, cell.x + cell.size, cell.y + cell.size]);
     },
     circle: function circle(cell) {
-      var diameter = f((cell.size - 1) * cell.value, steps(cell.size, 24));
+      var diameter = (cell.size - 1) * cell.value;
       if (diameter < 0) return;
       var path = [];
 
@@ -1252,6 +1248,7 @@
         sizes: [8, 16],
         width: 240,
         height: 240,
+        gradientResolution: 12,
         groundsLength: 10,
         percentOfStraightLines: 0.125,
         percentOfGradients: 0.5,
@@ -1282,6 +1279,7 @@
 
       var _this$props = this.props,
           sizes = _this$props.sizes,
+          gradientResolution = _this$props.gradientResolution,
           groundsLength = _this$props.groundsLength,
           percentOfStraightLines = _this$props.percentOfStraightLines,
           percentOfGradients = _this$props.percentOfGradients,
@@ -1328,7 +1326,7 @@
               return cell.x < x + size && cell.x + cell.size > x && cell.y < y + size && cell.y + cell.size > y;
             });
             if (busy) return "continue";
-            var value = gradient.compute(x, y, _this.width, _this.height);
+            var value = f(gradient.compute(x, y, _this.width, _this.height), 1 / gradientResolution);
             cells.push({
               x: x,
               y: y,
@@ -1355,6 +1353,7 @@
         _loop(index);
       }
 
+      console.log(cells);
       return {
         cells: cells,
         lines: lines,

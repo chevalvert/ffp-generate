@@ -1,4 +1,4 @@
-export default (landscape, canvas) => {
+export default (landscape, canvas, { colorSpace = 'css' } = {}) => {
   canvas.width = landscape.width
   canvas.height = landscape.height
   canvas.style.width = canvas.width + 'px'
@@ -6,11 +6,11 @@ export default (landscape, canvas) => {
 
   const ctx = canvas.getContext('2d')
 
-  ctx.fillStyle = landscape.props.background
+  ctx.fillStyle = landscape.props.background[colorSpace]
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
   landscape.render((cell, path) => {
-    ctx.fillStyle = cell.color
+    ctx.fillStyle = cell.color[colorSpace]
 
     ctx.beginPath()
     path.forEach((point, index) => {

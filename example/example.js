@@ -6,11 +6,13 @@ prng.seed = window.location.hash.substring(1) || Date.now()
 console.log('seed', +prng.seed)
 document.title += ' | ' + prng.seed
 
-Colors.log(Colors.toArray(), 8)
+// Colors.log(Colors.toArray(), 8)
+const c = Colors.toArray().map(c => c['css-cmyk-proof'])
+Colors.log(c, 8)
 
 // Landscape generation, agnostic of any rendering context
 const landscape = perf('generate', () => {
-  const colors = new Colors.swatch({ colorSpace: 'css' })
+  const colors = new Colors.swatch()
   Colors.log(colors, colors.length)
   return new Landscape({
     sizes: [8, 16],
@@ -31,7 +33,7 @@ const landscape = perf('generate', () => {
 
 // Canvas rendering, and post-processing/erode implementation
 const canvas = document.querySelector('canvas')
-perf('render.canvas', () => render.canvas(landscape, canvas))
+perf('render.canvas', () => render.canvas(landscape, canvas, { colorSpace: 'css' }))
 const eroder = erode(landscape, canvas)
 canvas.addEventListener('click', () => {
   eroder.rebuild()
@@ -39,7 +41,7 @@ canvas.addEventListener('click', () => {
 })
 
 // SVG rendering
-const svg = perf('render.svg', () => render.svg(landscape))
+const svg = perf('render.svg', () => render.svg(landscape, { colorSpace: 'css-cmyk-proof' }))
 document.querySelector('main').appendChild(svg)
 
 // Helper

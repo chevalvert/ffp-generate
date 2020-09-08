@@ -16,14 +16,17 @@ import { Landscape, Colors, prng } from 'ffp-generate'
 import render from 'ffp-generate/render'
 import { erode } from 'ffp-generate/post-processing'
 
-const landscape = new Landscape(options)
+const colors = Colors.swatch()
+// Array of cloned { rgb: [255, 255, 255], cmyk: [100, 100, 100, 100], css: 'rgb(255, 255, 255)', css-cmyk-proof: 'rgb(255, 255, 255)' }
+
+const landscape = new Landscape({ colors, ...options })
 
 // Render inside a canvas
 const canvas = document.getElementById('myCanvas')
-render.canvas(landscape, canvas)
+render.canvas(landscape, canvas, { colorSpace: 'css' })
 
 // Render as SVG
-const svgElement = render.svg(landscape)
+const svgElement = render.svg(landscape, { colorSpace: 'css' })
 document.body.appendChild(svgElement)
 
 ```

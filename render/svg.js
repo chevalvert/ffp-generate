@@ -19,7 +19,7 @@ function createSVGElement (tagName, attributes, parent) {
   return el
 }
 
-export default (landscape, { decimals = 3 } = {}) => {
+export default (landscape, { colorSpace = 'css', decimals = 3 } = {}) => {
   const svgElement = createSVGElement('svg', {
     'width': landscape.width,
     'height': landscape.height,
@@ -32,13 +32,13 @@ export default (landscape, { decimals = 3 } = {}) => {
     y: 0,
     width: landscape.width,
     height: landscape.height,
-    fill: landscape.props.background
+    fill: landscape.props.background[colorSpace]
   }, svgElement)
 
   // TODO: <defs> & <use
   landscape.render((cell, path) => createSVGElement('path', {
     d: pathData(path, decimals),
-    fill: cell.color
+    fill: cell.color[colorSpace]
   }, svgElement))
 
   return svgElement

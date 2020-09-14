@@ -19,7 +19,7 @@ const landscape = perf('generate', () => {
     width: window.innerWidth - 20,
     height: window.innerHeight - 20,
 
-    groundsLength: 1,
+    groundsLength: 30,
     percentOfStraightLines: 0.125,
     percentOfGradients: 0.5,
     percentOfSimplexGradients: 0.1,

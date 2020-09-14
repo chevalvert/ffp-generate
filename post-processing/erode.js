@@ -46,6 +46,8 @@ export default (landscape, canvas, {
   }
 
   function build () {
+    if (landscape.MONO_MODE) return
+
     // Compute breakpoints at which a line will be swaped with the next
     const breakpoints = []
     for (let i = 0; i < breaks; i++) breakpoints.push(prng.randomInt(0, length))
@@ -99,6 +101,7 @@ export default (landscape, canvas, {
   }
 
   function update (dt) {
+    if (landscape.MONO_MODE) return
     if (!shouldUpdate) return
     shouldUpdate = false
 
